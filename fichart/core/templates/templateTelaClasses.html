@@ -37,11 +37,10 @@
         }
 
         .avatar-img {
-            width: 80px;
-            height: 80px;
+            width: 483px;
+            height: 314px;
             object-fit: cover;
             border: 3px solid #dee2e6;
-            border-radius: 50%;
         }
 
         /* Wizard Navigation Styles */
@@ -133,6 +132,13 @@
         .scroll-custom::-webkit-scrollbar-corner {
             background: #929292;
         }
+
+        .form-control {
+            background-color: #e3e3e3;
+            color: #929292;
+            text-align: center;
+            scale: 1.2;
+        }
     </style>
 </head>
 
@@ -214,19 +220,31 @@
             <!-- Coluna Direita - Avatar, Nome e Nível/Classe -->
             <div class="col-md-4">
                 <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <img src="{% static 'frieren2II.png' %}" alt="Avatar" class="avatar-img mb-3">
-                            <h5 class="card-title">Nome do Personagem</h5>
-                            <div class="row">
-                                <div class="col-6">
-                                    <small class="text-muted">Nível</small>
-                                    <p class="mb-0 fw-bold">1</p>
+                    <div class="card-body text-center">
+                        <img src="{% static 'frieren2II.png' %}" alt="Avatar" class="avatar-img img-fluid mb-3 rounded-5">
+                        <!-- CAMPO DE TEXTO -->
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                {{ form.nome }}
+                                {% if form.nome.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.nome.errors }}
                                 </div>
-                                <div class="col-6">
-                                    <small class="text-muted">Classe</small>
-                                    <p class="mb-0 fw-bold" id="current-class">Não definida</p>
-                                </div>
+                                {% endif %}
+                            </div>
+                        </form>
+
+                        <div class="row">
+                            <div class="col-5">
+                                <p class="text-end">Nível 1</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="">-</p>
+                            </div>
+                            <div class="col-5">
+                                <p class="text-start" id="current-class">Não definida</p>
                             </div>
                         </div>
                     </div>
