@@ -261,8 +261,9 @@
                 {% for class in classes %}
         "{{ class.id }}": {
             description: `{{ class.description }}`,
-                icon: "{% static class.icon %}",
-                    } {% if not forloop.last %}, {% endif %}
+                icon: "{{ class.icon }}",
+                name: "{{ class.name }}",
+                                      } {% if not forloop.last %}, {% endif %}
         {% endfor %}
             };
 
@@ -273,7 +274,7 @@
             if (classData) {
                 document.getElementById('class-icon').src = classData.icon;
                 document.getElementById('class-description').textContent = classData.description;
-                document.getElementById('current-class').textContent = document.querySelector(`.class-option[data-class-id="${classId}"] .mb-1`).textContent;
+                document.getElementById('current-class').textContent = classData.name;
             }
         }
 
