@@ -4,6 +4,7 @@ from .views.viewTelaCadastro import viewTelaCadastro
 from .views.viewTelaCadastro import viewTelaCadastro
 from .views.viewTelaEscolhaRaca import viewTelaEscolhaRaca
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from .views.viewTelaClasses import viewTelaClasses
 
 urlpatterns = [
     path('', viewTelaLogin.as_view(), name="telaLogin"),

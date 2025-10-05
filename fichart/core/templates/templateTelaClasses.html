@@ -1,0 +1,329 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Criação de Personagem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #282828;
+            color: #ffffff;
+        }
+
+        .overflow-y {
+            overflow-y: auto;
+            scrollbar-width: thin;
+            /* For Firefox */
+        }
+
+        .class-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .class-option:hover {
+            background-color: #ffc014;
+            transform: translateX(5px);
+        }
+
+        .class-option.active {
+            background-color: #ffc014;
+            color: #ffffff;
+            -webkit-text-stroke: 0.5px black;
+            font-weight: bold;
+        }
+
+        .avatar-img {
+            width: 483px;
+            height: 314px;
+            object-fit: cover;
+            border: 3px solid #dee2e6;
+        }
+
+        /* Wizard Navigation Styles */
+        .wizard-nav {
+            padding: 1.5rem;
+        }
+
+        .wizard-step {
+            text-align: center;
+            position: relative;
+            padding: 0 10px;
+            z-index: 3;
+        }
+
+        .wizard-step .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e3e3e3;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 3;
+        }
+
+        .wizard-step.active .step-number {
+            background-color: #ffc014;
+            box-shadow: 0 0 10px #ffc014;
+            transform: scale(1.1);
+        }
+
+        .wizard-step.completed .step-number {
+            background-color: #929292;
+        }
+
+        .wizard-step .step-label {
+            position: relative;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 3;
+        }
+
+        .wizard-connector {
+            position: absolute;
+            top: 45px;
+            left: -30%;
+            width: 60%;
+            height: 8px;
+            background-color: #e3e3e3;
+            z-index: 2;
+        }
+
+        .wizard-step:first-child .wizard-connector {
+            display: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .wizard-step .step-label {
+                font-size: 0.75rem;
+            }
+
+            .wizard-step {
+                padding: 0 5px;
+            }
+        }
+
+
+        .scroll-custom::-webkit-scrollbar {
+            scrollbar-width: thin;
+        }
+
+        .scroll-custom::-webkit-scrollbar-track {
+            background: #929292;
+            border-radius: 6px;
+        }
+
+        .scroll-custom::-webkit-scrollbar-thumb {
+            background: #e3e3e3;
+            border-radius: 6px;
+        }
+
+        .scroll-custom::-webkit-scrollbar-corner {
+            background: #929292;
+        }
+
+        .form-control {
+            background-color: #e3e3e3;
+            color: #929292;
+            text-align: center;
+            scale: 1.2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid ">
+        <!-- Wizard Navigation -->
+        <div class="wizard-nav">
+            <div class="row align-items-center">
+                <div class="col wizard-step" data-step="1">
+                    <div class="step-label pb-2">Classe</div>
+                    <div class="wizard-connector rounded-5"></div>
+                    <div class="step-number"></div>
+
+                </div>
+                <div class="col wizard-step" data-step="2">
+                    <div class="step-label pb-2">Raça</div>
+                    <div class="wizard-connector rounded-5"></div>
+                    <a href="" class="step-number"></a>
+                </div>
+                <div class="col wizard-step" data-step="3">
+                    <div class="step-label pb-2">Antecedente</div>
+                    <div class="wizard-connector rounded-5"></div>
+                    <div class="step-number"></div>
+                </div>
+                <div class="col wizard-step" data-step="4">
+                    <div class="step-label pb-2">Magia</div>
+                    <div class="wizard-connector rounded-5"></div>
+                    <div class="step-number"></div>
+                </div>
+                <div class="col wizard-step" data-step="5">
+                    <div class="step-label pb-2">Atributo</div>
+                    <div class="wizard-connector rounded-5"></div>
+                    <div class="step-number"></div>
+                </div>
+                <div class="col wizard-step" data-step="6">
+                    <div class="step-label pb-2">Equipamento</div>
+                    <div class="wizard-connector rounded-5"></div>
+                    <div class="step-number"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Coluna Esquerda - Seleção de Classe -->
+            <div class="col-md-4">
+                <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+                    <div>
+                        <div>
+                            <div class="list-group pe-2">
+                                {% for class in classes %}
+                                <a href="#"
+                                    class="mb-4 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action class-option {% if class.active %}active{% endif %}"
+                                    data-class-id="{{ class.id }}">
+                                    <div>
+                                        <h6 class="mb-1 fs-3">{{ class.name }}</h6>
+                                    </div>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Coluna Central - Ícone + Descrição -->
+            <div class="col-md-4">
+                <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+                    <div class="card-body text-center">
+                        <img id="class-icon" src="" alt="Ícone da Classe" class="avatar-img img-fluid mb-3 rounded-5">
+                        <p id="class-description" class="lead mt-3 fs-3 text-start">
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coluna Direita - Avatar, Nome e Nível/Classe -->
+            <div class="col-md-4">
+                <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+                    <div class="card-body text-center">
+                        <img src="{% static 'PLACEHOLDER.png' %}" alt="Avatar" class="avatar-img img-fluid mb-3 rounded-5">
+                        <!-- CAMPO DE TEXTO -->
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                {{ form.nome }}
+                                {% if form.nome.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.nome.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </form>
+
+                        <div class="row">
+                            <div class="col-5">
+                                <p class="text-end">Nível 1</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="">-</p>
+                            </div>
+                            <div class="col-5">
+                                <p class="text-start" id="current-class">Não definida</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        // Converter a lista de classes do Django em um objeto JavaScript acessível por ID
+        const classesData = {
+                {% for class in classes %}
+        "{{ class.id }}": {
+            description: `{{ class.description }}`,
+                icon: "{{ class.icon }}",
+                name: "{{ class.name }}",
+                                      } {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+            };
+
+        // Função para atualizar a classe selecionada
+        function updateSelectedClass(classId) {
+            const classData = classesData[classId];
+
+            if (classData) {
+                document.getElementById('class-icon').src = classData.icon;
+                document.getElementById('class-description').textContent = classData.description;
+                document.getElementById('current-class').textContent = classData.name;
+            }
+        }
+
+        // Event listeners para seleção de classe
+        document.querySelectorAll('.class-option').forEach(option => {
+            option.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Remove active de todos os itens
+                document.querySelectorAll('.class-option').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // Adiciona active no item clicado
+                this.classList.add('active');
+
+                // Atualiza os dados da classe
+                const classId = this.dataset.classId;
+                updateSelectedClass(classId);
+            });
+        });
+
+        // Função para atualizar o progresso do wizard
+        function updateWizardProgress(completedStep) {
+            // Atualiza as classes dos passos
+            document.querySelectorAll('.wizard-step').forEach((step, index) => {
+                const stepNumber = parseInt(step.dataset.step);
+
+                step.classList.remove('active', 'completed');
+
+                if (stepNumber < completedStep) {
+                    step.classList.add('completed');
+                } else if (stepNumber === completedStep) {
+                    step.classList.add('active');
+                }
+            });
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function () {
+            // Seleciona a primeira classe por padrão, se existir
+            const firstClassOption = document.querySelector('.class-option');
+            if (firstClassOption) {
+                firstClassOption.click();
+            }
+
+            // Inicializa o wizard no passo 1
+            updateWizardProgress(1);
+        });
+    </script>
+</body>
+
+</html>
