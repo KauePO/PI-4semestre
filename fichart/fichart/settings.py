@@ -130,14 +130,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-MEDIA_URL = "/images/"
-
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,"static"),
+    os.path.join(BASE_DIR,"core/static"),
 )
+
+# MEDIA (uploads do usuário/admin)
+MEDIA_URL = '/media/'                   # URL para acessar no navegador
+MEDIA_ROOT = BASE_DIR / 'media'         # Pasta física para armazenar os arquivos
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/' 

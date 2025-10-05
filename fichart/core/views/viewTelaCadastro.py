@@ -6,6 +6,9 @@ from django.contrib.auth.forms import UserCreationForm
 
 class viewTelaCadastro(View):
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect("TelaEscolhaRaca")
+            
         return render(request, "templateCadastro.html")
 
     def post(self, request):
