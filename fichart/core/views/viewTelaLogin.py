@@ -7,7 +7,7 @@ class viewTelaLogin(View):
     def get(self, request):
 
         if request.user.is_authenticated:
-            return redirect("TelaEscolhaRaca")
+            return redirect("TelaClasses")
             
         return render(request, "templateLogin.html")
 
@@ -24,4 +24,4 @@ class viewTelaLogin(View):
 
         
         login(request,user)
-        return redirect('TelaEscolhaRaca')
+        return redirect('viewTelaClasses')
