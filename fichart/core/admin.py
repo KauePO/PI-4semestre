@@ -41,10 +41,9 @@ class ClasseAdmin(admin.ModelAdmin):
 # =============================
 @admin.register(Magia)
 class MagiaAdmin(admin.ModelAdmin):
-    list_display = ('id_magia', 'escola', 'nivel', 'descricao')
-    search_fields = ('escola', 'descricao')
+    list_display = ('id_magia', 'nome_magia', 'escola', 'nivel', 'descricao')
+    search_fields = ('nome_magia', 'escola', 'descricao')
     list_filter = ('escola', 'nivel')
-
 # =============================
 # Admin para Truque
 # =============================
