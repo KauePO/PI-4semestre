@@ -88,15 +88,10 @@ class Armadura(models.Model):
 
     class Meta:
         db_table = 'armadura'
-
-
-class ArmaduraHasClasse(models.Model):
-    pk = models.CompositePrimaryKey('armadura_id', 'classe_id')
-    armadura = models.ForeignKey(Armadura, models.DO_NOTHING)
-    classe = models.ForeignKey('Classe', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'armadura_has_classe'
+        
+    def __str__(self):
+        return self.nome
+        
 
 class Classe(models.Model):
     id_classe = models.AutoField(primary_key=True)
@@ -107,9 +102,14 @@ class Classe(models.Model):
     hb_base = models.IntegerField()
     hp_modificador = models.CharField()
     nivel = models.IntegerField()
+    armadura = models.ManyToManyField(Armadura)
+    
 
     class Meta:
         db_table = 'classe'
+    
+    def __str__(self):
+        return self.nome
 
 
 class ClasseHasProficiencia(models.Model):
@@ -119,6 +119,8 @@ class ClasseHasProficiencia(models.Model):
 
     class Meta:
         db_table = 'classe_has_proficiencia'
+        
+        
 
 
 class ConjuntoEquipamento(models.Model):
@@ -227,7 +229,7 @@ class IncrementoHabilidade(models.Model):
 
 class Magia(models.Model):
     id_magia = models.AutoField(primary_key=True)
-    id_truques = models.IntegerField(blank=True, null=True)
+    nome_magia = models.CharField()
     escola = models.CharField()
     tempo_conjuracao = models.CharField()
     alcance = models.IntegerField()
@@ -235,6 +237,7 @@ class Magia(models.Model):
     duraca = models.CharField()
     descricao = models.CharField()
     nivel = models.IntegerField(blank=True, null=True)
+    classe = models.ManyToManyField(Classe)
 
     class Meta:
         db_table = 'magia'
@@ -324,7 +327,7 @@ class PropriedadeHasArma(models.Model):
 class Raca(models.Model):
     id_raca = models.AutoField(primary_key=True)
     nome = models.CharField()
-    velocidade = models.IntegerField()
+    velocidade = models.FloatField()
     tamanho = models.IntegerField()
     id_subraca = models.IntegerField()
     descricao = models.TextField()
@@ -398,22 +401,16 @@ class TipoArmadura(models.Model):
 
 
 class Truque(models.Model):
-    id_truque = models.IntegerField(primary_key=True)
+    id_truque = models.AutoField(primary_key=True)
+    nome_truque = models.CharField()
     escola = models.CharField()
     tempo_conjuracao = models.IntegerField()
     alcance = models.IntegerField()
     componentes = models.CharField()
     duracao = models.CharField()
     descricao = models.CharField()
+    classes = models.ManyToManyField(Classe)
 
     class Meta:
         db_table = 'truque'
 
-
-class TruqueHasClasse(models.Model):
-    pk = models.CompositePrimaryKey('classe_id', 'truque_id')
-    classe = models.ForeignKey(Classe, models.DO_NOTHING)
-    truque = models.ForeignKey(Truque, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'truque_has_classe'
