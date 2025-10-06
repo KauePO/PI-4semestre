@@ -12,6 +12,7 @@ class Antecedente(models.Model):
     id_antecedente = models.AutoField(primary_key=True)
     nome = models.CharField()
     descricao = models.TextField()
+    icone = models.ImageField( upload_to="racas/" ,blank=True, null=True)
 
     class Meta:
         db_table = 'antecedente'
@@ -102,6 +103,7 @@ class Classe(models.Model):
     hb_base = models.IntegerField()
     hp_modificador = models.CharField()
     nivel = models.IntegerField()
+    icone = models.ImageField( upload_to="classes/" ,blank=True, null=True)
     armadura = models.ManyToManyField(Armadura)
     
 

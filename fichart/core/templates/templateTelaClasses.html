@@ -1,16 +1,92 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
+<!doctype html>
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Criação de Personagem</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+
     <style>
         body {
             background-color: #282828;
-            color: #ffffff;
+            font-family: "Inter";
+            font-weight: bold;
+            color: white;
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+
+        /*.wizard-progresso {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            position: relative;
+
+            .passo {
+                display: table-cell;
+                text-align: center;
+                vertical-align: top;
+                overflow: visible;
+                position: relative;
+                font-size: 14px;
+                color: beige;
+                font-weight: bold;
+
+                &:not(:last-child):before {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    left: 50%;
+                    top: 40px;
+                    background-color: rgb(194, 194, 188);
+                    height: 6px;
+                    width: 100%;
+                }
+
+                .no {
+                    display: inline-block;
+
+                    background-color: beige;
+                    border-radius: 42px;
+                    height: 40px;
+                    width: 40px;
+                    position: absolute;
+                    top: 25px;
+                    left: 50%;
+                    margin-left: -18px;
+
+                }
+
+                &.complete {
+                    &:before {
+                        background-color: rgb(235, 141, 74);
+                    }
+
+                    .no {
+
+                        background-color: #FFCF14;
+                        ;
+                    }
+
+                    &:before {
+                        font-family: fantasy;
+
+                    }
+                }
+            }
+
+
+        }*/
+
+        .avatar-img {
+            width: 483px;
+            height: 314px;
+            object-fit: cover;
+            border: 3px solid #dee2e6;
         }
 
         .overflow-y {
@@ -19,29 +95,23 @@
             /* For Firefox */
         }
 
-        .class-option {
+        .classe-option {
             transition: all 0.2s;
             cursor: pointer;
         }
 
-        .class-option:hover {
+        .classe-option:hover {
             background-color: #ffc014;
             transform: translateX(5px);
         }
 
-        .class-option.active {
+        .classe-option.active {
             background-color: #ffc014;
             color: #ffffff;
             -webkit-text-stroke: 0.5px black;
             font-weight: bold;
         }
 
-        .avatar-img {
-            width: 483px;
-            height: 314px;
-            object-fit: cover;
-            border: 3px solid #dee2e6;
-        }
 
         /* Wizard Navigation Styles */
         .wizard-nav {
@@ -78,8 +148,11 @@
         }
 
         .wizard-step.completed .step-number {
-            background-color: #929292;
+            background-color: #ffc014;
         }
+
+
+
 
         .wizard-step .step-label {
             position: relative;
@@ -97,6 +170,10 @@
             height: 8px;
             background-color: #e3e3e3;
             z-index: 2;
+        }
+
+        .wizard-connector.completed {
+            background-color: rgb(235, 141, 74);
         }
 
         .wizard-step:first-child .wizard-connector {
@@ -139,88 +216,102 @@
             text-align: center;
             scale: 1.2;
         }
+
+        #descricaoClasse {}
+
+        #iconeClasse {}
     </style>
 </head>
 
 <body>
-    <div class="container-fluid ">
-        <!-- Wizard Navigation -->
-        <div class="wizard-nav">
-            <div class="row align-items-center">
-                <div class="col wizard-step" data-step="1">
-                    <div class="step-label pb-2">Classe</div>
-                    <div class="wizard-connector rounded-5"></div>
-                    <div class="step-number"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-8">
 
-                </div>
-                <div class="col wizard-step" data-step="2">
-                    <div class="step-label pb-2">Raça</div>
-                    <div class="wizard-connector rounded-5"></div>
-                    <a href="" class="step-number"></a>
-                </div>
-                <div class="col wizard-step" data-step="3">
-                    <div class="step-label pb-2">Antecedente</div>
-                    <div class="wizard-connector rounded-5"></div>
-                    <div class="step-number"></div>
-                </div>
-                <div class="col wizard-step" data-step="4">
-                    <div class="step-label pb-2">Magia</div>
-                    <div class="wizard-connector rounded-5"></div>
-                    <div class="step-number"></div>
-                </div>
-                <div class="col wizard-step" data-step="5">
-                    <div class="step-label pb-2">Atributo</div>
-                    <div class="wizard-connector rounded-5"></div>
-                    <div class="step-number"></div>
-                </div>
-                <div class="col wizard-step" data-step="6">
-                    <div class="step-label pb-2">Equipamento</div>
-                    <div class="wizard-connector rounded-5"></div>
-                    <div class="step-number"></div>
-                </div>
-            </div>
-        </div>
+                <!-- Wizard Navigation -->
+                <div class="wizard-nav">
+                    <div class="row align-items-center">
+                        <div class="col wizard-step " data-step="1">
+                            <div class="step-label pb-2 ">Classe</div>
+                            <div class="wizard-connector rounded-5"></div>
+                            <a href="" class="step-number"></a>
 
-        <div class="row g-4">
-            <!-- Coluna Esquerda - Seleção de Classe -->
-            <div class="col-md-4">
-                <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
-                    <div>
-                        <div>
+                        </div>
+                        <div class="col wizard-step active" data-step="2">
+                            <div class="step-label pb-2 ">Raça</div>
+                            <div class="wizard-connector rounded-5 "></div>
+                            <a href="{% url 'TelaEscolhaRaca' %}" class="step-number"></a>
+                        </div>
+                        <div class="col wizard-step" data-step="3">
+                            <div class="step-label pb-2">Antecedente</div>
+                            <div class="wizard-connector rounded-5"></div>
+                            <div class="step-number"></div>
+                        </div>
+                        <div class="col wizard-step" data-step="4">
+                            <div class="step-label pb-2">Magia</div>
+                            <div class="wizard-connector rounded-5"></div>
+                            <div class="step-number"></div>
+                        </div>
+                        <div class="col wizard-step" data-step="5">
+                            <div class="step-label pb-2">Atributo</div>
+                            <div class="wizard-connector rounded-5"></div>
+                            <div class="step-number"></div>
+                        </div>
+                        <div class="col wizard-step" data-step="6">
+                            <div class="step-label pb-2">Equipamento</div>
+                            <div class="wizard-connector rounded-5"></div>
+                            <div class="step-number"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Coluna Esquerda - Seleção de Classe -->
+                    <div class="col">
+                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh; max-width: 62vh; min-width: 62vh;">
+
                             <div class="list-group pe-2">
-                                {% for class in classes %}
+
+                                {% for classe in classes %}
                                 <a href="#"
-                                    class="mb-4 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action class-option {% if class.active %}active{% endif %}"
-                                    data-class-id="{{ class.id }}">
+                                    class="mb-4 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action classe-option "
+                                    data-class-id="{{classe.id_classe}}">
                                     <div>
-                                        <h6 class="mb-1 fs-3">{{ class.name }}</h6>
+                                        <h6 class="mb-1 fs-3"> {{ classe.nome }} </h6>
                                     </div>
                                 </a>
                                 {% endfor %}
                             </div>
+
                         </div>
                     </div>
-                </div>
-            </div>
 
+                    <!-- Coluna Central - Ícone + Descrição -->
 
+                    <div class="col ms-5">
+                        <div class="col-md-4 ">
+                            <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh; max-width: 62vh; min-width: 62vh;">
+                                <div class="card-body text-center">
+                                    <img id="iconeClasse" src="" alt="Ícone da Classe"
+                                        class="avatar-img img-fluid mb-3 rounded-5">
+                                    <p id="descricaoClasse" class="lead mt-3 fs-3 text-start">
+                                    </p>
 
-            <!-- Coluna Central - Ícone + Descrição -->
-            <div class="col-md-4">
-                <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
-                    <div class="card-body text-center">
-                        <img id="class-icon" src="" alt="Ícone da Classe" class="avatar-img img-fluid mb-3 rounded-5">
-                        <p id="class-description" class="lead mt-3 fs-3 text-start">
-                        </p>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
             </div>
 
-            <!-- Coluna Direita - Avatar, Nome e Nível/Classe -->
-            <div class="col-md-4">
+            <div class="col-4 container-fluid mt-5">
                 <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
                     <div class="card-body text-center">
-                        <img src="{% static 'PLACEHOLDER.png' %}" alt="Avatar" class="avatar-img img-fluid mb-3 rounded-5">
+                        <img src="{% static 'images/PLACEHOLDER.png' %}" alt="Avatar"
+                            class="avatar-img img-fluid mb-3 rounded-5">
                         <!-- CAMPO DE TEXTO -->
                         <form method="post">
                             {% csrf_token %}
@@ -243,87 +334,129 @@
                                 <p class="">-</p>
                             </div>
                             <div class="col-5">
-                                <p class="text-start" id="current-class">Não definida</p>
+                                <p class="text-start" id="current-class"></p>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
 
-        // Converter a lista de classes do Django em um objeto JavaScript acessível por ID
-        const classesData = {
-                {% for class in classes %}
-        "{{ class.id }}": {
-            description: `{{ class.description }}`,
-                icon: "{{ class.icon }}",
-                name: "{{ class.name }}",
-                                      } {% if not forloop.last %}, {% endif %}
-        {% endfor %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+
+<script>
+
+    const classesData = {
+                {% for classe in classes %}
+    "{{ classe.id_classe }}": {
+        description: `{{ classe.descricao }}`,
+            name: "{{ classe.nome }}",
+                icone: "{{ classe.icone.url }}",
+
+                    } {% if not forloop.last %}, {% endif %}
+    {% endfor %}
             };
 
-        // Função para atualizar a classe selecionada
-        function updateSelectedClass(classId) {
-            const classData = classesData[classId];
+    // Função para atualizar a classe selecionada
+    function updateSelectedClass(classeId) {
 
-            if (classData) {
-                document.getElementById('class-icon').src = classData.icon;
-                document.getElementById('class-description').textContent = classData.description;
-                document.getElementById('current-class').textContent = classData.name;
-            }
+        const classeData = classesData[classeId];
+
+        localStorage.setItem("classe", classeId);
+
+        console.log(classeData)
+
+        if (classeData) {
+            document.getElementById('descricaoClasse').textContent = classeData.description;
+            document.getElementById("iconeClasse").src = classeData.icone;
+            document.getElementById('current-class').textContent = classeData.name;
         }
 
-        // Event listeners para seleção de classe
-        document.querySelectorAll('.class-option').forEach(option => {
-            option.addEventListener('click', function (e) {
-                e.preventDefault();
 
-                // Remove active de todos os itens
-                document.querySelectorAll('.class-option').forEach(item => {
-                    item.classList.remove('active');
-                });
+        console.log(localStorage.getItem("classe"))
+    }
 
-                // Adiciona active no item clicado
-                this.classList.add('active');
 
-                // Atualiza os dados da classe
-                const classId = this.dataset.classId;
-                updateSelectedClass(classId);
+    // Event listeners para seleção de classe
+    document.querySelectorAll('.classe-option').forEach(option => {
+        option.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            //remove os dados de raca e subraca do localStorage
+            localStorage.removeItem("classe")
+
+            // Remove active de todos os itens
+            document.querySelectorAll('.classe-option').forEach(item => {
+                item.classList.remove('active');
             });
+
+            // Adiciona active no item clicado
+            this.classList.add('active');
+
+            // Atualiza os dados da classe
+            const classeId = this.dataset.classId;
+            updateSelectedClass(classeId);
+
+
         });
+    });
 
-        // Função para atualizar o progresso do wizard
-        function updateWizardProgress(completedStep) {
-            // Atualiza as classes dos passos
-            document.querySelectorAll('.wizard-step').forEach((step, index) => {
-                const stepNumber = parseInt(step.dataset.step);
+    function updateWizardProgress(completedStep) {
+        // Atualiza as classes dos passos
+        document.querySelectorAll('.wizard-step').forEach((step, index) => {
+            const stepNumber = parseInt(step.dataset.step);
 
-                step.classList.remove('active', 'completed');
+            step.classList.remove('active', 'completed');
 
-                if (stepNumber < completedStep) {
-                    step.classList.add('completed');
-                } else if (stepNumber === completedStep) {
-                    step.classList.add('active');
-                }
-            });
-        }
+            if (stepNumber < completedStep) {
+                step.classList.add('completed');
+            } else if (stepNumber === completedStep) {
+                step.classList.add('active');
+            }
+        });
+    }
 
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function () {
-            // Seleciona a primeira classe por padrão, se existir
-            const firstClassOption = document.querySelector('.class-option');
-            if (firstClassOption) {
-                firstClassOption.click();
+    let playerNome = document.getElementById("id_nome");
+
+    playerNome.addEventListener("change", function () {
+        localStorage.setItem("playerNome", this.value);
+    })
+
+
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function () {
+        // Seleciona a primeira classe por padrão, se existir
+
+
+        let playerNome = localStorage.getItem("playerNome") ?? "";
+        let classe = localStorage.getItem("classe") ?? NaN;
+
+
+        playerName = document.getElementById("id_nome").value = playerNome
+
+
+        if (!classe) {
+            const firstClasseOption = document.querySelector('.classe-option');
+            if (firstClasseOption) {
+                firstClasseOption.click();
             }
 
-            // Inicializa o wizard no passo 1
-            updateWizardProgress(1);
-        });
-    </script>
-</body>
+        }
+        else {
+            document.querySelector(`a[data-class-id='${classe}']`).click();
+        }
+
+
+        // Inicializa o wizard no passo 1
+        updateWizardProgress(1);
+    });
+</script>
 
 </html>

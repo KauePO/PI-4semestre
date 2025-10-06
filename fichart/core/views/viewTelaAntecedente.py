@@ -5,12 +5,15 @@ from ..forms import nomeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-from core.models import Classe
+from core.models import Antecedente
 
-class viewTelaClasses(LoginRequiredMixin,View):
+class viewTelaAntecedente(LoginRequiredMixin,View):
     def get(self, request):
         
-        classes = Classe.objects.all()
+        antecedentes = Antecedente.objects.all()
 
         form = nomeForm()
-        return render(request, 'templateTelaClasses.html', {'classes': classes, 'form': form})
+        return render(request, 'templateTelaAntecedentes.html', {'antecedentes': antecedentes, 'form': form})
+
+
+
