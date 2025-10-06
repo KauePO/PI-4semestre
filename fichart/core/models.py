@@ -107,6 +107,7 @@ class Classe(models.Model):
     hb_base = models.IntegerField()
     hp_modificador = models.CharField()
     nivel = models.IntegerField()
+    icone = models.ImageField( upload_to="classes/" ,blank=True, null=True)
 
     class Meta:
         db_table = 'classe'
