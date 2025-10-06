@@ -12,6 +12,7 @@ class Antecedente(models.Model):
     id_antecedente = models.AutoField(primary_key=True)
     nome = models.CharField()
     descricao = models.TextField()
+    icone = models.ImageField( upload_to="racas/" ,blank=True, null=True)
 
     class Meta:
         db_table = 'antecedente'
