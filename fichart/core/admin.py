@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Raca, Subraca, Personagem, Classe, Magia, Truque
+from .models import Raca, Subraca, Personagem, Classe, Magia, Truque, Antecedente
 
 # =============================
 # Admin otimizado para Raca
@@ -52,3 +52,13 @@ class TruqueAdmin(admin.ModelAdmin):
     list_display = ('id_truque', 'escola', 'alcance', 'duracao')
     search_fields = ('escola', 'descricao')
     list_filter = ('escola',)
+
+# =============================
+# Admin para Antecedente
+# =============================
+@admin.register(Antecedente)
+class AntecedenteAdmin(admin.ModelAdmin):
+    list_display = ('id_antecedente', 'nome', 'descricao')
+    search_fields = ('nome',)
+    list_filter = ('nome',)
+

@@ -95,17 +95,17 @@
             /* For Firefox */
         }
 
-        .raca-option {
+        .antecedente-option {
             transition: all 0.2s;
             cursor: pointer;
         }
 
-        .raca-option:hover {
+        .antecedente-option:hover {
             background-color: #ffc014;
             transform: translateX(5px);
         }
 
-        .raca-option.active {
+        .antecedente-option.active {
             background-color: #ffc014;
             color: #ffffff;
             -webkit-text-stroke: 0.5px black;
@@ -210,61 +210,16 @@
             background: #929292;
         }
 
-        /*---------------------------------------------*/
-
-        .subRacaContainer {
-            display: block;
-            position: relative;
-            padding-left: 35px;
-            /* reserva espaço para o botão */
-            margin-bottom: 12px;
-            cursor: pointer;
-            font-size: 18px;
-            line-height: 20px;
-            user-select: none;
-        }
-
-        /* Esconde o input original */
-        .defaultRadio {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        /* Quadradinho/botão */
-        .btnRadio {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 20px;
-            width: 20px;
+        .form-control {
             background-color: #e3e3e3;
-            border-radius: 50%;
-            /* opcional se quiser estilo radio */
+            color: #929292;
+            text-align: center;
+            scale: 1.2;
         }
 
-        /* Hover */
-        .subRacaContainer:hover input~.btnRadio {
-            background-color: #ffc014;
-        }
+        #descricaoAntecedente {}
 
-        /* Quando marcado */
-        .subRacaContainer input:checked~.btnRadio {
-            background-color: #ffc014;
-            box-shadow: 0 0 10px #ffc014;
-            transform: scale(1.1);
-        }
-
-        #descricaoRaca {
-            overflow-y: scroll;
-        }
-
-        #iconeRaca{
-            width: 50%;
-            height: 400px;
-            border-radius: 35px;
-            box-shadow: 2px 2px bisque;
-        }
+        #iconeAntecedente {}
     </style>
 </head>
 
@@ -278,24 +233,24 @@
                     <div class="row align-items-center">
                         <div class="col wizard-step completed" data-step="1">
                             <div class="step-label pb-2 ">Classe</div>
-                            <div class="wizard-connector rounded-5"></div>
+                            <div class="wizard-connector rounded-5 completed"></div>
                             <a href="{% url 'TelaClasses' %}" class="step-number"></a>
 
                         </div>
-                        <div class="col wizard-step active" data-step="2">
+                        <div class="col wizard-step completed" data-step="2">
                             <div class="step-label pb-2 ">Raça</div>
                             <div class="wizard-connector rounded-5 completed"></div>
-                            <a href="" class="step-number"></a>
+                            <a href="{% url 'TelaEscolhaRaca' %}" class="step-number"></a>
                         </div>
-                        <div class="col wizard-step" data-step="3">
+                        <div class="col wizard-step active" data-step="3">
                             <div class="step-label pb-2">Antecedente</div>
-                            <div class="wizard-connector rounded-5"></div>
-                            <a href="{% url 'TelaAntecedente' %}" class="step-number"></a>
+                            <div class="wizard-connector rounded-5 completed"></div>
+                            <a href="#" class="step-number"></a>
                         </div>
                         <div class="col wizard-step" data-step="4">
                             <div class="step-label pb-2">Magia</div>
                             <div class="wizard-connector rounded-5"></div>
-                            <div class="step-number"></div>
+                            <a href="{% url 'TelaMagia' %}" class="step-number"></a>
                         </div>
                         <div class="col wizard-step" data-step="5">
                             <div class="step-label pb-2">Atributo</div>
@@ -311,17 +266,18 @@
                 </div>
 
                 <div class="row">
+                    <!-- Coluna Esquerda - Seleção de Antecedente -->
                     <div class="col">
-                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh; max-width: 62vh; min-width: 62vh;">
 
                             <div class="list-group pe-2">
 
-                                {% for raca in racas %}
+                                {% for antecedente in antecedentes %}
                                 <a href="#"
-                                    class="mb-4 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action raca-option "
-                                    data-class-id="{{raca.id_raca}}">
+                                    class="mb-4 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action antecedente-option "
+                                    data-class-id="{{antecedente.id_antecedente}}">
                                     <div>
-                                        <h6 class="mb-1 fs-3"> {{ raca.nome }} </h6>
+                                        <h6 class="mb-1 fs-3"> {{ antecedente.nome }} </h6>
                                     </div>
                                 </a>
                                 {% endfor %}
@@ -330,15 +286,21 @@
                         </div>
                     </div>
 
+                    <!-- Coluna Central - Ícone + Descrição -->
+
                     <div class="col ms-5">
-                        <div class="d-flex column-gap-3 mb-4">
-                            <img id="iconeRaca">
-                            <div id = "containerListaSubracas">
+                        <div class="col-md-4 ">
+                            <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh; max-width: 62vh; min-width: 62vh;">
+                                <div class="card-body text-center">
+                                    <img id="iconeAntecedente" src="" alt="Ícone do Antecedente"
+                                        class="avatar-img img-fluid mb-3 rounded-5">
+                                    <p id="descricaoAntecedente" class="lead mt-3 fs-3 text-start">
+                                    </p>
+
+                                </div>
+
                             </div>
                         </div>
-
-                        <p id="descricaoRaca" style="max-height: 78vh;">
-                        </p>
 
                     </div>
                 </div>
@@ -372,7 +334,7 @@
                                 <p class="">-</p>
                             </div>
                             <div class="col-5">
-                                <p class="text-start" id="current-class">Não definida</p>
+                                <p class="text-start" id="current-class"></p>
                             </div>
                         </div>
                     </div>
@@ -390,149 +352,109 @@
 
 <script>
 
-    const racasData = {
-                {% for raca in racas %}
-                    "{{ raca.id_raca }}": {
-                        description: `{{ raca.descricao }}`,
-                        name: "{{ raca.nome }}",
-                        icone: "{{ raca.icone.url }}",
-                        subRacas:[
-                            {% for subRaca in subRacas%}
-                                
-                                {% if subRaca.raca_id == raca.id_raca %}
-                                    "{{ subRaca.nome }}" {% if not forloop.last %}, {% endif %}    
-                                {% endif %}
-                                    
-                                
-                            {% endfor %}
-                        ]
+    const antecedentesData = {
+                {% for antecedente in antecedentes %}
+    "{{ antecedente.id_antecedente }}": {
+        description: `{{ antecedente.descricao }}`,
+            name: "{{ antecedente.nome }}",
+                icone: "{{ antecedente.icone.url }}",
 
                     } {% if not forloop.last %}, {% endif %}
-                {% endfor %}
+    {% endfor %}
             };
 
-    // Função para atualizar a classe selecionada
-        function updateSelectedClass(racaId) {
-            
-            const racaData = racasData[racaId];
+    // Função para atualizar a antecedente selecionada
+    function updateSelectedClass(antecedenteId) {
 
-            localStorage.setItem("raca",racaId);
+        const antecedenteData = antecedentesData[antecedenteId];
 
-            console.log(racaData)
+        localStorage.setItem("antecedente", antecedenteId);
 
-            if (racaData) {
-                document.getElementById('descricaoRaca').textContent = racaData.description;
-                document.getElementById("iconeRaca").src = racaData.icone;
+        console.log(antecedenteData)
 
-                const container = document.getElementById("containerListaSubracas");
-
-                container.innerHTML = `
-                
-                    ${racaData.subRacas.map(subraca => `
-                        <label class="subRacaContainer">
-                        <input type="radio" name="radioRaca" class="defaultRadio" value="${subraca}">
-                        <span class="btnRadio"></span>
-                        ${subraca}
-                        </label>
-                    `).join('')}
-                    
-                `;
-            }
-
-            const listRadioSubraca = document.querySelectorAll("input[name='radioRaca']")
-
-            listRadioSubraca.forEach( radio =>{
-                radio.addEventListener("change", function(){
-                    if(this.checked){
-                        console.log(this.value)
-                        localStorage.setItem("subRaca",this.value);
-                    }
-                })
-            })
-
-            console.log(localStorage.getItem("raca"))
+        if (antecedenteData) {
+            document.getElementById('descricaoAntecedente').textContent = antecedenteData.description;
+            document.getElementById("iconeAntecedente").src = antecedenteData.icone;
         }
 
-    
-        // Event listeners para seleção de classe
-        document.querySelectorAll('.raca-option').forEach(option => {
-            option.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                //remove os dados de raca e subraca do localStorage
-                localStorage.removeItem("raca")
-                localStorage.removeItem("subRaca")
 
-                // Remove active de todos os itens
-                document.querySelectorAll('.raca-option').forEach(item => {
-                    item.classList.remove('active');
-                });
+        console.log(localStorage.getItem("antecedente"))
+    }
 
-                // Adiciona active no item clicado
-                this.classList.add('active');
 
-                // Atualiza os dados da classe
-                const racaId = this.dataset.classId;
-                updateSelectedClass(racaId);
+    // Event listeners para seleção de antecedente
+    document.querySelectorAll('.antecedente-option').forEach(option => {
+        option.addEventListener('click', function (e) {
+            e.preventDefault();
 
-                
+            //remove os dados de antecedente do localStorage
+            localStorage.removeItem("antecedente")
+
+            // Remove active de todos os itens
+            document.querySelectorAll('.antecedente-option').forEach(item => {
+                item.classList.remove('active');
             });
+
+            // Adiciona active no item clicado
+            this.classList.add('active');
+
+            // Atualiza os dados da antecedente
+            const antecedenteId = this.dataset.classId;
+            updateSelectedClass(antecedenteId);
+
+
         });
+    });
 
-        function updateWizardProgress(completedStep) {
-            // Atualiza as classes dos passos
-            document.querySelectorAll('.wizard-step').forEach((step, index) => {
-                const stepNumber = parseInt(step.dataset.step);
+    function updateWizardProgress(completedStep) {
+        // Atualiza as antecedentes dos passos
+        document.querySelectorAll('.wizard-step').forEach((step, index) => {
+            const stepNumber = parseInt(step.dataset.step);
 
-                step.classList.remove('active', 'completed');
+            step.classList.remove('active', 'completed');
 
-                if (stepNumber < completedStep) {
-                    step.classList.add('completed');
-                } else if (stepNumber === completedStep) {
-                    step.classList.add('active');
-                }
-            });
-        }
+            if (stepNumber < completedStep) {
+                step.classList.add('completed');
+            } else if (stepNumber === completedStep) {
+                step.classList.add('active');
+            }
+        });
+    }
 
-        let playerNome = document.getElementById("id_nome");
+    let playerNome = document.getElementById("id_nome");
 
-        playerNome.addEventListener("change", function(){
-            localStorage.setItem("playerNome", this.value);
-        })
+    playerNome.addEventListener("change", function () {
+        localStorage.setItem("playerNome", this.value);
+    })
 
-        
+
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', function () {
-        // Seleciona a primeira classe por padrão, se existir
+        // Seleciona a primeira antecedente por padrão, se existir
 
-       
+
         let playerNome = localStorage.getItem("playerNome") ?? "";
-        let raca = localStorage.getItem("raca") ?? NaN;
-        let subRaca = localStorage.getItem("subRaca") ?? NaN;
+        let antecedente = localStorage.getItem("antecedente") ?? NaN;
 
 
         playerName = document.getElementById("id_nome").value = playerNome
 
 
-        if (!raca){
-            const firstRacaOption = document.querySelector('.raca-option');
-            if (firstRacaOption) {
-                firstRacaOption.click();
+        if (!antecedente) {
+            const firstClasseOption = document.querySelector('.antecedente-option');
+            if (firstClasseOption) {
+                firstClasseOption.click();
             }
-            
+
         }
-        else{
-            document.querySelector(`a[data-class-id='${raca}']`).click();
+        else {
+            document.querySelector(`a[data-class-id='${antecedente}']`).click();
         }
 
-        if(subRaca){
-            document.querySelector(`input[value='${subRaca}']`).click();
-        }
-        
 
-        // Inicializa o wizard no passo 2
-        updateWizardProgress(2);
+        // Inicializa o wizard no passo 3
+        updateWizardProgress(3);
     });
 </script>
 
