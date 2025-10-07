@@ -24,4 +24,4 @@ class viewTelaLogin(View):
 
         
         login(request,user)
-        return redirect('viewTelaClasses')
+        return redirect('TelaClasses')
