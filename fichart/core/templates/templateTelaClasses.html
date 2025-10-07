@@ -376,6 +376,7 @@
             document.getElementById('descricaoClasse').textContent = classeData.description;
             document.getElementById("iconeClasse").src = classeData.icone;
             document.getElementById('current-class').textContent = classeData.name;
+            document.cookie = `classe=${classeData.name}; path=/; max-age=86400`;
         }
 
 
