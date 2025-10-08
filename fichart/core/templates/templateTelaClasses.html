@@ -16,8 +16,7 @@
             font-family: "Inter";
             font-weight: bold;
             color: white;
-            overflow-y: hidden;
-            overflow-x: hidden;
+            /* Removido overflow hidden para permitir scroll em mobile */
         }
 
         .avatar-img {
@@ -32,7 +31,6 @@
         .overflow-y {
             overflow-y: auto;
             scrollbar-width: thin;
-            /* For Firefox */
         }
 
         .classe-option {
@@ -51,7 +49,6 @@
             -webkit-text-stroke: 0.5px black;
             font-weight: bold;
         }
-
 
         /* Wizard Navigation Styles */
         .wizard-nav {
@@ -91,9 +88,6 @@
         .wizard-step.completed .step-number {
             background-color: #ffc014;
         }
-
-
-
 
         .wizard-step .step-label {
             position: relative;
@@ -147,7 +141,8 @@
             scale: 1.2;
         }
 
-        #descricaoClasse {}
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
             .wizard-step .step-label {
                 font-size: 0.65rem;
             }
@@ -177,6 +172,7 @@
         }
 
         @media (max-width: 576px) {
+            .wizard-nav {
                 padding: 0.5rem;
             }
         }
@@ -186,7 +182,8 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-
+            <!-- Coluna principal -->
+            <div class="col-12 col-lg-8">
                 <!-- Wizard Navigation -->
                 <div class="wizard-nav">
                     <div class="row align-items-center">
@@ -194,9 +191,10 @@
                             <div class="step-label pb-2">Classe</div>
                             <div class="wizard-connector rounded-5"></div>
                             <a href="" class="step-number"></a>
-
                         </div>
                         <div class="col wizard-step active" data-step="2">
+                            <div class="step-label pb-2">Raça</div>
+                            <div class="wizard-connector rounded-5"></div>
                             <a href="{% url 'TelaEscolhaRaca' %}" class="step-number"></a>
                         </div>
                         <div class="col wizard-step" data-step="3">
@@ -224,33 +222,23 @@
 
                 <div class="row">
                     <!-- Coluna Esquerda - Seleção de Classe -->
-                    <div class="col">
-                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh; max-width: 62vh; min-width: 62vh;">
-
-                            <div class="list-group pe-2">
-
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="scroll-custom overflow-x-hidden pe-2" style="max-height: 78vh; overflow-y: auto;">
                             <div class="list-group">
                                 {% for classe in classes %}
                                 <a href="#"
                                     class="mb-3 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action classe-option"
                                     data-class-id="{{classe.id_classe}}">
                                     <div>
+                                        <h6 class="mb-1 fs-5"> {{ classe.nome }} </h6>
                                     </div>
                                 </a>
                                 {% endfor %}
                             </div>
-
                         </div>
                     </div>
 
                     <!-- Coluna Central - Ícone + Descrição -->
-
-                    <div class="col ms-5">
-                        <div class="col-md-4 ">
-                            <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh; max-width: 62vh; min-width: 62vh;">
-                                <div class="card-body text-center">
-                                    <img id="iconeClasse" src="" alt="Ícone da Classe"
-                                        class="avatar-img img-fluid mb-3 rounded-5">
                     <div class="col-12 col-md-6 mb-3">
                         <div class="scroll-custom overflow-x-hidden p-1" style="max-height: 78vh; overflow-y: auto;">
                             <div class="card-body text-center">
@@ -291,6 +279,7 @@
                                 <p class="mb-0">-</p>
                             </div>
                             <div class="col-5">
+                                <p class="text-start mb-0" id="current-class"></p>
                             </div>
                         </div>
                     </div>
