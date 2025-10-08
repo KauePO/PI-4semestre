@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Raca, Subraca, Personagem, Classe, Magia, Truque, Antecedente, Armadura, TipoArmadura
+from .models import Raca, Subraca, Personagem, Classe, Magia, Truque, Antecedente, Armadura, TipoArmadura, Arma, ConjuntoEquipamento, EquipamentoDeAventura, Ferramenta
 
 # =============================
 # Admin otimizado para Raca
@@ -68,7 +68,7 @@ class AntecedenteAdmin(admin.ModelAdmin):
 # =============================
 
 @admin.register(Arma)
-class ArmaAdmin(admin.modelAdmin):
+class ArmaAdmin(admin.ModelAdmin):
     list_display = ('id_arma', 'nome', 'tipo', 'custo', 'peso', 'numero_dado_dano', 'dado_dano', 'tipo_dano')
     search_fields = ('nome', 'tipo')
     list_filter = ('custo', 'tipo_dano')
@@ -96,7 +96,7 @@ class ArmaduraAdmin(admin.ModelAdmin):
 # Admin para ConjutoEquipamento
 # =============================
 @admin.register(ConjuntoEquipamento)
-class ConjuntoEquipamentoAdmin(admin.modelAdmin):
+class ConjuntoEquipamentoAdmin(admin.ModelAdmin):
     list_display = ('id_conjuto_equipamento', 'nome', 'descricao', 'classe')
     search_fields = ('nome', 'descricao')
     list_filter = ('classe',)
@@ -104,8 +104,8 @@ class ConjuntoEquipamentoAdmin(admin.modelAdmin):
 # =============================
 # Admin para EquipamentoAventura
 # =============================
-@admin.register(EquipamentoAventura)
-class EquipamentoAventuraAdmin(admin.modelAdmin):
+@admin.register(EquipamentoDeAventura)
+class EquipamentoAventuraAdmin(admin.ModelAdmin):
     list_display = ('id_equipamento_de_aventura', 'nome_ferramenta', 'descricao', 'custo', 'peso', 'classe', 'conjunto_equipamento')
     search_fields = ('nome', 'custo')
     list_filter = ('classe',)
@@ -114,7 +114,7 @@ class EquipamentoAventuraAdmin(admin.modelAdmin):
 # Admin para Ferramenta
 # =============================
 @admin.register(Ferramenta)
-class FerramentaAdmin(admin.modelAdmin):
+class FerramentaAdmin(admin.ModelAdmin):
     list_display = ('id_ferramenta', 'nome_ferramenta', 'custo', 'peso', 'classe')
-    search_fields = ('', '')
-    list_filter = ('', '')
+    search_fields = ('nome_ferramenta', 'custo')
+    list_filter = ('classe',)

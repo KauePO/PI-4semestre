@@ -47,6 +47,7 @@ class AntecedenteHasProficiencia(models.Model):
 
 class Arma(models.Model):
     id_arma = models.AutoField(primary_key=True)
+    nome = models.CharField()
     tipo = models.CharField()
     custo = models.IntegerField()
     peso = models.FloatField()
@@ -87,6 +88,8 @@ class Classe(models.Model):
     nivel = models.IntegerField()
     icone = models.ImageField( upload_to="classes/" ,blank=True, null=True)
     armadura = models.ManyToManyField(Armadura)
+    arma = models.ManyToManyField(Arma)
+    
     
 
     class Meta:
@@ -115,9 +118,6 @@ class ConjuntoEquipamento(models.Model):
 
     class Meta:
         db_table = 'conjunto_equipamento'
-
-
-
 
 
 class EquipamentoDeAventura(models.Model):
