@@ -61,6 +61,17 @@ class AntecedenteAdmin(admin.ModelAdmin):
     list_display = ('id_antecedente', 'nome', 'descricao')
     search_fields = ('nome',)
     list_filter = ('nome',)
+
+    
+# =============================
+# Admin para Arma
+# =============================
+
+@admin.register(Arma)
+class ArmaAdmin(admin.modelAdmin):
+    list_display = ('id_arma', 'nome', 'tipo', 'custo', 'peso', 'numero_dado_dano', 'dado_dano', 'tipo_dano')
+    search_fields = ('nome', 'tipo')
+    list_filter = ('custo', 'tipo_dano')
     
 
 # =============================
@@ -81,3 +92,29 @@ class ArmaduraAdmin(admin.ModelAdmin):
     search_fields = ('nome',)
     list_filter = ('nome',)
 
+# =============================
+# Admin para ConjutoEquipamento
+# =============================
+@admin.register(ConjuntoEquipamento)
+class ConjuntoEquipamentoAdmin(admin.modelAdmin):
+    list_display = ('id_conjuto_equipamento', 'nome', 'descricao', 'classe')
+    search_fields = ('nome', 'descricao')
+    list_filter = ('classe',)
+
+# =============================
+# Admin para EquipamentoAventura
+# =============================
+@admin.register(EquipamentoAventura)
+class EquipamentoAventuraAdmin(admin.modelAdmin):
+    list_display = ('id_equipamento_de_aventura', 'nome_ferramenta', 'descricao', 'custo', 'peso', 'classe', 'conjunto_equipamento')
+    search_fields = ('nome', 'custo')
+    list_filter = ('classe',)
+
+# =============================
+# Admin para Ferramenta
+# =============================
+@admin.register(Ferramenta)
+class FerramentaAdmin(admin.modelAdmin):
+    list_display = ('id_ferramenta', 'nome_ferramenta', 'custo', 'peso', 'classe')
+    search_fields = ('', '')
+    list_filter = ('', '')

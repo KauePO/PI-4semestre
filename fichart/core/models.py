@@ -58,24 +58,6 @@ class Arma(models.Model):
         db_table = 'arma'
 
 
-class ArmaHasClasse(models.Model):
-    pk = models.CompositePrimaryKey('arma_id', 'classe_id')
-    arma = models.ForeignKey(Arma, models.DO_NOTHING)
-    classe = models.ForeignKey('Classe', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'arma_has_classe'
-
-
-class ArmaHasPersonagem(models.Model):
-    pk = models.CompositePrimaryKey('arma_id', 'personagem_id')
-    arma = models.ForeignKey(Arma, models.DO_NOTHING)
-    personagem = models.ForeignKey('Personagem', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'arma_has_personagem'
-
-
 class Armadura(models.Model):
     id_armadura = models.AutoField(primary_key=True)
     tipo_armadura = models.ForeignKey('TipoArmadura', models.DO_NOTHING)
@@ -129,18 +111,13 @@ class ConjuntoEquipamento(models.Model):
     id_conjunto_equipamento = models.AutoField(primary_key=True)
     nome = models.CharField()
     descricao = models.TextField()
+    classe = models.ManyToManyField(Classe)
 
     class Meta:
         db_table = 'conjunto_equipamento'
 
 
-class ConjuntoEquipamentoHasClasse(models.Model):
-    pk = models.CompositePrimaryKey('conjunto_equipamento_id', 'classe_id')
-    conjunto_equipamento = models.ForeignKey(ConjuntoEquipamento, models.DO_NOTHING)
-    classe = models.ForeignKey(Classe, models.DO_NOTHING)
 
-    class Meta:
-        db_table = 'conjunto_equipamento_has_classe'
 
 
 class EquipamentoDeAventura(models.Model):
@@ -149,27 +126,11 @@ class EquipamentoDeAventura(models.Model):
     descricao = models.TextField(blank=True, null=True)
     custo = models.IntegerField()
     peso = models.FloatField()
+    classe = models.ManyToManyField(Classe)
+    conjunto_equipamento = models.ManyToManyField(ConjuntoEquipamento)
 
     class Meta:
         db_table = 'equipamento_de_aventura'
-
-
-class EquipamentoDeAventuraHasClasse(models.Model):
-    pk = models.CompositePrimaryKey('classe_id', 'equipamento_de_aventura_id')
-    classe = models.ForeignKey(Classe, models.DO_NOTHING)
-    equipamento_de_aventura = models.ForeignKey(EquipamentoDeAventura, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'equipamento_de_aventura_has_classe'
-
-
-class EquipamentoDeAventuraHasConjuntoEquipamento(models.Model):
-    pk = models.CompositePrimaryKey('conjunto_equipamento_id', 'equipamento_de_aventura_id')
-    conjunto_equipamento = models.ForeignKey(ConjuntoEquipamento, models.DO_NOTHING)
-    equipamento_de_aventura = models.ForeignKey(EquipamentoDeAventura, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'equipamento_de_aventura_has_conjunto_equipamento'
 
 
 class Ferramenta(models.Model):
@@ -177,18 +138,10 @@ class Ferramenta(models.Model):
     nome_ferramenta = models.CharField()
     custo = models.IntegerField()
     peso = models.IntegerField()
+    classe = models.ManyToManyField(Classe)
 
     class Meta:
         db_table = 'ferramenta'
-
-
-class FerramentaHasClasse(models.Model):
-    pk = models.CompositePrimaryKey('classe_id', 'ferramenta_id')
-    classe = models.ForeignKey(Classe, models.DO_NOTHING)
-    ferramenta = models.ForeignKey(Ferramenta, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'ferramenta_has_classe'
 
 
 class HabilidadeEspecial(models.Model):
@@ -267,7 +220,7 @@ class Personagem(models.Model):
     traco_personalidade = models.CharField(blank=True, null=True)
     ideais = models.CharField(blank=True, null=True)
     ligacoes = models.CharField(blank=True, null=True)
-
+    arma = models.ManyToManyField(Arma)
     class Meta:
         db_table = 'personagem'
 
@@ -397,7 +350,7 @@ class TipoArmadura(models.Model):
     id_tipo_armadura = models.AutoField(primary_key=True)
     nome_tipo_armadura = models.CharField(blank=True, null=True)
     descricao = models.TextField(blank=True, null=True)
-
+    personagem = models.ManyToManyField(Personagem)
     class Meta:
         db_table = 'tipo_armadura'
     
