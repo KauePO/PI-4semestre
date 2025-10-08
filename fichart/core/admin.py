@@ -62,15 +62,6 @@ class AntecedenteAdmin(admin.ModelAdmin):
     search_fields = ('nome',)
     list_filter = ('nome',)
     
-# =============================
-# Admin para Armadura
-# =============================
-@admin.register(Armadura)
-class ArmaduraAdmin(admin.ModelAdmin):
-    list_display = ('id_armadura', 'nome', )
-    search_fields = ('nome',)
-    list_filter = ('nome',)
-    
 
 # =============================
 # Admin para Tipo Armadura
@@ -80,4 +71,13 @@ class TipoArmaduraAdmin(admin.ModelAdmin):
     list_display = ('id_tipo_armadura', 'nome_tipo_armadura', )
     search_fields = ('nome_tipo_armadura',)
     list_filter = ('nome_tipo_armadura',)
+
+# =============================
+# Admin para Armadura
+# =============================
+@admin.register(Armadura)
+class ArmaduraAdmin(admin.ModelAdmin):
+    list_display = ('id_armadura', 'nome', 'descricao', 'tipo_armadura', 'classe_de_armadura')
+    search_fields = ('nome',)
+    list_filter = ('nome',)
 

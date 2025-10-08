@@ -16,75 +16,14 @@
             font-family: "Inter";
             font-weight: bold;
             color: white;
-            overflow-y: hidden;
-            overflow-x: hidden;
+            /* Removido overflow hidden para permitir scroll em mobile */
         }
 
-        /*.wizard-progresso {
-            display: table;
-            width: 100%;
-            table-layout: fixed;
-            position: relative;
-
-            .passo {
-                display: table-cell;
-                text-align: center;
-                vertical-align: top;
-                overflow: visible;
-                position: relative;
-                font-size: 14px;
-                color: beige;
-                font-weight: bold;
-
-                &:not(:last-child):before {
-                    content: '';
-                    display: block;
-                    position: absolute;
-                    left: 50%;
-                    top: 40px;
-                    background-color: rgb(194, 194, 188);
-                    height: 6px;
-                    width: 100%;
-                }
-
-                .no {
-                    display: inline-block;
-
-                    background-color: beige;
-                    border-radius: 42px;
-                    height: 40px;
-                    width: 40px;
-                    position: absolute;
-                    top: 25px;
-                    left: 50%;
-                    margin-left: -18px;
-
-                }
-
-                &.complete {
-                    &:before {
-                        background-color: rgb(235, 141, 74);
-                    }
-
-                    .no {
-
-                        background-color: #FFCF14;
-                        ;
-                    }
-
-                    &:before {
-                        font-family: fantasy;
-
-                    }
-                }
-            }
-
-
-        }*/
-
         .avatar-img {
-            width: 483px;
-            height: 314px;
+            width: 100%;
+            max-width: 483px;
+            height: auto;
+            max-height: 314px;
             object-fit: cover;
             border: 3px solid #dee2e6;
         }
@@ -92,7 +31,6 @@
         .overflow-y {
             overflow-y: auto;
             scrollbar-width: thin;
-            /* For Firefox */
         }
 
         .antecedente-option {
@@ -112,33 +50,33 @@
             font-weight: bold;
         }
 
-
         /* Wizard Navigation Styles */
         .wizard-nav {
-            padding: 1.5rem;
+            padding: 1rem;
         }
 
         .wizard-step {
             text-align: center;
             position: relative;
-            padding: 0 10px;
+            padding: 0 5px;
             z-index: 3;
         }
 
         .wizard-step .step-number {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             background-color: #e3e3e3;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 10px;
+            margin: 0 auto 5px;
             font-weight: bold;
             transition: all 0.3s ease;
             position: relative;
             z-index: 3;
+            font-size: 0.9rem;
         }
 
         .wizard-step.active .step-number {
@@ -151,23 +89,21 @@
             background-color: #ffc014;
         }
 
-
-
-
         .wizard-step .step-label {
             position: relative;
             color: white;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 500;
             z-index: 3;
+            line-height: 1.2;
         }
 
         .wizard-connector {
             position: absolute;
-            top: 45px;
+            top: 40px;
             left: -30%;
             width: 60%;
-            height: 8px;
+            height: 6px;
             background-color: #e3e3e3;
             z-index: 2;
         }
@@ -180,20 +116,8 @@
             display: none;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .wizard-step .step-label {
-                font-size: 0.75rem;
-            }
-
-            .wizard-step {
-                padding: 0 5px;
-            }
-        }
-
-
         .scroll-custom::-webkit-scrollbar {
-            scrollbar-width: thin;
+           scrollbar-width: thin;
         }
 
         .scroll-custom::-webkit-scrollbar-track {
@@ -217,17 +141,49 @@
             scale: 1.2;
         }
 
-        #descricaoAntecedente {}
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .wizard-step .step-label {
+                font-size: 0.65rem;
+            }
+            
+            .wizard-step .step-number {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+            
+            .wizard-connector {
+                top: 35px;
+                height: 5px;
+            }
+            
+            .container-fluid {
+                padding: 0 10px;
+            }
+            
+            .antecedente-option h6 {
+                font-size: 1.1rem !important;
+            }
+            
+            #descricaoAntecedente {
+                font-size: 1rem !important;
+            }
+        }
 
-        #iconeAntecedente {}
+        @media (max-width: 576px) {
+            .wizard-nav {
+                padding: 0.5rem;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-8">
-
+            <!-- Coluna principal -->
+            <div class="col-12 col-lg-8">
                 <!-- Wizard Navigation -->
                 <div class="wizard-nav">
                     <div class="row align-items-center">
@@ -235,10 +191,9 @@
                             <div class="step-label pb-2 ">Classe</div>
                             <div class="wizard-connector rounded-5 completed"></div>
                             <a href="{% url 'TelaClasses' %}" class="step-number"></a>
-
                         </div>
-                        <div class="col wizard-step completed" data-step="2">
-                            <div class="step-label pb-2 ">Raça</div>
+                        <div class="col wizard-step active completed" data-step="2">
+                            <div class="step-label pb-2">Raça</div>
                             <div class="wizard-connector rounded-5 completed"></div>
                             <a href="{% url 'TelaEscolhaRaca' %}" class="step-number"></a>
                         </div>
@@ -266,56 +221,46 @@
                 </div>
 
                 <div class="row">
-                    <!-- Coluna Esquerda - Seleção de Antecedente -->
-                    <div class="col">
-                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh; max-width: 62vh; min-width: 62vh;">
-
-                            <div class="list-group pe-2">
-
+                    <!-- Coluna Esquerda - Seleção de Classe -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="scroll-custom overflow-x-hidden pe-2" style="max-height: 78vh; overflow-y: auto;">
+                            <div class="list-group">
                                 {% for antecedente in antecedentes %}
                                 <a href="#"
-                                    class="mb-4 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action antecedente-option "
+                                    class="mb-3 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action antecedente-option"
                                     data-class-id="{{antecedente.id_antecedente}}">
                                     <div>
-                                        <h6 class="mb-1 fs-3"> {{ antecedente.nome }} </h6>
+                                        <h6 class="mb-1 fs-5"> {{ antecedente.nome }} </h6>
                                     </div>
                                 </a>
                                 {% endfor %}
                             </div>
-
                         </div>
                     </div>
 
                     <!-- Coluna Central - Ícone + Descrição -->
-
-                    <div class="col ms-5">
-                        <div class="col-md-4 ">
-                            <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh; max-width: 62vh; min-width: 62vh;">
-                                <div class="card-body text-center">
-                                    <img id="iconeAntecedente" src="" alt="Ícone do Antecedente"
-                                        class="avatar-img img-fluid mb-3 rounded-5">
-                                    <p id="descricaoAntecedente" class="lead mt-3 fs-3 text-start">
-                                    </p>
-
-                                </div>
-
+                    <div class="col-12 col-md-6 mb-3">
+                        <div class="scroll-custom overflow-x-hidden p-1" style="max-height: 78vh; overflow-y: auto;">
+                            <div class="card-body text-center">
+                                <img id="iconeAntecedente" src="" alt="Ícone da Classe"
+                                    class="avatar-img img-fluid mb-3 rounded-5">
+                                <p id="descricaoAntecedente" class="lead mt-3 text-start fs-6">
+                                </p>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
 
-            <div class="col-4 container-fluid mt-5">
-                <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+            <!-- Coluna lateral -->
+            <div class="col-12 col-lg-4 mt-3 mt-lg-5">
+                <div class="scroll-custom overflow-x-hidden" style="max-height: 78vh; overflow-y: auto;">
                     <div class="card-body text-center">
                         <img src="{% static 'images/PLACEHOLDER.png' %}" alt="Avatar"
                             class="avatar-img img-fluid mb-3 rounded-5">
                         <!-- CAMPO DE TEXTO -->
                         <form method="post">
                             {% csrf_token %}
-
                             <div class="mb-3">
                                 {{ form.nome }}
                                 {% if form.nome.errors %}
@@ -328,22 +273,20 @@
 
                         <div class="row">
                             <div class="col-5">
-                                <p class="text-end">Nível 1</p>
+                                <p class="text-end mb-0">Nível 1</p>
                             </div>
                             <div class="col-2">
-                                <p class="">-</p>
+                                <p class="mb-0">-</p>
                             </div>
                             <div class="col-5">
-                                <p class="text-start" id="current-class"></p>
+                                <p class="text-start mb-0" id="current-class"></p>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
@@ -387,7 +330,7 @@
         option.addEventListener('click', function (e) {
             e.preventDefault();
 
-            //remove os dados de antecedente do localStorage
+            //remove os dados de raca e subraca do localStorage
             localStorage.removeItem("antecedente")
 
             // Remove active de todos os itens
