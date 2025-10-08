@@ -400,6 +400,10 @@ class TipoArmadura(models.Model):
 
     class Meta:
         db_table = 'tipo_armadura'
+    
+    def __str__(self):
+        return self.nome_tipo_armadura
+        
 
 
 class Truque(models.Model):
