@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Raca, Subraca, Personagem, Classe, Magia, Truque, Antecedente
+from .models import Raca, Subraca, Personagem, Classe, Magia, Truque, Antecedente, Armadura, TipoArmadura
 
 # =============================
 # Admin otimizado para Raca
@@ -61,4 +61,23 @@ class AntecedenteAdmin(admin.ModelAdmin):
     list_display = ('id_antecedente', 'nome', 'descricao')
     search_fields = ('nome',)
     list_filter = ('nome',)
+    
+# =============================
+# Admin para Armadura
+# =============================
+@admin.register(Armadura)
+class ArmaduraAdmin(admin.ModelAdmin):
+    list_display = ('id_armadura', 'nome', )
+    search_fields = ('nome',)
+    list_filter = ('nome',)
+    
+
+# =============================
+# Admin para Tipo Armadura
+# =============================
+@admin.register(TipoArmadura)
+class TipoArmaduraAdmin(admin.ModelAdmin):
+    list_display = ('id_tipo_armadura', 'nome_tipo_armadura', )
+    search_fields = ('nome_tipo_armadura',)
+    list_filter = ('nome_tipo_armadura',)
 

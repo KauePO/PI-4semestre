@@ -368,8 +368,6 @@
 
         const classeData = classesData[classeId];
 
-        localStorage.setItem("classe", classeId);
-
         console.log(classeData)
 
         if (classeData) {
@@ -379,7 +377,10 @@
         }
 
 
-        console.log(localStorage.getItem("classe"))
+        //Adiciona classe ao cookie
+        document.cookie = `classe=${classeData.name}; path=/`
+
+        
     }
 
 
@@ -388,8 +389,6 @@
         option.addEventListener('click', function (e) {
             e.preventDefault();
 
-            //remove os dados de raca e subraca do localStorage
-            localStorage.removeItem("classe")
 
             // Remove active de todos os itens
             document.querySelectorAll('.classe-option').forEach(item => {

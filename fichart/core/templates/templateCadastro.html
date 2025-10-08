@@ -12,7 +12,7 @@
     <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
 
     <style>
-        body{
+        body {
             background-color: #282828;
             font-family: "Inter";
             font-weight: bold;
@@ -20,30 +20,34 @@
             overflow-y: hidden;
             overflow-x: hidden;
         }
-        #form-cadastro{
+
+        #form-cadastro {
             position: relative;
             top: 300px;
         }
-        #passwordHelpBlock{
+
+        #passwordHelpBlock {
             color: white;
         }
 
-        #linkCadastrar{
+        #linkCadastrar {
             color: #FFC014;
             text-decoration: none;
         }
 
-        #inputUser, #inputPassword, #btnLogin{
+        #inputUser,
+        #inputPassword,
+        #btnLogin {
             border-top-left-radius: 0%;
             border-bottom-left-radius: 0%;
         }
 
-        #btnLogin{
+        #btnLogin {
             background-color: #FFC014;
             filter: blur(0.5px);
         }
 
-        #imageFundo{
+        #imageFundo {
             position: absolute;
             z-index: -1;
             left: 13%;
@@ -52,12 +56,25 @@
 </head>
 
 <body>
-    
-    <img id="imageFundo" src="{% static '/images/Title_Dragon_Fight_by_YngvarAsplund 1.png' %}" alt="dragão" >
+
+
+    {% if error %}
+
+        <div class="alert alert-danger alert-dismissible fade show position-absolute" role="alert">
+            {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+    {% endif %}
+
+
+
+
+    <img id="imageFundo" src="{% static '/images/Title_Dragon_Fight_by_YngvarAsplund 1.png' %}" alt="dragão">
 
     <div class="container" id="mainContainer">
         <form class=" col-5" id="form-cadastro" action="#" method="post">
-            
+
             {% csrf_token %}
 
             <img src="{% static 'images/logo_maneira.png' %}" alt="">
@@ -66,26 +83,29 @@
 
             <div class="mb-3">
 
-                <input type="text" id="inputUser" alt="Campo de usuário" class="form-control form-control-lg rounded-end-4" placeholder="Usuário" name="username">
-                
-            </div>
-
-            <div class="mb-3">
-
-                <input type="password" class="form-control form-control-lg rounded-end-4" id="inputPassword" placeholder="Senha" name="password1">
+                <input type="text" id="inputUser" alt="Campo de usuário"
+                    class="form-control form-control-lg rounded-end-4" placeholder="Usuário" name="username" required>
 
             </div>
 
             <div class="mb-3">
 
-                <input type="password" class="form-control form-control-lg rounded-end-4" id="inputPassword" placeholder="Confirme sua senha" name="password2">
+                <input type="password" class="form-control form-control-lg rounded-end-4" id="inputPassword"
+                    placeholder="Senha" name="password1" required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <input type="password" class="form-control form-control-lg rounded-end-4" id="inputPassword"
+                    placeholder="Repita sua senha" name="password2" required>
 
                 <div id="passwordHelpBlock" class="form-text">
                     Já tem uma conta? <a href="{% url 'telaLogin' %}" id="linkCadastrar">Entrar</a>
                 </div>
 
             </div>
-            
+
             <button type="submit" class="btn btn-lg rounded-end-4 text-light" id="btnLogin">Cadastrar</button>
         </form>
 

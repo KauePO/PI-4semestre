@@ -11,6 +11,7 @@ class viewTelaMagia(LoginRequiredMixin, View):
     def get(self, request):
         
         classeAtual = request.COOKIES.get("classe")
+        print(classeAtual)
         magiasObjects = Magia.objects.all().filter(classe__nome = classeAtual)
         listaMagias = {
                         "1":magiasObjects.filter(nivel = 1),
