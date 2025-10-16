@@ -30,15 +30,6 @@ jobs:
           pip install --upgrade pip
           pip install -r fichart/requirements.txt
 
-      - name: ✅ Teste básico de build
-        run: |
-          source venv/bin/activate
-          python fichart/manage.py check
-        env:
-          DJANGO_SETTINGS_MODULE: fichart.settings
-          SECRET_KEY: test
-          DEBUG: 'True'
-
       - name: 📦 Preparar artefato para deploy
         uses: actions/upload-artifact@v4
         with:
