@@ -9,6 +9,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from .views.viewTelaClasses import viewTelaClasses
 from .views.viewTelaMagia import viewTelaMagia
 from .views.viewTelaAntecedente import viewTelaAntecedente
+from .views.viewTelaAtributos import viewTelaAtributos
 
 urlpatterns = [
     path('', viewTelaLogin.as_view(), name="telaLogin"),
@@ -16,5 +17,6 @@ urlpatterns = [
     path('selecaoRaca/',viewTelaEscolhaRaca.as_view(), name="TelaEscolhaRaca"),
     path('selecaoClasse/',viewTelaClasses.as_view(), name="TelaClasses"),
     path("selecaoMagia/",viewTelaMagia.as_view(), name="TelaMagia"),
-    path('selecaoAntecedente/',viewTelaAntecedente.as_view(), name="TelaAntecedente")
+    path('selecaoAntecedente/',viewTelaAntecedente.as_view(), name="TelaAntecedente"),
+    path('selecaoAtributos/',viewTelaAtributos.as_view(), name='TelaAtributos')
 ]
