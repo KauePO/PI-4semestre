@@ -10,6 +10,43 @@ class viewTelaAtributos( LoginRequiredMixin, View):
         
         form = nomeForm()
         
-       
+        atributos = {
+            "forca": "Força",
+            "destreza": "Destreza",
+            "constituicao": "Constituição",
+            "inteligencia": "Inteligência",
+            "sabedoria": "Sabedoria",
+            "carisma": "Carisma",
+        }
         
-        return render(request,"templateTelaAtributos.html",{"form":form})
+        salvaguardas = {
+            "forca": "forca",
+            "destreza": "destreza",
+            "constituicao": "constituicao",
+            "inteligencia": "inteligencia",
+            "sabedoria": "sabedoria",
+            "carisma": "carisma",
+        }
+        
+        pericias = {
+            "acrobacia": "destreza",
+            "arcanismo": "inteligencia",
+            "atletismo": "forca",
+            "atuacao": "carisma",
+            "enganacao": "carisma",
+            "furtividade": "destreza",
+            "historia": "inteligencia",
+            "intimidacao": "carisma",
+            "intuição": "sabedoria",
+            "investigacao": "inteligencia",
+            "lidar com animais": "sabedoria",
+            "medicina": "sabedoria",
+            "natureza": "inteligencia",
+            "percepcao": "sabedoria",
+            "persuasao": "carisma",
+            "prestidigitacao": "destreza",
+            "religiao": "inteligencia",
+            "sobrevivencia": "sabedoria",
+        }
+        
+        return render(request,"templateTelaAtributos.html",{"form":form, "pericias":pericias, "salvaguardas":salvaguardas, "atributos":atributos })

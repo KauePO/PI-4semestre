@@ -208,6 +208,55 @@
         #listaMagias {
             margin-bottom: 40px;
         }
+
+        .check_salva {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .check_pericia {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .custom_check {
+            position: absolute;
+            top: 10%;
+            left: 0;
+            border-radius: 50%;
+            height: 25px;
+            width: 25px;
+            background-color: black;
+            border: white 3px solid;
+        }
+
+        .container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 22px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container:hover input~.custom_check {
+            background-color: #f5cf68;
+        }
+
+
+        .container input:checked~.custom_check {
+            background-color: #FFC014;
+        }
     </style>
 </head>
 
@@ -259,89 +308,23 @@
 
                         <h3> Atributos </h3>
 
-                        <!-- Força -->
+                        {% for nome, label in atributos.items %}
                         <div class="text-dark d-flex flex-column justify-content-center align-items-center rounded-5"
                             style="padding: 10px; width: 25%; background-color: #D9D9D9;">
-                            <span id="modificador_forca"
-                                style="background-color: #FFFFFF; padding:1px 10px 1px 10px; font-size: 1.5rem;"
-                                class="rounded-5 align-self-end border border-black">
-                                -0
-                            </span>
-                            <input id="inputForca" data-nome_atributo="forca" type="number" min="1" max="20" value="10"
-                                class="text-center w-100 campoAtributo"
-                                style="font-size: 4rem; font-weight:900; border:none; background-color:#D9D9D9; outline:none;">
-                            <span>FORÇA</span>
-                        </div>
 
-                        <!-- Destreza -->
-                        <div class="text-dark d-flex flex-column justify-content-center align-items-center rounded-5"
-                            style="padding: 10px; width: 25%; background-color: #D9D9D9;">
-                            <span id="modificador_destreza"
-                                style="background-color: #FFFFFF; padding:1px 10px 1px 10px; font-size: 1.5rem;"
+                            <span id="modificador_{{ nome }}"
+                                style="background-color: #FFFFFF; padding:1px 10px; font-size: 1.5rem;"
                                 class="rounded-5 align-self-end border border-black">
-                                -0
+                                0
                             </span>
-                            <input id="inputDestreza" data-nome_atributo="destreza" type="number" min="1" max="20"
+
+                            <input id="input_{{ nome }}" data-nome_atributo="{{ nome }}" type="number" min="1" max="20"
                                 value="10" class="text-center w-100 campoAtributo"
                                 style="font-size: 4rem; font-weight:900; border:none; background-color:#D9D9D9; outline:none;">
-                            <span>DESTREZA</span>
-                        </div>
 
-                        <!-- Constituição -->
-                        <div class="text-dark d-flex flex-column justify-content-center align-items-center rounded-5"
-                            style="padding: 10px; width: 25%; background-color: #D9D9D9;">
-                            <span id="modificador_constituicao"
-                                style="background-color: #FFFFFF; padding:1px 10px 1px 10px; font-size: 1.5rem;"
-                                class="rounded-5 align-self-end border border-black">
-                                -0
-                            </span>
-                            <input id="inputConstituicao" data-nome_atributo="constituicao" type="number" min="1"
-                                max="20" value="10" class="text-center w-100 campoAtributo"
-                                style="font-size: 4rem; font-weight:900; border:none; background-color:#D9D9D9; outline:none;">
-                            <span>CONSTITUIÇÃO</span>
+                            <span>{{ label }}</span>
                         </div>
-
-                        <!-- Inteligência -->
-                        <div class="text-dark d-flex flex-column justify-content-center align-items-center rounded-5"
-                            style="padding: 10px; width: 25%; background-color: #D9D9D9;">
-                            <span id="modificador_inteligencia"
-                                style="background-color: #FFFFFF; padding:1px 10px 1px 10px; font-size: 1.5rem;"
-                                class="rounded-5 align-self-end border border-black">
-                                -0
-                            </span>
-                            <input id="inputInteligencia" data-nome_atributo="inteligencia" type="number" min="1"
-                                max="20" value="10" class="text-center w-100 campoAtributo"
-                                style="font-size: 4rem; font-weight:900; border:none; background-color:#D9D9D9; outline:none;">
-                            <span>INTELIGÊNCIA</span>
-                        </div>
-
-                        <!-- Sabedoria -->
-                        <div class="text-dark d-flex flex-column justify-content-center align-items-center rounded-5"
-                            style="padding: 10px; width: 25%; background-color: #D9D9D9;">
-                            <span id="modificador_sabedoria"
-                                style="background-color: #FFFFFF; padding:1px 10px 1px 10px; font-size: 1.5rem;"
-                                class="rounded-5 align-self-end border border-black">
-                                -0
-                            </span>
-                            <input id="inputSabedoria" data-nome_atributo="sabedoria" type="number" min="1" max="20"
-                                value="10" class="text-center w-100 campoAtributo"
-                                style="font-size: 4rem; font-weight:900; border:none; background-color:#D9D9D9; outline:none;">
-                            <span>SABEDORIA</span>
-                        </div>
-
-                        <!-- Carisma -->
-                        <div class="text-dark d-flex flex-column justify-content-center align-items-center rounded-5"
-                            style="padding: 10px; width: 25%; background-color: #D9D9D9;">
-                            <span id="modificador_carisma"
-                                style="background-color: #FFFFFF; padding:1px 10px 1px 10px; font-size: 1.5rem;"
-                                class="rounded-5 align-self-end border border-black">
-                                -0
-                            </span>
-                            <input id="inputCarisma" data-nome_atributo="carisma" type="number" min="1" max="20"
-                                value="10" class="text-center w-100 campoAtributo"
-                                style="font-size: 4rem; font-weight:900; border:none; background-color:#D9D9D9; outline:none;">
-                            <spanCARISMA< /span>
-                        </div>
+                        {% endfor %}
 
 
                     </div>
@@ -349,12 +332,42 @@
                     <div class="col ms-5">
 
                         <center>
-                            <h2>Escolhidas</h2>
+                            <h2>SALVAGUARDAS</h2>
                         </center>
+
                         <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+
+                            {% for nome, atributo in salvaguardas.items %}
+                            <label for="check_{{ nome }}" style="display: block;" class="container">
+                                <span id="valor_salva_{{ nome }}">0</span>
+                                {{ atributo|capfirst }}
+                                <input class="check_salva" id="check_{{ nome }}" type="checkbox" value="{{ nome }}"
+                                    data-tipo_atributo="{{ atributo }}" />
+                                <span class="custom_check"></span>
+                            </label>
+                            {% endfor %}
+
 
                         </div>
 
+                        <center>
+                            <h2>Perícias</h2>
+                        </center>
+
+
+                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+
+                            {% for nome, atributo in pericias.items %}
+                            <label for="check_{{ nome }}" style="display: block;" class="container">
+                                <span id="valor_pericia_{{ nome }}">0</span>
+                                {{ nome|capfirst }} ({{ atributo }})
+                                <input class="check_pericia" id="check_{{ nome }}" type="checkbox" value="{{ nome }}"
+                                    data-tipo_atributo="{{ atributo }}" />
+                                <span class="custom_check"></span>
+                            </label>
+                            {% endfor %}
+
+                        </div>
                     </div>
                 </div>
 
@@ -446,22 +459,17 @@
 
     //------ SCRIPT DA TELA DE ATRIBUTOS -------------
 
-
-
-
-
+    //Funcionalidade de atribuir ou remover pontos de atributo
     document.querySelectorAll(".campoAtributo").forEach(input => {
         input.addEventListener("change", () => modificarAtributo(input));
     });
 
 
     function modificarAtributo(input) {
-        console.log("teste");
+
         const valorAtributo = Math.max(1, Math.min(20, parseInt(input.value)));
 
         const nomeAtributo = input.dataset.nome_atributo;
-
-        console.log(nomeAtributo);
 
         const campoModificador = document.getElementById(`modificador_${nomeAtributo}`)
 
@@ -474,9 +482,60 @@
         campoModificador.innerHTML = modificador;
 
         document.cookie = `${nomeAtributo}=${valorAtributo}; path=/`;
+
+        document.getElementById(`valor_salva_${nomeAtributo}`).innerHTML = modificador;
+
+        modificarSalva(document.querySelector(`[data-tipo_atributo = '${nomeAtributo}']`));
+
+        document.querySelectorAll(`.check_pericia[data-tipo_atributo="${nomeAtributo}"]`)
+            .forEach(checkbox => {
+                modificarPericia(checkbox);
+            });
     }
 
 
+    //Funcionalide de escolher salva guarda
+
+    document.querySelectorAll('.check_salva').forEach(checkbox => {
+        checkbox.addEventListener('change', () => modificarSalva(checkbox));
+    });
+
+    function modificarSalva(checkbox) {
+        const tipo_atributo = checkbox.dataset.tipo_atributo;
+        const valor_campo_modificador = parseInt(document.getElementById(`modificador_${tipo_atributo}`).innerHTML)
+
+
+
+        if (checkbox.checked) {
+            document.getElementById(`valor_salva_${tipo_atributo}`).innerHTML = valor_campo_modificador + 2;
+        }
+        else {
+            document.getElementById(`valor_salva_${tipo_atributo}`).innerHTML = valor_campo_modificador;
+        }
+
+    }
+
+    //Funcionalide de escolher  perícias
+
+    document.querySelectorAll('.check_pericia').forEach(checkbox => {
+        checkbox.addEventListener('change', () => modificarPericia(checkbox));
+    });
+
+    function modificarPericia(checkbox) {
+        const tipo_atributo = checkbox.dataset.tipo_atributo;
+        const nome_pericia = checkbox.value;
+        const valor_campo_modificador = parseInt(document.getElementById(`modificador_${tipo_atributo}`).innerHTML)
+
+
+
+        if (checkbox.checked) {
+            document.getElementById(`valor_pericia_${nome_pericia}`).innerHTML = valor_campo_modificador + 2;
+        }
+        else {
+            document.getElementById(`valor_pericia_${nome_pericia}`).innerHTML = valor_campo_modificador;
+        }
+
+    }
 
 
 </script>
