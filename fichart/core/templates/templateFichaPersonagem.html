@@ -203,7 +203,7 @@
             /* Amarelo dourado */
         }
 
-        .proficiencia-card{
+        .proficiencia-card {
             flex: 1;
             background-color: #8D8D8D;
             /* Parte cinza escura à esquerda */
@@ -213,6 +213,34 @@
             border-right: 2px solid #d9d9d9;
             /* Pequeno contraste na divisão */
             max-height: 40vh;
+        }
+
+        .truque-descricao {
+            max-height: 90px;
+            /* Altura máxima antes do colapso */
+            overflow: hidden;
+            position: relative;
+            transition: max-height 0.3s ease;
+        }
+
+        .truque-descricao.expandido {
+            max-height: 1000px;
+            /* Altura expandida */
+        }
+
+        .truque-descricao::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to top, rgba(41, 127, 212, 1), rgba(41, 127, 212, 0));
+            pointer-events: none;
+        }
+
+        .truque-descricao.expandido::after {
+            display: none;
         }
     </style>
 </head>
@@ -449,12 +477,309 @@
                         <li>{{idioma}}</li>
                         {% endfor %}
                     </ul>
-
                 </div>
 
 
         </div>
+
+        <div class="col-12 col-lg-6 section overflow-auto scroll-custom" style="max-height: 75vh;">
+
+            <h1 class="text-center">MAGIAS E TRUQUES</h1>
+            <div>
+                <div>
+                    <h4>Truques</h4>
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for truque in truques %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do truque -->
+                                <div class="proficiencia-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ truque.nome }}</strong> - {{ truque.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ truque.tempoConjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ truque.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ truque.componentes }}<br>
+                                    <strong>Duração:</strong> {{ truque.duracao }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}"
+                                    style="background-color: #297fd4;">
+                                    {{ truque.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_truque }}" style="display: none;">
+                                    ▼ Mostrar mais
+                                </button>
+                            </div>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="">Nível 1</h4>
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for magia in magias%}
+                            {% if magia.nivel == 1 %}
+                            <div class="text-start mb-2">
+                                <div class="proficiencia-card">
+                                    {{magia.nome}} - {{magia.escola}}<br>
+                                    Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
+                                    Alcance: {{magia.alcance}}<br>
+                                    Componentes: {{magia.componentes}}<br>
+                                    Duração: {{magia.duracao}}<br>
+                                </div>
+                                <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
+                                    {{magia.descricao}}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="">Nível 2</h4>
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for magia in magias%}
+                            {% if magia.nivel == 2 %}
+                            <div class="text-start mb-2">
+                                <div class="proficiencia-card">
+                                    {{magia.nome}} - {{magia.escola}}<br>
+                                    Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
+                                    Alcance: {{magia.alcance}}<br>
+                                    Componentes: {{magia.componentes}}<br>
+                                    Duração: {{magia.duracao}}<br>
+                                </div>
+                                <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
+                                    {{magia.descricao}}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="">Nível 3</h4>
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for magia in magias%}
+                            {% if magia.nivel == 3 %}
+                            <div class="text-start mb-2">
+                                <div class="proficiencia-card">
+                                    {{magia.nome}} - {{magia.escola}}<br>
+                                    Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
+                                    Alcance: {{magia.alcance}}<br>
+                                    Componentes: {{magia.componentes}}<br>
+                                    Duração: {{magia.duracao}}<br>
+                                </div>
+                                <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
+                                    {{magia.descricao}}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="">Nível 4</h4>
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for magia in magias%}
+                            {% if magia.nivel == 4 %}
+                            <div class="text-start mb-2">
+                                <div class="proficiencia-card">
+                                    {{magia.nome}} - {{magia.escola}}<br>
+                                    Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
+                                    Alcance: {{magia.alcance}}<br>
+                                    Componentes: {{magia.componentes}}<br>
+                                    Duração: {{magia.duracao}}<br>
+                                </div>
+                                <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
+                                    {{magia.descricao}}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="">Nível 5</h4>
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for magia in magias%}
+                            {% if magia.nivel == 5 %}
+                            <div class="text-start mb-2">
+                                <div class="proficiencia-card">
+                                    {{magia.nome}} - {{magia.escola}}<br>
+                                    Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
+                                    Alcance: {{magia.alcance}}<br>
+                                    Componentes: {{magia.componentes}}<br>
+                                    Duração: {{magia.duracao}}<br>
+                                </div>
+                                <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
+                                    {{magia.descricao}}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="">Nível 6</h4>
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for magia in magias%}
+                            {% if magia.nivel == 6 %}
+                            <div class="text-start mb-2">
+                                <div class="proficiencia-card">
+                                    {{magia.nome}} - {{magia.escola}}<br>
+                                    Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
+                                    Alcance: {{magia.alcance}}<br>
+                                    Componentes: {{magia.componentes}}<br>
+                                    Duração: {{magia.duracao}}<br>
+                                </div>
+                                <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
+                                    {{magia.descricao}}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="">Nível 7</h4>
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for magia in magias%}
+                            {% if magia.nivel == 7 %}
+                            <div class="text-start mb-2">
+                                <div class="proficiencia-card">
+                                    {{magia.nome}} - {{magia.escola}}<br>
+                                    Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
+                                    Alcance: {{magia.alcance}}<br>
+                                    Componentes: {{magia.componentes}}<br>
+                                    Duração: {{magia.duracao}}<br>
+                                </div>
+                                <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
+                                    {{magia.descricao}}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="">Nível 8</h4>
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for magia in magias%}
+                            {% if magia.nivel == 8 %}
+                            <div class="text-start mb-2">
+                                <div class="proficiencia-card">
+                                    {{magia.nome}} - {{magia.escola}}<br>
+                                    Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
+                                    Alcance: {{magia.alcance}}<br>
+                                    Componentes: {{magia.componentes}}<br>
+                                    Duração: {{magia.duracao}}<br>
+                                </div>
+                                <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
+                                    {{magia.descricao}}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="">Nível 9</h4>
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for magia in magias%}
+                            {% if magia.nivel == 9 %}
+                            <div class="text-start mb-2">
+                                <div class="proficiencia-card">
+                                    {{magia.nome}} - {{magia.escola}}<br>
+                                    Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
+                                    Alcance: {{magia.alcance}}<br>
+                                    Componentes: {{magia.componentes}}<br>
+                                    Duração: {{magia.duracao}}<br>
+                                </div>
+                                <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
+                                    {{magia.descricao}}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        </div>
     </div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".truque-descricao").forEach(desc => {
+            const button = desc.parentElement.querySelector(".ver-mais");
+
+            // Se o conteúdo ultrapassar o limite visível, mostra o botão
+            if (desc.scrollHeight > desc.clientHeight + 5) {
+                button.style.display = "block";
+            }
+
+            // Evento de clique para expandir/recolher
+            button.addEventListener("click", () => {
+                const expandido = desc.classList.toggle("expandido");
+                button.textContent = expandido ? "▲ Mostrar menos" : "▼ Mostrar mais";
+            });
+        });
+    });
+</script>
+
+
+
 
 </html>
