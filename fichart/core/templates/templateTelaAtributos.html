@@ -16,7 +16,6 @@
             font-family: "Inter";
             font-weight: bold;
             color: white;
-            overflow-y: hidden;
             overflow-x: hidden;
         }
 
@@ -302,9 +301,8 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col overflow-x-hidden scroll-custom scroll-thin d-flex row-gap-3 align-items-center flex-column"
-                        style="max-height: 78vh;">
+                <div class="row" >
+                    <div class="col overflow-x-hidden scroll-custom scroll-thin d-flex row-gap-3 align-items-center flex-column" style="max-height: 84.5dvh;">
 
                         <h3> Atributos </h3>
 
@@ -329,13 +327,13 @@
 
                     </div>
 
-                    <div class="col ms-5">
+                    <div class="col ms-5 overflow-x-hidden scroll-custom scroll-thin" style="max-height: 84.5dvh;">
 
                         <center>
                             <h2>SALVAGUARDAS</h2>
                         </center>
 
-                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+                        <div >
 
                             {% for nome, atributo in salvaguardas.items %}
                             <label for="check_{{ nome }}" style="display: block;" class="container">
@@ -355,7 +353,7 @@
                         </center>
 
 
-                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+                        <div>
 
                             {% for nome, atributo in pericias.items %}
                             <label for="check_{{ nome }}" style="display: block;" class="container">
@@ -374,7 +372,7 @@
             </div>
 
             <div class="col-4 container-fluid mt-5">
-                <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+                <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78dvh;">
                     <div class="card-body text-center">
                         <img src="{% static 'images/PLACEHOLDER.png' %}" alt="Avatar"
                             class="avatar-img img-fluid mb-3 rounded-5">
@@ -418,126 +416,127 @@
 </body>
 
 <script>
-    // Inicialização 
     document.addEventListener('DOMContentLoaded', function () {
-        // Seleciona a primeira classe por padrão, se existir
-
-
         let playerNome = localStorage.getItem("playerNome") ?? "";
-
-        playerName = document.getElementById("id_nome").value = playerNome;
-        // Inicializa o wizard no passo 4
+        document.getElementById("id_nome").value = playerNome;
         updateWizardProgress(5);
+
+        // ---- RECUPERA COOKIES E REAPLICA ESTADOS ----
+        carregarAtributosDosCookies();
+        carregarCheckboxesDosCookies();
     });
 
-    //preenchimento do wizard
-
+    // WIZARD
     function updateWizardProgress(completedStep) {
-        // Atualiza as classes dos passos
-        document.querySelectorAll('.wizard-step').forEach((step, index) => {
+        document.querySelectorAll('.wizard-step').forEach((step) => {
             const stepNumber = parseInt(step.dataset.step);
-
             step.classList.remove('active', 'completed');
-
-            if (stepNumber < completedStep) {
-                step.classList.add('completed');
-            } else if (stepNumber === completedStep) {
-                step.classList.add('active');
-            }
+            if (stepNumber < completedStep) step.classList.add('completed');
+            else if (stepNumber === completedStep) step.classList.add('active');
         });
     }
 
-
-    // Preenchimento do nome do player
-
-    let playerNome = document.getElementById("id_nome");
-
-    playerNome.addEventListener("change", function () {
+    // PLAYER NAME
+    document.getElementById("id_nome").addEventListener("change", function () {
         localStorage.setItem("playerNome", this.value);
-    })
+    });
 
+    // ---------------- FUNÇÕES DE COOKIES ----------------
 
-    //------ SCRIPT DA TELA DE ATRIBUTOS -------------
+    function pegar_cookie(nome_cookie) {
+        nome_cookie = nome_cookie + "=";
+        const cookie_deconded = decodeURIComponent(document.cookie);
+        const lista_cookies = cookie_deconded.split(";");
+        for (let i of lista_cookies) {
+            i = i.trimStart();
+            if (i.startsWith(nome_cookie)) {
+                return i.substring(nome_cookie.length, i.length);
+            }
+        }
+        return null;
+    }
 
-    //Funcionalidade de atribuir ou remover pontos de atributo
+    function salvar_cookie(nome, valor) {
+        document.cookie = `${nome}=${valor}; path=/`;
+    }
+
+    // ---------------- ATRIBUTOS ----------------
     document.querySelectorAll(".campoAtributo").forEach(input => {
         input.addEventListener("change", () => modificarAtributo(input));
     });
 
-
     function modificarAtributo(input) {
-
         const valorAtributo = Math.max(1, Math.min(20, parseInt(input.value)));
-
         const nomeAtributo = input.dataset.nome_atributo;
-
-        const campoModificador = document.getElementById(`modificador_${nomeAtributo}`)
-
+        const campoModificador = document.getElementById(`modificador_${nomeAtributo}`);
         input.value = valorAtributo;
-
         const modificador = Math.floor((valorAtributo - 10) / 2);
-
-
-
         campoModificador.innerHTML = modificador;
 
-        document.cookie = `${nomeAtributo}=${valorAtributo}; path=/`;
+        // Salva nos cookies
+        salvar_cookie(nomeAtributo, valorAtributo);
 
+        // Atualiza salvaguardas e perícias relacionadas
         document.getElementById(`valor_salva_${nomeAtributo}`).innerHTML = modificador;
-
-        modificarSalva(document.querySelector(`[data-tipo_atributo = '${nomeAtributo}']`));
-
-        document.querySelectorAll(`.check_pericia[data-tipo_atributo="${nomeAtributo}"]`)
-            .forEach(checkbox => {
-                modificarPericia(checkbox);
-            });
+        modificarSalva(document.querySelector(`[data-tipo_atributo='${nomeAtributo}']`));
+        document.querySelectorAll(`.check_pericia[data-tipo_atributo='${nomeAtributo}']`)
+            .forEach(modificarPericia);
     }
 
+    function carregarAtributosDosCookies() {
+        document.querySelectorAll(".campoAtributo").forEach(input => {
+            const valorCookie = pegar_cookie(input.dataset.nome_atributo);
+            if (valorCookie) {
+                input.value = valorCookie;
+                input.dispatchEvent(new Event("change"));
+            }
+        });
+    }
 
-    //Funcionalide de escolher salva guarda
-
+    // ---------------- SALVAGUARDAS ----------------
     document.querySelectorAll('.check_salva').forEach(checkbox => {
-        checkbox.addEventListener('change', () => modificarSalva(checkbox));
+        checkbox.addEventListener('change', () => {
+            modificarSalva(checkbox);
+            salvar_cookie(checkbox.id, checkbox.checked ? "1" : "0");
+        });
     });
 
     function modificarSalva(checkbox) {
         const tipo_atributo = checkbox.dataset.tipo_atributo;
-        const valor_campo_modificador = parseInt(document.getElementById(`modificador_${tipo_atributo}`).innerHTML)
-
-
-
-        if (checkbox.checked) {
-            document.getElementById(`valor_salva_${tipo_atributo}`).innerHTML = valor_campo_modificador + 2;
-        }
-        else {
-            document.getElementById(`valor_salva_${tipo_atributo}`).innerHTML = valor_campo_modificador;
-        }
-
+        const valor_mod = parseInt(document.getElementById(`modificador_${tipo_atributo}`).innerHTML);
+        const campo = document.getElementById(`valor_salva_${tipo_atributo}`);
+        campo.innerHTML = checkbox.checked ? valor_mod + 2 : valor_mod;
     }
 
-    //Funcionalide de escolher  perícias
-
+    // ---------------- PERÍCIAS ----------------
     document.querySelectorAll('.check_pericia').forEach(checkbox => {
-        checkbox.addEventListener('change', () => modificarPericia(checkbox));
+        checkbox.addEventListener('change', () => {
+            modificarPericia(checkbox);
+            salvar_cookie(checkbox.id, checkbox.checked ? "1" : "0");
+        });
     });
 
     function modificarPericia(checkbox) {
         const tipo_atributo = checkbox.dataset.tipo_atributo;
         const nome_pericia = checkbox.value;
-        const valor_campo_modificador = parseInt(document.getElementById(`modificador_${tipo_atributo}`).innerHTML)
-
-
-
-        if (checkbox.checked) {
-            document.getElementById(`valor_pericia_${nome_pericia}`).innerHTML = valor_campo_modificador + 2;
-        }
-        else {
-            document.getElementById(`valor_pericia_${nome_pericia}`).innerHTML = valor_campo_modificador;
-        }
-
+        const valor_mod = parseInt(document.getElementById(`modificador_${tipo_atributo}`).innerHTML);
+        const campo = document.getElementById(`valor_pericia_${nome_pericia}`);
+        campo.innerHTML = checkbox.checked ? valor_mod + 2 : valor_mod;
     }
 
-
+    // ---------------- RECUPERA CHECKBOXES ----------------
+    function carregarCheckboxesDosCookies() {
+        document.querySelectorAll('.check_salva, .check_pericia').forEach(checkbox => {
+            const valorCookie = pegar_cookie(checkbox.id);
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+    }
 </script>
+
 
 </html>

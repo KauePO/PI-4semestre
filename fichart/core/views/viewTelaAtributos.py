@@ -2,11 +2,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.shortcuts import render, redirect
 from ..forms import nomeForm
+from core.models import Raca, IncrementoHabilidade
 
 
 class viewTelaAtributos( LoginRequiredMixin, View):
     
     def get(self, request):
+        
+        raca_escolhida = request.COOKIES.get("raca_escolhida",0)
+        
+        incremento_habilidade = IncrementoHabilidade.objects.get(raca=raca_escolhida)
+        
         
         form = nomeForm()
         
@@ -49,4 +55,13 @@ class viewTelaAtributos( LoginRequiredMixin, View):
             "sobrevivencia": "sabedoria",
         }
         
-        return render(request,"templateTelaAtributos.html",{"form":form, "pericias":pericias, "salvaguardas":salvaguardas, "atributos":atributos })
+        context = {
+            "form":form, 
+            "pericias":pericias, 
+            "salvaguardas":salvaguardas, 
+            "atributos":atributos, 
+            "incremento_habilidade":incremento_habilidade
+            }
+        
+        
+        return render(request,"templateTelaAtributos.html",context)
