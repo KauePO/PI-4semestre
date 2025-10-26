@@ -221,7 +221,7 @@ class Idiomas(models.Model):
 
 class IncrementoHabilidade(models.Model):
     id_incremento_habilidade = models.AutoField(primary_key=True)
-    subraca = models.ForeignKey('Subraca', models.DO_NOTHING)
+    subraca = models.ForeignKey('Subraca', models.DO_NOTHING, blank=1, null=1)
     nome = models.CharField()
     valor_incremento = models.IntegerField()
 
@@ -331,9 +331,9 @@ class Raca(models.Model):
     nome = models.CharField()
     velocidade = models.FloatField()
     tamanho = models.IntegerField()
-    id_subraca = models.IntegerField()
     descricao = models.TextField()
     icone = models.ImageField( upload_to="racas/" ,blank=True, null=True)
+    incremento_habilidade = models.ManyToManyField(IncrementoHabilidade)
 
     class Meta:
         db_table = 'raca'

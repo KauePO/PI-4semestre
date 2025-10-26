@@ -11,11 +11,23 @@ from core.models import Raca, Subraca
 class viewTelaEscolhaRaca(LoginRequiredMixin,View):
 
     def get(self,request):
+        
+        raca_escolhida = request.COOKIES.get("raca_escolhida") 
+        subraca_escolhida = request.COOKIES.get("subraca_escolhida") 
+        
         form = nomeForm()
 
         racas = Raca.objects.all()
         subRacas = Subraca.objects.all()
+        
+        context = {
+            'form':form, 
+            'racas':racas, 
+            "subRacas":subRacas, 
+            "raca_escolhida":raca_escolhida, 
+            "subraca_escolhida":subraca_escolhida
+            }
 
 
-        return render(request,"templateEscolhaRaca.html",{'form':form, 'racas':racas, "subRacas":subRacas})
+        return render(request,"templateEscolhaRaca.html",context)
 
