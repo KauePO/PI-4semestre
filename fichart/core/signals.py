@@ -8,5 +8,5 @@ from .models import Usuario
 @receiver (post_save, sender=User)
 
 def post_save_user (sender, instance, created, **kwargs):
-    novo_usuario = Usuario(user=instance)
-    novo_usuario.save()
+    if created:
+        Usuario.objects.get_or_create(user=instance)
