@@ -12,14 +12,34 @@
     <style>
         body {
             background-color: #1e1e1e;
-            color: #fff;
+            color: #FFFFFF;
             font-family: "Inter", sans-serif;
             font-weight: 600;
         }
 
-        h5,
-        h6 {
-            color: #ffc014;
+        hr {
+            border: none;
+            height: 8px;
+            background-color: #e3e3e3;
+            margin: 20px 0;
+        }
+
+        .titulo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 2.3rem;
+            color: #FFFFFF;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .subtitulo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #FFFFFF;
+            text-align: left;
+            margin-bottom: 10px;
         }
 
         .avatar-img {
@@ -50,17 +70,7 @@
         }
 
         .section {
-            background-color: #2b2b2b;
-            border-radius: 10px;
             padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .section-title {
-            border-bottom: 2px solid #ffc014;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            font-size: 1rem;
         }
 
         .scroll-section {
@@ -205,9 +215,33 @@
 
         .proficiencia-card {
             flex: 1;
-            background-color: #8D8D8D;
+            background-color: #e3e3e3;
             /* Parte cinza escura à esquerda */
-            color: #FFFFFF;
+            color: #000000;
+            padding: 20px 25px;
+            font-size: 1.2rem;
+            /* Pequeno contraste na divisão */
+            max-height: 340px;
+        }
+
+        .content-card {
+            flex: 1;
+            background-color: #e3e3e3;
+            /* Parte cinza escura à esquerda */
+            color: #282828;
+            padding: 20px 25px;
+            font-size: 1.2rem;
+            border-right: 2px solid #d9d9d9;
+            /* Pequeno contraste na divisão */
+            max-height: 40vh;
+            margin-bottom: 1.5rem;
+        }
+
+        .spell-card {
+            flex: 1;
+            background-color: #e3e3e3;
+            /* Parte cinza escura à esquerda */
+            color: #282828;
             padding: 20px 25px;
             font-size: 1.2rem;
             border-right: 2px solid #d9d9d9;
@@ -221,6 +255,7 @@
             overflow: hidden;
             position: relative;
             transition: max-height 0.3s ease;
+            margin-bottom: 1.5rem;
         }
 
         .truque-descricao.expandido {
@@ -242,11 +277,44 @@
         .truque-descricao.expandido::after {
             display: none;
         }
+
+        .ver-mais {
+            position: absolute;
+            bottom: 2.7rem;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            z-index: 2;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #fff;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .ver-mais:hover {
+            background-color: #ffc014;
+            color: #1a1a1a;
+            border-color: #ffc014;
+        }
+
+        .text-start.mb-2 {
+            position: relative;
+            margin-bottom: 2rem !important;
+        }
     </style>
 </head>
 
 <body class="container-fluid py-4">
     <div class="row g-3">
+        <div class="col-12 col-lg-12">
+            <button class="btn btn-outline-light" onclick="window.history.back();">
+                ← Voltar
+            </button>
+            <button class="btn btn-outline-light ms-2" onclick="">
+                Salvar
+        </div>
         <!-- Coluna esquerda: Atributos e informações básicas -->
         <div class="col-12 col-lg-5">
             <div class="section text-start" style="min-height: 75vh;">
@@ -291,7 +359,7 @@
 
                     <!-- Lado direito -->
                     <div class="col-6">
-                        <h6 class="section-title">Atributos</h6>
+                        <p class="titulo">Atributos</p>
 
                         <div class="d-flex flex-column align-items-center">
                             {% for nome, valor in personagem.atributos.items %}
@@ -333,7 +401,7 @@
 
         </div>
         <div class="col-12 col-lg-3 section overflow-auto scroll-custom" style="max-height: 75vh;">
-            <h6 class="section-title">Salvaguardas</h6>
+            <h6 class="titulo">Salvaguardas</h6>
             <div class="atributo w-100 mb-2 text-center">
                 <ul class="list-group">
 
@@ -359,7 +427,7 @@
                 </ul>
             </div>
 
-            <h6 class="section-title">Perícias</h6>
+            <h6 class="titulo">Perícias</h6>
             <div class="atributo w-100 mb-2 text-center">
                 <ul class="list-group">
                     <li class="list-group-item">
@@ -419,10 +487,10 @@
             <ul class="list-group list-group-flush">
                 <div class="row g-3">
                     <div class="col-12 col-lg-6">
-                        <h4>Pontos de Vida:</h4>
+                        <p class="subtitulo">Pontos de Vida:</p>
                     </div>
                     <div class="col-12 col-lg-6">
-                        <h4>Temporários:</h4>
+                        <p class="subtitulo">Temporários:</p>
                     </div>
                 </div>
                 <li class="status-box text-center">
@@ -437,7 +505,7 @@
                 <ul class="list-group list-group-flush">
                     <div class="row g-3">
                         <div class="col-12 col-lg-6">
-                            <h4>Dados de Vida:</h4>
+                            <p class="subtitulo">Dados de Vida:</p>
                         </div>
                     </div>
                     <li class="status-box text-center">
@@ -447,6 +515,7 @@
                 </ul>
 
                 <div class="salvaguarda">
+                    <p class="subtitulo">Salvaguarda:</p>
                     <div class="linha">
                         <label>Sucessos:</label>
                         <div class="bolas">
@@ -465,36 +534,40 @@
                     </div>
                 </div>
 
-                <div class="proficiencia-card overflow-auto scroll-custom">
-                    <ul class="">
-                        <li>Proficiências:</li>
-                        {% for proficiencia in proficiencias%}
-                        <li class="">{{ proficiencia}}</li>
-                        {% endfor %}
-
-                        <li>Idiomas:</li>
-                        {% for idioma in idiomas%}
-                        <li>{{idioma}}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
+                    <div class="proficiencia-card overflow-auto scroll-custom">
+                        <ul class="p-3" id="lista-proficiencias">
+                            <p class="fw-bolder">Proficiências:</p>
+                            {% for proficiencia in proficiencias %}
+                            <li>{{ proficiencia }}</li>
+                            {% endfor %}
+                            <button type="button" onclick="adicionarItem('lista-proficiencias')">+ Adicionar</button>
+                        </ul>
+                        <ul class="p-3" id="lista-idiomas">
+                            <p class="fw-bolder">Idiomas:</p>
+                            {% for idioma in idiomas %}
+                            <li>{{ idioma }}</li>
+                            {% endfor %}
+                            <button type="button" onclick="adicionarItem('lista-idiomas')">+ Adicionar</button>
+                        </ul>
+                    </div>
 
         </div>
 
+        <hr>
+
         <div class="col-12 col-lg-6 section overflow-auto scroll-custom" style="max-height: 75vh;">
 
-            <h1 class="text-center">MAGIAS E TRUQUES</h1>
+            <h1 class="titulo">MAGIAS E TRUQUES</h1>
             <div>
                 <div>
-                    <h4>Truques</h4>
-                    <div class="atributo w-100 mb-2 text-center">
-                        <ul class="list-group">
+                    <p class="subtitulo">Truques</p>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group" id="lista-truques">
 
                             {% for truque in truques %}
                             <div class="text-start mb-2">
                                 <!-- Cabeçalho do truque -->
-                                <div class="proficiencia-card bg-light text-dark p-2 rounded-top">
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
                                     <strong>{{ truque.nome }}</strong> - {{ truque.escola }}<br>
                                     <strong>Tempo de Conjuração:</strong> {{ truque.tempoConjuracao }}<br>
                                     <strong>Alcance:</strong> {{ truque.alcance }}<br>
@@ -511,24 +584,27 @@
                                 <!-- Botão Mostrar mais/menos -->
                                 <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
                                     data-target="#descricao{{ id_truque }}" style="display: none;">
-                                    ▼ Mostrar mais
+                                    ▼
                                 </button>
                             </div>
                             {% endfor %}
 
+                            <!-- Botão para adicionar novo truque -->
+                            <button type="button" class="btn btn-sm btn-primary mt-2"
+                                onclick="mostrarFormularioTruque()">+ Adicionar</button>
                         </ul>
                     </div>
                 </div>
 
                 <div>
-                    <h4 class="">Nível 1</h4>
-                    <div class="atributo w-100 mb-2 text-center">
+                    <p class="subtitulo">Nível 1</p>
+                    <div class="section w-100 mb-2 text-center">
                         <ul class="list-group">
 
                             {% for magia in magias%}
                             {% if magia.nivel == 1 %}
                             <div class="text-start mb-2">
-                                <div class="proficiencia-card">
+                                <div class="spell-card">
                                     {{magia.nome}} - {{magia.escola}}<br>
                                     Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
                                     Alcance: {{magia.alcance}}<br>
@@ -547,14 +623,14 @@
                 </div>
 
                 <div>
-                    <h4 class="">Nível 2</h4>
+                    <p class="">Nível 2</p>
                     <div class="atributo w-100 mb-2 text-center">
                         <ul class="list-group">
 
                             {% for magia in magias%}
                             {% if magia.nivel == 2 %}
                             <div class="text-start mb-2">
-                                <div class="proficiencia-card">
+                                <div class="spell-card">
                                     {{magia.nome}} - {{magia.escola}}<br>
                                     Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
                                     Alcance: {{magia.alcance}}<br>
@@ -573,14 +649,14 @@
                 </div>
 
                 <div>
-                    <h4 class="">Nível 3</h4>
+                    <p class="">Nível 3</p>
                     <div class="atributo w-100 mb-2 text-center">
                         <ul class="list-group">
 
                             {% for magia in magias%}
                             {% if magia.nivel == 3 %}
                             <div class="text-start mb-2">
-                                <div class="proficiencia-card">
+                                <div class="spell-card">
                                     {{magia.nome}} - {{magia.escola}}<br>
                                     Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
                                     Alcance: {{magia.alcance}}<br>
@@ -599,14 +675,14 @@
                 </div>
 
                 <div>
-                    <h4 class="">Nível 4</h4>
+                    <p class="">Nível 4</p>
                     <div class="atributo w-100 mb-2 text-center">
                         <ul class="list-group">
 
                             {% for magia in magias%}
                             {% if magia.nivel == 4 %}
                             <div class="text-start mb-2">
-                                <div class="proficiencia-card">
+                                <div class="spell-card">
                                     {{magia.nome}} - {{magia.escola}}<br>
                                     Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
                                     Alcance: {{magia.alcance}}<br>
@@ -625,14 +701,14 @@
                 </div>
 
                 <div>
-                    <h4 class="">Nível 5</h4>
+                    <p class="">Nível 5</p>
                     <div class="atributo w-100 mb-2 text-center">
                         <ul class="list-group">
 
                             {% for magia in magias%}
                             {% if magia.nivel == 5 %}
                             <div class="text-start mb-2">
-                                <div class="proficiencia-card">
+                                <div class="spell-card">
                                     {{magia.nome}} - {{magia.escola}}<br>
                                     Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
                                     Alcance: {{magia.alcance}}<br>
@@ -651,14 +727,14 @@
                 </div>
 
                 <div>
-                    <h4 class="">Nível 6</h4>
+                    <p class="">Nível 6</p>
                     <div class="atributo w-100 mb-2 text-center">
                         <ul class="list-group">
 
                             {% for magia in magias%}
                             {% if magia.nivel == 6 %}
                             <div class="text-start mb-2">
-                                <div class="proficiencia-card">
+                                <div class="spell-card">
                                     {{magia.nome}} - {{magia.escola}}<br>
                                     Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
                                     Alcance: {{magia.alcance}}<br>
@@ -677,14 +753,14 @@
                 </div>
 
                 <div>
-                    <h4 class="">Nível 7</h4>
+                    <p class="">Nível 7</p>
                     <div class="atributo w-100 mb-2 text-center">
                         <ul class="list-group">
 
                             {% for magia in magias%}
                             {% if magia.nivel == 7 %}
                             <div class="text-start mb-2">
-                                <div class="proficiencia-card">
+                                <div class="spell-card">
                                     {{magia.nome}} - {{magia.escola}}<br>
                                     Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
                                     Alcance: {{magia.alcance}}<br>
@@ -703,14 +779,14 @@
                 </div>
 
                 <div>
-                    <h4 class="">Nível 8</h4>
+                    <p class="">Nível 8</p>
                     <div class="atributo w-100 mb-2 text-center">
                         <ul class="list-group">
 
                             {% for magia in magias%}
                             {% if magia.nivel == 8 %}
                             <div class="text-start mb-2">
-                                <div class="proficiencia-card">
+                                <div class="spell-card">
                                     {{magia.nome}} - {{magia.escola}}<br>
                                     Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
                                     Alcance: {{magia.alcance}}<br>
@@ -729,14 +805,14 @@
                 </div>
 
                 <div>
-                    <h4 class="">Nível 9</h4>
+                    <p class="">Nível 9</p>
                     <div class="atributo w-100 mb-2 text-center">
                         <ul class="list-group">
 
                             {% for magia in magias%}
                             {% if magia.nivel == 9 %}
                             <div class="text-start mb-2">
-                                <div class="proficiencia-card">
+                                <div class="spell-card">
                                     {{magia.nome}} - {{magia.escola}}<br>
                                     Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
                                     Alcance: {{magia.alcance}}<br>
@@ -757,6 +833,163 @@
 
             </div>
         </div>
+        <div class="col-12 col-lg-6 section overflow-auto scroll-custom" style="max-height: 75vh;">
+            <h1 class="titulo">CARACTERISTICAS E TALENTOS</h1>
+
+            <!-- ✅ Uma única row com duas colunas dentro -->
+            <div class="row">
+
+                <!-- Coluna 1 -->
+                <div class="col-6">
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for truque in truques %}
+                            <div class="text-start mb-2">
+                                <div class="content-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ truque.nome }}</strong> - {{ truque.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ truque.tempoConjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ truque.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ truque.componentes }}<br>
+                                    <strong>Duração:</strong> {{ truque.duracao }}<br>
+                                </div>
+
+                                <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}"
+                                    style="background-color: #297fd4;">
+                                    {{ truque.descricao }}
+                                </div>
+
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_truque }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Coluna 2 -->
+                <div class="col-6">
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
+
+                            {% for truque in truques %}
+                            <div class="text-start mb-2">
+                                <div class="content-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ truque.nome }}</strong> - {{ truque.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ truque.tempoConjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ truque.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ truque.componentes }}<br>
+                                    <strong>Duração:</strong> {{ truque.duracao }}<br>
+                                </div>
+
+                                <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}"
+                                    style="background-color: #297fd4;">
+                                    {{ truque.descricao }}
+                                </div>
+
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_truque }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="col-12 col-lg-12 section scroll-custom" style="max-height: 75vh;">
+            <h1 class="titulo">DESCRIÇÃO DO PERSONAGEM</h1>
+            <div class="row">
+                <div class="col-4">
+                    <div class="content-card overflow-auto scroll-custom">
+                        <ul class="">
+                            <li>Proficiências:</li>
+                            {% for proficiencia in proficiencias%}
+                            <li class="">{{ proficiencia}}</li>
+                            {% endfor %}
+
+                            <li>Idiomas:</li>
+                            {% for idioma in idiomas%}
+                            <li>{{idioma}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="content-card overflow-auto scroll-custom">
+                        <ul class="">
+                            <li>Proficiências:</li>
+                            {% for proficiencia in proficiencias%}
+                            <li class="">{{ proficiencia}}</li>
+                            {% endfor %}
+
+                            <li>Idiomas:</li>
+                            {% for idioma in idiomas%}
+                            <li>{{idioma}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="col-4">
+                    <div class="content-card overflow-auto scroll-custom">
+                        <ul class="">
+                            <li>Proficiências:</li>
+                            {% for proficiencia in proficiencias%}
+                            <li class="">{{ proficiencia}}</li>
+                            {% endfor %}
+
+                            <li>Idiomas:</li>
+                            {% for idioma in idiomas%}
+                            <li>{{idioma}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="content-card overflow-auto scroll-custom">
+                        <ul class="">
+                            <li>Proficiências:</li>
+                            {% for proficiencia in proficiencias%}
+                            <li class="">{{ proficiencia}}</li>
+                            {% endfor %}
+
+                            <li>Idiomas:</li>
+                            {% for idioma in idiomas%}
+                            <li>{{idioma}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="content-card overflow-auto scroll-custom">
+                        <ul class="">
+                            <li>Proficiências:</li>
+                            {% for proficiencia in proficiencias%}
+                            <li class="">{{ proficiencia}}</li>
+                            {% endfor %}
+
+                            <li>Idiomas:</li>
+                            {% for idioma in idiomas%}
+                            <li>{{idioma}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </body>
@@ -773,10 +1006,88 @@
             // Evento de clique para expandir/recolher
             button.addEventListener("click", () => {
                 const expandido = desc.classList.toggle("expandido");
-                button.textContent = expandido ? "▲ Mostrar menos" : "▼ Mostrar mais";
+                button.textContent = expandido ? "▲" : "▼";
             });
         });
     });
+
+    function adicionarItem(listaId) {
+        const nome = prompt("Digite o novo item:");
+        if (nome && nome.trim() !== "") {
+            const ul = document.getElementById(listaId);
+            const novoItem = document.createElement("li");
+            novoItem.textContent = nome;
+            ul.insertBefore(novoItem, ul.querySelector(`button[onclick="adicionarItem('${listaId}')"]`));
+        }
+    }
+
+    function mostrarFormularioTruque() {
+        // Verifica se já existe um formulário aberto
+        if (document.getElementById("form-novo-truque")) return;
+
+        const lista = document.getElementById("lista-truques");
+        const form = document.createElement("div");
+        form.id = "form-novo-truque";
+        form.classList.add("p-2", "bg-light", "text-dark", "rounded", "mt-2",);
+
+        form.innerHTML = `
+    <h6>Adicionar Novo Truque</h6>
+    <input type="text" class="form-control mb-1" id="novo-nome" placeholder="Nome">
+    <input type="text" class="form-control mb-1" id="nova-escola" placeholder="Escola">
+    <input type="text" class="form-control mb-1" id="novo-tempo" placeholder="Tempo de Conjuração">
+    <input type="text" class="form-control mb-1" id="novo-alcance" placeholder="Alcance">
+    <input type="text" class="form-control mb-1" id="novos-componentes" placeholder="Componentes">
+    <input type="text" class="form-control mb-1" id="nova-duracao" placeholder="Duração">
+    <textarea class="form-control mb-2" id="nova-descricao" placeholder="Descrição (opcional)"></textarea>
+    <button class="btn btn-success btn-sm" onclick="adicionarTruque()">Salvar</button>
+    <button class="btn btn-secondary btn-sm" onclick="cancelarFormulario()">Cancelar</button>
+  `;
+
+        lista.appendChild(form);
+    }
+
+    function cancelarFormulario() {
+        const form = document.getElementById("form-novo-truque");
+        if (form) form.remove();
+    }
+
+    function adicionarTruque() {
+        const nome = document.getElementById("novo-nome").value.trim();
+        const escola = document.getElementById("nova-escola").value.trim();
+        const tempo = document.getElementById("novo-tempo").value.trim();
+        const alcance = document.getElementById("novo-alcance").value.trim();
+        const componentes = document.getElementById("novos-componentes").value.trim();
+        const duracao = document.getElementById("nova-duracao").value.trim();
+        const descricao = document.getElementById("nova-descricao").value.trim();
+
+        if (!nome) {
+            alert("Por favor, preencha pelo menos o nome.");
+            return;
+        }
+
+        const novoTruque = document.createElement("div");
+        novoTruque.classList.add("text-start", "mb-2");
+        novoTruque.innerHTML = `
+    <div class="content-card bg-light text-dark p-2 rounded-top">
+      <strong>${nome}</strong> - ${escola}<br>
+      <strong>Tempo de Conjuração:</strong> ${tempo}<br>
+      <strong>Alcance:</strong> ${alcance}<br>
+      <strong>Componentes:</strong> ${componentes}<br>
+      <strong>Duração:</strong> ${duracao}<br>
+    </div>
+    <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}" style="background-color: #297fd4;">
+      ${descricao || ""}
+    </div>
+  `;
+
+
+        // Insere antes do botão "+ Adicionar"
+        const lista = document.getElementById("lista-truques");
+        const botaoAdicionar = lista.querySelector("button.btn-primary");
+        lista.insertBefore(novoTruque, botaoAdicionar);
+
+        cancelarFormulario();
+    }
 </script>
 
 
