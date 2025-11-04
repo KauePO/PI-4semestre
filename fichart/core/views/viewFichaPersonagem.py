@@ -7,7 +7,7 @@ import json
 import urllib.parse
 
 
-from core.models import Personagem
+from core.models import Personagem, Magia, Truque
 
 class viewFichaPersonagem(LoginRequiredMixin,View):
     def get(self, request):
@@ -24,17 +24,18 @@ class viewFichaPersonagem(LoginRequiredMixin,View):
             lista_decodificada = urllib.parse.unquote(lista_idiomas)
             idiomas = json.loads(lista_decodificada)
         #=========================================================================
-        lista_truques = request.COOKIES.get('truques')
+        idtruques = request.COOKIES.get('idtruques')
+        lista_decodificada = urllib.parse.unquote(idtruques)
+        id = json.loads(lista_decodificada)
 
-        if lista_truques:
-            lista_decodificada = urllib.parse.unquote(lista_truques)
-            truques = json.loads(lista_decodificada)
+        truques = Truque.objects.all().filter(id_truque__in = id)
         #=========================================================================
-        lista_magias = request.COOKIES.get('magias')
-        if lista_magias:
-            lista_decodificada = urllib.parse.unquote(lista_magias)
-            magias = json.loads(lista_decodificada)
+        idmagias = request.COOKIES.get('idmagias')
+        lista_decodificada = urllib.parse.unquote(idmagias)
+        id = json.loads(lista_decodificada)
 
+        magias = Magia.objects.all().filter(id_magia__in = id)
+        #=========================================================================
 
         personagem = Personagem.objects.get(id_personagem=1)
 
