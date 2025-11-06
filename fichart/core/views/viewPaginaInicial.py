@@ -11,6 +11,8 @@ class viewPaginaInicial(LoginRequiredMixin, View):
         personagens = Personagem.objects.filter(usuario__user=request.user)
         usuario = Usuario.objects.get(user=request.user)
         
+        print(personagens.count())
+        
         context = {
             "personagens":personagens,
             "QTD_fichas": personagens.count(),
