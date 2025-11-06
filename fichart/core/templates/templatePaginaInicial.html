@@ -1,0 +1,251 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <script src="https://kit.fontawesome.com/cc7beb20bf.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            font-family: "Inter";
+            background-color: #282828;
+            color: aliceblue;
+        }
+
+        #elementoLogout {
+            color: aliceblue;
+            font-size: 2rem;
+            font-weight: lighter;
+        }
+
+        #container-plano {
+            text-align: center;
+            font-size: 2rem;
+            font-style: italic;
+        }
+
+        #elementoPlano {
+            text-decoration: none;
+            color: #FFC014;
+            background: none;
+            border: none;
+            font-style: italic;
+        }
+
+        #elementoLinha {
+            height: 2px;
+            background-color: white;
+            /* ou a cor que quiser */
+            opacity: 0.8;
+        }
+
+        #cardCriar {
+            width: 14.25rem;
+            height: 19.375rem;
+            border: 4px solid #929292;
+            border-radius: 25px;
+            padding: 7px;
+        }
+
+        #cardCriar:hover {
+            background-color: #3a3a3a;
+            cursor: pointer;
+        }
+
+        #iconeAdicionar {
+            font-size: 5rem;
+            transition: font-size 0.5s ease;
+        }
+
+        #cardCriar:hover #iconeAdicionar {
+            font-size: 8rem;
+
+        }
+
+        #cardCriado {
+            background-image: url('{% static "images/PLACEHOLDER.png" %}') !important;
+            background-size: cover !important;
+            background-repeat: no-repeat !important;
+            border: none !important;
+            width: 14.25rem;
+            height: 19.375rem;
+            padding: 0;
+            border-radius: 25px;
+            box-shadow: black 8px 6px;
+            --bs-card-bg: none !important;
+            position: relative
+        }
+
+        #cardCriadoInterno {
+            background: linear-gradient(180deg, transparent, #282828);
+            border-radius: 25px;
+            border: none;
+
+        }
+
+        #tituloCard {
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 1.7rem;
+        }
+
+        #contadorFichas {
+            text-align: end;
+        }
+
+        #modalUpgrade {
+            background-color: rgba(0, 0, 0, 0.4);
+            color: aliceblue;
+        }
+
+        #botaoUpgrade {
+            background: none;
+            color: aliceblue;
+            border-color: #FFC014;
+            border-width: thick;
+            border-radius: 15px;
+            color: #FFC014;
+
+        }
+
+        #overlayTrancado {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(61, 58, 58, 0.9);
+            border-radius: 25px;
+            border: none;
+            z-index: 1;
+        }
+
+        #linkCardCriar {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!--Modal de upgrade de plano-->
+    <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg bg-transparent">
+            <div class="modal-content" id="modalUpgrade">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close bg-light" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body border-0 d-flex flex-column align-items-center">
+                    <p class="text-center fs-3 mb-4">Se torne um <span style="color: #FFC014;">Aventureiro</span><br> e
+                        tenha
+                        acesso a 20 fichas simultâneas.</p>
+                    <p class="fs-3 text-center mb-0">De: <span class="text-decoration-line-through">R$20,00</span></p>
+                    <p class="fs-1 text-center mt-0" style="color: #FFC014;">Por: R$13,99 </p>
+
+                    <button type="button" class="fs-3 p-2 align-self-center" id="botaoUpgrade">Aprimore seu
+                        plano</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Conteúdo principal da página-->
+
+    <div class="container-fluid p-5">
+
+        <div class="d-flex flex-row justify-content-between mb-5">
+            <a class="align-self-center" id="elementoLogout" href="{% url 'logout' %}"><em>Logout</em></a>
+
+            <div class="d-flex flex-column" id="container-plano">
+                <span>Plano Básico</span>
+                <button data-bs-toggle="modal" data-bs-target="#exampleModal" id="elementoPlano">Aprimore seu
+                    plano</button>
+            </div>
+        </div>
+
+
+        <div class="d-flex flex-row gap-3 mb-5">
+            <h2>Minhas fichas de personagem</h2>
+            <div class="flex-grow-1 align-self-center" id="elementoLinha"></div>
+        </div>
+
+
+
+        <div class="card-group gap-5">
+
+                {% if plano_ativo and QTD_fichas < 1 %} 
+                    <a href="{% url 'TelaEscolhaRaca' %}" id="linkCardCriar">
+                        <div id="cardCriar" class="d-flex flex-column justify-content-between">
+                            <span class="w-100" id="contadorFichas">1/3</span>
+                            <i class="fa-solid fa-plus align-self-center" id="iconeAdicionar"></i>
+
+                            <h5 class=" mb-0 pb-2" id="tituloCard">CRIAR FICHA</h5>
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="" id="linkCardCriar">
+                        <div id="cardCriar" class="d-flex flex-column justify-content-between">
+                            <span class="w-100" id="contadorFichas">1/3</span>
+                            <i class="fa-solid fa-ban align-self-center" id="iconeAdicionar"></i>
+
+                            <h5 class=" mb-0 pb-2" id="tituloCard">CRIAR FICHA</h5>
+                        </div>
+                    </a>
+                {% endif %}
+
+
+
+                {% for personagem in personagens %}
+                <div id="cardCriado">
+
+
+                    {% if forloop.counter > 1 and not plano_ativo %}
+                    <div id="overlayTrancado" class="d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-lock fs-1"></i>
+                    </div>
+                    {% endif %}
+
+                    <div id="cardCriadoInterno" class="d-flex align-items-end h-100 w-100">
+                        <h5 class=" mb-0 pb-2" id="tituloCard">{{personagem.nome}}</h5>
+                    </div>
+
+                </div>
+                {% endfor %}
+
+
+        </div>
+
+
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+        crossorigin="anonymous"></script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let maximoPersonagens = {{ plano_ativo| yesno: "true,false"
+        }} ?50 : 3;
+        document.getElementById("contadorFichas").innerText = {{ QTD_fichas }} + `/${maximoPersonagens}`;
+        })
+    </script>
+</body>
+
+</html>
