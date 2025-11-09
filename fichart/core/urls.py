@@ -12,6 +12,9 @@ from .views.viewTelaAntecedente import viewTelaAntecedente
 from .views.viewTelaAtributos import viewTelaAtributos
 from .views.viewPaginaInicial import viewPaginaInicial
 from .views.viewLogout import viewLogout
+from .views.viewAssinarPlano import viewAssinarPlano
+from .views.viewSucessoPagamento import viewSucessoPagamento
+
 
 urlpatterns = [
     path('', viewTelaLogin.as_view(), name="telaLogin"),
@@ -22,5 +25,7 @@ urlpatterns = [
     path('selecaoAntecedente/',viewTelaAntecedente.as_view(), name="TelaAntecedente"),
     path('selecaoAtributos/',viewTelaAtributos.as_view(), name='TelaAtributos'),
     path("paginaInicial/", viewPaginaInicial.as_view(), name="paginaInicial"),
-    path("logout/",viewLogout.as_view(), name="logout")
+    path("logout/",viewLogout.as_view(), name="logout"),
+    path("assinarPlano/", viewAssinarPlano.as_view(), name="assinarPlano"),
+    path("sucessoPagamento/", viewSucessoPagamento.as_view(), name="sucessoPagamento")
 ]

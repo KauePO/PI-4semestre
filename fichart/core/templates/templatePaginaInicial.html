@@ -106,13 +106,14 @@
         }
 
         #botaoUpgrade {
+            border: 1px solid;
             background: none;
             color: aliceblue;
             border-color: #FFC014;
             border-width: thick;
             border-radius: 15px;
             color: #FFC014;
-
+            text-decoration:none;
         }
 
         #overlayTrancado {
@@ -149,8 +150,8 @@
                     <p class="fs-3 text-center mb-0">De: <span class="text-decoration-line-through">R$20,00</span></p>
                     <p class="fs-1 text-center mt-0" style="color: #FFC014;">Por: R$13,99 </p>
 
-                    <button type="button" class="fs-3 p-2 align-self-center" id="botaoUpgrade">Aprimore seu
-                        plano</button>
+                    <a href="{% url 'assinarPlano' %}" class="fs-3 p-3 align-self-center" id="botaoUpgrade"><i>Aprimore seu
+                        plano</i></a>
 
                 </div>
             </div>
@@ -164,11 +165,15 @@
         <div class="d-flex flex-row justify-content-between mb-5">
             <a class="align-self-center" id="elementoLogout" href="{% url 'logout' %}"><em>Logout</em></a>
 
-            <div class="d-flex flex-column" id="container-plano">
-                <span>Plano Básico</span>
-                <button data-bs-toggle="modal" data-bs-target="#exampleModal" id="elementoPlano">Aprimore seu
-                    plano</button>
-            </div>
+            
+            {% if not plano_ativo %}
+                <div class="d-flex flex-column" id="container-plano">
+                    <span>Plano Básico</span>
+                    <button data-bs-toggle="modal" data-bs-target="#exampleModal" id="elementoPlano">Aprimore seu
+                        plano</button>
+                </div>
+            {% endif %}
+                
         </div>
 
 
