@@ -251,6 +251,17 @@ class Usuario (models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     plano_ativo = models.BooleanField(default=False)
     data_ativacao = models.DateField(blank=True, null=True)
+    
+class Cobranca(models.Model):
+    id_cobranca = models.AutoField(primary_key=True)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_cobranca_externo = models.IntegerField()
+    status_cobranca = models.CharField(max_length=255)
+    
+    class Meta:
+        db_table = 'cobranca'
+    
+
 
 class Personagem(models.Model):
     id_personagem = models.AutoField(primary_key=True)
