@@ -3,13 +3,17 @@ from django.views import View
 from django.shortcuts import redirect
 from core.models import Usuario, Cobranca
 import requests
+import os
+from dotenv import load_dotenv
 
 class viewAssinarPlano(LoginRequiredMixin, View):
     def get(self, request):
+        load_dotenv()
+        
         
         error = []
         url = ""
-        token = "abc_dev_RJh2nXJLpFtyKGRt0BDNBxAk"
+        token = os.getenv("CHAVE_API_ABACATE")
         
         
         usuario = Usuario.objects.get(user = request.user)
@@ -26,10 +30,10 @@ class viewAssinarPlano(LoginRequiredMixin, View):
             
             response = requests.get(url, headers=headers).json()
             
-            if (response.get("data",{})[0].get("status") == "PENDING"){
+            if (response.get("data",{})[0].get("status") == "PENDING"):
                 urlPagamento = response.get("data",{})[0].get("url")
                 return redirect(urlPagamento)
-            }
+            
             
             cobrancaExistente.status_cobranca = response.get("data",{})[0].get("status")
             
