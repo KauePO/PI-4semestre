@@ -253,9 +253,8 @@ class Usuario (models.Model):
     data_ativacao = models.DateField(blank=True, null=True)
     
 class Cobranca(models.Model):
-    id_cobranca = models.AutoField(primary_key=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    id_cobranca_externo = models.IntegerField()
+    id_cobranca_externo = models.CharField()
     status_cobranca = models.CharField(max_length=255)
     
     class Meta:

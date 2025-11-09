@@ -8,15 +8,35 @@ class viewAssinarPlano(LoginRequiredMixin, View):
     def get(self, request):
         
         error = []
-        usuario = Usuario.objects.get(user = request.user)
-        
-        
-        url = "https://api.abacatepay.com/v1/billing/create"
+        url = ""
         token = "abc_dev_RJh2nXJLpFtyKGRt0BDNBxAk"
+        
+        
+        usuario = Usuario.objects.get(user = request.user)
+        cobrancaExistente = Cobranca.objects.filter(status_cobranca = "PENDING").first()
+        
+        if cobrancaExistente:
+            
+            print("Ta devendo")
+            url = "https://api.abacatepay.com/v1/billing/list"
+            
+            headers ={
+                "Authorization":f"Bearer {token}"
+            }
+            
+            response = requests.get(url, headers=headers).json()
+            urlPagamento = response.get("data",{})[0].get("url")
+            return redirect(urlPagamento)
+            
+            
+        
         headers ={
             "Authorization":f"Bearer {token}",
             "Content-Type":"application/json"
         }
+        
+        url = "https://api.abacatepay.com/v1/billing/create"
+        
         
         data = {
             "frequency": "ONE_TIME",
@@ -41,6 +61,8 @@ class viewAssinarPlano(LoginRequiredMixin, View):
         }
         
         try:
+            
+            print("criando nova")
             
             response = requests.post(url, headers=headers, json=data)
             responseData = response.json()
