@@ -1,13 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.shortcuts import redirect
-from core.models import Usuario
+from core.models import Usuario, Cobranca
 import requests
 
 class viewAssinarPlano(LoginRequiredMixin, View):
     def get(self, request):
         
-        user = Usuario.objects.get(user = request.user)
+        error = []
+        usuario = Usuario.objects.get(user = request.user)
         
         
         url = "https://api.abacatepay.com/v1/billing/create"
@@ -39,9 +40,20 @@ class viewAssinarPlano(LoginRequiredMixin, View):
             },
         }
         
-        response = requests.post(url, headers=headers, json=data)
-        responseData = response.json()
-        urlPagamento = responseData.get("data",{}).get("url")
+        try:
+            
+            response = requests.post(url, headers=headers, json=data)
+            responseData = response.json()
+            urlPagamento = responseData.get("data",{}).get("url")
+            id_cobranca = responseData.get("data",{}).get("id")
+            status_cobranca = responseData.get("data",{}).get("status")
+            
+            novaCobranca = Cobranca(usuario = usuario, id_cobranca_externo = id_cobranca, status_cobranca = status_cobranca)
+            
+            novaCobranca.save()
+        
+        except Exception as e:
+            error.append(e)
         
         return redirect(urlPagamento)
         
