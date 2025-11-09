@@ -25,8 +25,14 @@ class viewAssinarPlano(LoginRequiredMixin, View):
             }
             
             response = requests.get(url, headers=headers).json()
-            urlPagamento = response.get("data",{})[0].get("url")
-            return redirect(urlPagamento)
+            
+            if (response.get("data",{})[0].get("status") == "PENDING"){
+                urlPagamento = response.get("data",{})[0].get("url")
+                return redirect(urlPagamento)
+            }
+            
+            cobrancaExistente.status_cobranca = response.get("data",{})[0].get("status")
+            
             
             
         
@@ -52,16 +58,9 @@ class viewAssinarPlano(LoginRequiredMixin, View):
             ],
             "returnUrl": "http://localhost:8000/paginaInicial/",
             "completionUrl": "http://localhost:8000/sucessoPagamento/",
-            "customer": {
-                "name": request.user.username,
-                "cellphone": "(11) 4002-8922",
-                "email": "daniel_lima@abacatepay.com",
-                "taxId": "51911125800"
-            },
         }
         
         try:
-            
             print("criando nova")
             
             response = requests.post(url, headers=headers, json=data)
