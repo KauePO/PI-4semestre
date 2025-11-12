@@ -417,6 +417,7 @@
             const racaData = racasData[racaId];
 
             localStorage.setItem("raca",racaId);
+            document.cookie = `raca_escolhida=${racaId};Path=/`
 
             console.log(racaData)
 
@@ -444,8 +445,7 @@
             listRadioSubraca.forEach( radio =>{
                 radio.addEventListener("change", function(){
                     if(this.checked){
-                        console.log(this.value)
-                        localStorage.setItem("subRaca",this.value);
+                        document.cookie = `subraca_escolhida="${this.value};path=/"`;
                     }
                 })
             })
@@ -454,7 +454,7 @@
         }
 
     
-        // Event listeners para seleção de classe
+        // Event listeners para seleção de raca
         document.querySelectorAll('.raca-option').forEach(option => {
             option.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -508,9 +508,11 @@
 
        
         let playerNome = localStorage.getItem("playerNome") ?? "";
-        let raca = localStorage.getItem("raca") ?? NaN;
-        let subRaca = localStorage.getItem("subRaca") ?? NaN;
+        let raca = {{raca_escolhida}};
+        let subRaca = {{subraca_escolhida|default:0}};
 
+        console.log(raca);
+        
 
         playerName = document.getElementById("id_nome").value = playerNome
 

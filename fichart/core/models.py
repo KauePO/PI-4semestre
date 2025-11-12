@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Antecedente(models.Model):
@@ -221,7 +222,7 @@ class Idiomas(models.Model):
 
 class IncrementoHabilidade(models.Model):
     id_incremento_habilidade = models.AutoField(primary_key=True)
-    subraca = models.ForeignKey('Subraca', models.DO_NOTHING)
+    subraca = models.ForeignKey('Subraca', models.DO_NOTHING, blank=1, null=1)
     nome = models.CharField()
     valor_incremento = models.IntegerField()
 
@@ -243,6 +244,22 @@ class Magia(models.Model):
 
     class Meta:
         db_table = 'magia'
+
+
+class Usuario (models.Model):
+    id_usuario = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    plano_ativo = models.BooleanField(default=False)
+    data_ativacao = models.DateField(blank=True, null=True)
+    
+class Cobranca(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_cobranca_externo = models.CharField()
+    status_cobranca = models.CharField(max_length=255)
+    
+    class Meta:
+        db_table = 'cobranca'
+    
 
 
 class Personagem(models.Model):
@@ -267,6 +284,7 @@ class Personagem(models.Model):
     traco_personalidade = models.CharField(blank=True, null=True)
     ideais = models.CharField(blank=True, null=True)
     ligacoes = models.CharField(blank=True, null=True)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'personagem'
@@ -331,9 +349,9 @@ class Raca(models.Model):
     nome = models.CharField()
     velocidade = models.FloatField()
     tamanho = models.IntegerField()
-    id_subraca = models.IntegerField()
     descricao = models.TextField()
     icone = models.ImageField( upload_to="racas/" ,blank=True, null=True)
+    incremento_habilidade = models.ManyToManyField(IncrementoHabilidade)
 
     class Meta:
         db_table = 'raca'
