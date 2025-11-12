@@ -59,10 +59,11 @@
 
         .atributo {
             background-color: #D9D9D9;
-            border-radius: 8px;
+            border-radius: 15px;
             padding: 10px;
             text-align: center;
             color: #000000;
+            height: auto;
         }
 
         .atributo h3 {
@@ -77,6 +78,18 @@
 
         .section {
             padding: 15px;
+        }
+
+        .proficienciaSalvaguarda {
+            padding-bottom: 5%;
+            position: relative;
+            bottom: 0.3rem;
+        }
+
+        .descricaoPersonagem {
+            width: 100%;
+            height: 150px;
+            background-color: #e3e3e3;
         }
 
         .scroll-section {
@@ -186,6 +199,8 @@
             align-items: center;
             gap: 1rem;
             /* Espaçamento entre as bolinhas */
+            position: relative;
+            bottom: -0.4rem;
         }
 
         /* Linha de fundo conectando as bolinhas */
@@ -207,7 +222,7 @@
             height: 22px;
             border: 2px solid white;
             border-radius: 50%;
-            background: #3b3b3b;
+            background: #1e1e1e;
             cursor: pointer;
             position: relative;
             z-index: 1;
@@ -262,6 +277,11 @@
             position: relative;
             transition: max-height 0.3s ease;
             margin-bottom: 1.5rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            /* Garante que espaços sejam respeitados */
         }
 
         .truque-descricao.expandido {
@@ -276,13 +296,49 @@
             left: 0;
             width: 100%;
             height: 30px;
-            background: linear-gradient(to top, rgba(41, 127, 212, 1), rgba(41, 127, 212, 0));
+            background: linear-gradient(to top, #040404, #8d8d8d00);
             pointer-events: none;
         }
 
         .truque-descricao.expandido::after {
             display: none;
         }
+
+        .magia-descricao {
+            max-height: 90px;
+            /* Altura máxima antes do colapso */
+            overflow: hidden;
+            position: relative;
+            transition: max-height 0.3s ease;
+            margin-bottom: 1.5rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            /* Garante que espaços sejam respeitados */
+        }
+
+        .magia-descricao.expandido {
+            max-height: 1000px;
+            /* Altura expandida */
+        }
+
+        .magia-descricao::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to top, #040404, #8d8d8d00);
+            pointer-events: none;
+        }
+
+        .magia-descricao.expandido::after {
+            display: none;
+        }
+
+
 
         .ver-mais {
             position: absolute;
@@ -313,26 +369,27 @@
 </head>
 
 <body class="container-fluid py-4">
-    <form method="POST" id="form-ficha">
-        {% csrf_token %}
-        <div class="row g-3">
-            <div class="col-12 col-lg-12">
-                <button class="btn btn-outline-light" onclick="window.history.back();">
-                    ← Voltar
-                </button>
-                <button type="submit" form="form-ficha" class="btn btn-outline-light ms-2">
-                    Salvar
-                </button>
-            </div>
-            <!-- Coluna esquerda: Atributos e informações básicas -->
-            <div class="col-12 col-lg-5">
-                <div class="section text-start" style="min-height: 75vh;">
-                    <div class="row">
-                        <!-- Lado esquerdo -->
-                        <div class="col-6">
-                            <img src="{% static 'images/PLACEHOLDER.png' %}" alt="Avatar"
-                                class="avatar-img img-fluid mb-3 rounded-5">
 
+    <div class="row g-3">
+        <div class="col-12 col-lg-12">
+            <button class="btn btn-outline-light" onclick="window.history.back();">
+                ← Voltar
+            </button>
+
+            <button type="submit" form="form-ficha" class="btn btn-outline-light ms-2">
+                Salvar
+            </button>
+        </div>
+        <!-- Coluna esquerda: Atributos e informações básicas -->
+        <div class="col-12 col-lg-5">
+            <div class="section text-start">
+                <div class="row">
+                    <!-- Lado esquerdo -->
+                    <div class="col-6 overflow-auto scroll-custom;" style="max-height: 75vh;">
+                        
+
+        <form method="POST" id="form-ficha">
+            <div class="text-center pt-3 pb-1">
                             {% csrf_token %}
                             {{ form.nome }}
                             {% if form.nome.errors %}
@@ -340,704 +397,744 @@
                                 {{ form.nome.errors }}
                             </div>
                             {% endif %}
-
-                            <ul class="list-group list-group-flush mt-2">
-                                <li class="list-group-item bg-transparent border-0 text-light">
-                                    {{ personagem.raca|default:"Anão da montanha" }}
-                                </li>
-                                <li class="list-group-item bg-transparent border-0 text-light">
-                                    {{ personagem.classe|default:"Clérigo" }} - Nível {{ personagem.nivel|default:"1" }}
-                                </li>
-                                <li class="list-group-item bg-transparent border-0 text-light">
-                                    {{ personagem.antecedente|default:"Acólito" }}
-                                </li>
-                            </ul>
-
-                            <ul class="list-group list-group-flush">
-                                <li class="status-box">
-                                    <div class="status-label">Deslocamento:</div>
-                                    <div class="status-value">{{ personagem.deslocamento|default:"7,5 m" }}</div>
-                                </li>
-
-                                <li class="status-box">
-                                    <div class="status-label">Classe de Armadura:</div>
-                                    <div class="status-value">{{ personagem.ca|default:"13" }}</div>
-                                </li>
-                            </ul>
                         </div>
+                        </form>
 
-                        <!-- Lado direito -->
-                        <div class="col-6">
-                            <p class="titulo">Atributos</p>
+                        <img src="{% static 'images/PLACEHOLDER.png' %}" alt="Avatar"
+                            class="avatar-img img-fluid mb-3 rounded-5">
 
-                            <div class="d-flex flex-column align-items-center">
-                                {% for nome, valor in personagem.atributos.items %}
-                                <div class="atributo w-100 mb-2 text-center">
-                                    <h3>{{ valor }}</h3>
-                                    <span>{{ nome }}</span>
-                                </div>
-                                {% empty %}
-                                <div class="atributo w-100 mb-2 text-center">
-                                    <h3>{{personagem.forca}}</h3>
-                                    <span>Força</span>
-                                </div>
-                                <div class="atributo w-100 mb-2 text-center">
-                                    <h3>{{personagem.destreza}}</h3>
-                                    <span>Destreza</span>
-                                </div>
-                                <div class="atributo w-100 mb-2 text-center">
-                                    <h3>{{personagem.constituicao}}</h3>
-                                    <span>Constituição</span>
-                                </div>
-                                <div class="atributo w-100 mb-2 text-center">
-                                    <h3>{{personagem.sabedoria}}</h3>
-                                    <span>Sabedoria</span>
-                                </div>
-                                <div class="atributo w-100 mb-2 text-center">
-                                    <h3>{{personagem.inteligencia}}</h3>
-                                    <span>Inteligência</span>
-                                </div>
-                                <div class="atributo w-100 mb-2 text-center">
-                                    <h3>{{personagem.carisma}}</h3>
-                                    <span>Carisma</span>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div> <!-- fim da row -->
+
+                        <ul class="mt-2"> <!-- pl-3 para padding left -->
+                            <li class="text-light mb-1">
+                                {{ raca.nome|default:"Anão da montanha" }}
+                            </li>
+                            <li class="text-light mb-1">
+                                {{ classe.nome|default:"Clérigo" }} - Nível {{ personagem.nivel|default:"1" }}
+                            </li>
+                            <li class="text-light mb-1">
+                                {{ personagem.antecedente|default:"Acólito" }}
+                            </li>
+                        </ul>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="status-box">
+                                <div class="status-label">Deslocamento:</div>
+                                <div class="status-value">{{ raca.velocidade|default:"7,5" }}m</div>
+                            </li>
+
+                            <li class="status-box">
+                                <div class="status-label">Classe de Armadura:</div>
+                                <div class="status-value">{{ personagem.ca|default:"13" }}</div>
+                            </li>
+                        </ul>
                     </div>
 
+                    <!-- Lado direito -->
+                    <div class="col-6  overflow-auto scroll-custom;" style="max-height: 75vh;">
+                        <p class="titulo">Atributos</p>
+
+                        <div class="d-flex flex-column align-items-center">
+                            {% for nome, valor in personagem.atributos.items %}
+                            <div class="atributo w-100 mb-2 text-center">
+                                <h3>{{ valor }}</h3>
+                                <span>{{ nome }}</span>
+                            </div>
+                            {% empty %}
+                            <div class="atributo w-100 mb-2 text-center">
+                                <h3>{{atrForca}}</h3>
+                                <span>Força</span>
+                            </div>
+                            <div class="atributo w-100 mb-2 text-center">
+                                <h3>{{atrDestreza}}</h3>
+                                <span>Destreza</span>
+                            </div>
+                            <div class="atributo w-100 mb-2 text-center">
+                                <h3>{{atrConstituicao}}</h3>
+                                <span>Constituição</span>
+                            </div>
+                            <div class="atributo w-100 mb-2 text-center">
+                                <h3>{{atrSabedoria}}</h3>
+                                <span>Sabedoria</span>
+                            </div>
+                            <div class="atributo w-100 mb-2 text-center">
+                                <h3>{{atrInteligencia}}</h3>
+                                <span>Inteligência</span>
+                            </div>
+                            <div class="atributo w-100 mb-2 text-center">
+                                <h3>{{atrCarisma}}</h3>
+                                <span>Carisma</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div> <!-- fim da row -->
                 </div>
 
             </div>
-            <div class="col-12 col-lg-3 section overflow-auto scroll-custom" style="max-height: 75vh;">
-                <h6 class="titulo">Salvaguardas</h6>
-                <div class="atributo w-100 mb-2 text-center">
-                    <ul class="list-group">
 
-                        <input class="" type="checkbox" id="forcaCheck">
-                        <label class="" for="forcaCheck">Força</label>
+        </div>
+        <div class="col-12 col-lg-3 section overflow-auto scroll-custom" style="max-height: 75vh;">
+            <h6 class="titulo">Salvaguardas</h6>
+            <div class=" w-100 mb-2 text-start">
 
+                <input class="" type="checkbox" id="forcaCheck">
+                <label class="proficienciaSalvaguarda" for="forcaCheck">Força</label>
+                <br>
 
-                        <input class="" type="checkbox" id="destrezaCheck">
-                        <label class="" for="destrezaCheck">Destreza</label>
+                <input class="" type="checkbox" id="destrezaCheck">
+                <label class="proficienciaSalvaguarda" for="destrezaCheck">Destreza</label>
+                <br>
 
-                        <input class="" type="checkbox" id="constituicaoCheck">
-                        <label class="" for="constituicaoCheck">Constituição</label>
+                <input class="" type="checkbox" id="constituicaoCheck">
+                <label class="proficienciaSalvaguarda" for="constituicaoCheck">Constituição</label>
+                <br>
 
-                        <input class="" type="checkbox" id="sabedoriaCheck">
-                        <label class="" for="sabedoriaCheck">Sabedoria</label>
+                <input class="" type="checkbox" id="sabedoriaCheck">
+                <label class="proficienciaSalvaguarda" for="sabedoriaCheck">Sabedoria</label>
+                <br>
 
-                        <input class="" type="checkbox" id="inteligenciaCheck">
-                        <label class="" for="inteligenciaCheck">Inteligência</label>
+                <input class="" type="checkbox" id="inteligenciaCheck">
+                <label class="proficienciaSalvaguarda" for="inteligenciaCheck">Inteligência</label>
+                <br>
 
-                        <input class="" type="checkbox" id="carismaCheck">
-                        <label class="" for="carismaCheck">Carisma</label>
-
-                    </ul>
-                </div>
-
-                <h6 class="titulo">Perícias</h6>
-                <div class="atributo w-100 mb-2 text-center">
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="acrobaciaCheck">
-                            <label class="" for="acrobaciaCheck">Acrobacia</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="furtividadeCheck">
-                            <label class="" for="furtividadeCheck">Furtividade</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="religiaoCheck">
-                            <label class="" for="religiaoCheck">Religião</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="intimidacaoCheck">
-                            <label class="" for="intimidacaoCheck">Intimidação</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="acrobaciaCheck">
-                            <label class="" for="acrobaciaCheck">Acrobacia</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="furtividadeCheck">
-                            <label class="" for="furtividadeCheck">Furtividade</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="religiaoCheck">
-                            <label class="" for="religiaoCheck">Religião</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="intimidacaoCheck">
-                            <label class="" for="intimidacaoCheck">Intimidação</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="acrobaciaCheck">
-                            <label class="" for="acrobaciaCheck">Acrobacia</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="furtividadeCheck">
-                            <label class="" for="furtividadeCheck">Furtividade</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="religiaoCheck">
-                            <label class="" for="religiaoCheck">Religião</label>
-                        </li>
-                        <li class="list-group-item">
-                            <input class="" type="checkbox" id="intimidacaoCheck">
-                            <label class="" for="intimidacaoCheck">Intimidação</label>
-                        </li>
-                    </ul>
-                </div>
+                <input class="" type="checkbox" id="carismaCheck">
+                <label class="proficienciaSalvaguarda" for="carismaCheck">Carisma</label>
+                <br>
             </div>
 
-            <div class="col-12 col-lg-4 section overflow-hidden scroll-custom" style="max-height: 75vh;">
+            <h6 class="titulo">Perícias</h6>
+            <div class="w-100 mb-2 text-start">
+
+                <input class="" type="checkbox" id="acrobaciaCheck">
+                <label class="proficienciaSalvaguarda" for="acrobaciaCheck">Acrobacia</label>
+                <br>
+
+                <input class="" type="checkbox" id="furtividadeCheck">
+                <label class="proficienciaSalvaguarda" for="furtividadeCheck">Furtividade</label>
+                <br>
+
+                <input class="" type="checkbox" id="religiaoCheck">
+                <label class="proficienciaSalvaguarda" for="religiaoCheck">Religião</label>
+                <br>
+
+                <input class="" type="checkbox" id="intimidacaoCheck">
+                <label class="proficienciaSalvaguarda" for="intimidacaoCheck">Intimidação</label>
+                <br>
+
+                <input class="" type="checkbox" id="acrobaciaCheck">
+                <label class="proficienciaSalvaguarda" for="acrobaciaCheck">Acrobacia</label>
+                <br>
+
+                <input class="" type="checkbox" id="furtividadeCheck">
+                <label class="proficienciaSalvaguarda" for="furtividadeCheck">Furtividade</label>
+                <br>
+
+                <input class="" type="checkbox" id="religiaoCheck">
+                <label class="proficienciaSalvaguarda" for="religiaoCheck">Religião</label>
+                <br>
+
+                <input class="" type="checkbox" id="intimidacaoCheck">
+                <label class="proficienciaSalvaguarda" for="intimidacaoCheck">Intimidação</label>
+                <br>
+
+                <input class="" type="checkbox" id="acrobaciaCheck">
+                <label class="proficienciaSalvaguarda" for="acrobaciaCheck">Acrobacia</label>
+                <br>
+
+                <input class="" type="checkbox" id="furtividadeCheck">
+                <label class="proficienciaSalvaguarda" for="furtividadeCheck">Furtividade</label>
+                <br>
+
+                <input class="" type="checkbox" id="religiaoCheck">
+                <label class="proficienciaSalvaguarda" for="religiaoCheck">Religião</label>
+                <br>
+
+                <input class="" type="checkbox" id="intimidacaoCheck">
+                <label class="proficienciaSalvaguarda" for="intimidacaoCheck">Intimidação</label>
+
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4 section overflow-auto scroll-custom" style="max-height: 75vh;">
+
+            <ul class="list-group list-group-flush">
+                <div class="row g-3">
+                    <div class="col-12 col-lg-6">
+                        <p class="subtitulo">Pontos de Vida:</p>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <p class="subtitulo">Temporários:</p>
+                    </div>
+                </div>
+                <li class="status-box text-center">
+                    <div class="status-label">
+                        {{ classe.hb_base|default:"13" }}/{{ classe.hb_base|default:"13" }}
+                    </div>
+                    <div class="status-value">
+                        {{ classe.vidaTemporaria|default:"0"}}/{{ classe.vidaTemporaria|default:"0"}}
+                    </div>
+                </li>
 
                 <ul class="list-group list-group-flush">
                     <div class="row g-3">
                         <div class="col-12 col-lg-6">
-                            <p class="subtitulo">Pontos de Vida:</p>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <p class="subtitulo">Temporários:</p>
+                            <p class="subtitulo">Dados de Vida:</p>
                         </div>
                     </div>
                     <li class="status-box text-center">
-                        <div class="status-label">
-                            {{ personagem.vida|default:"13" }}/{{ personagem.vida|default:"13" }}
-                        </div>
-                        <div class="status-value">
-                            {{ personagem.vidaTemporaria|default:"13"}}/{{ personagem.vidaTemporaria|default:"13"}}
-                        </div>
+                        <div class="status-label">{{ classe.hp_n_dados|default:"1" }}</div>
+                        <div class="status-value">D{{ classe.hp_dado|default:"D8" }}</div>
                     </li>
+                </ul>
 
-                    <ul class="list-group list-group-flush">
-                        <div class="row g-3">
-                            <div class="col-12 col-lg-6">
-                                <p class="subtitulo">Dados de Vida:</p>
-                            </div>
+                <div class="salvaguarda">
+                    <p class="subtitulo">Salvaguarda:</p>
+                    <div class="linha">
+                        <label>Sucessos:</label>
+                        <div class="bolas">
+                            <input type="checkbox">
+                            <input type="checkbox">
+                            <input type="checkbox">
                         </div>
-                        <li class="status-box text-center">
-                            <div class="status-label">{{ personagem.numeroDadosVida|default:"1" }}</div>
-                            <div class="status-value">{{ personagem.dadoVida|default:"D8" }}</div>
-                        </li>
+                    </div>
+                    <div class="linha">
+                        <label>Falhas:</label>
+                        <div class="bolas">
+                            <input type="checkbox">
+                            <input type="checkbox">
+                            <input type="checkbox">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="proficiencia-card overflow-auto scroll-custom">
+                    <ul class="p-3" id="lista-proficiencias">
+                        <p class="fw-bolder">Proficiências:</p>
+                        {% for proficiencia in proficiencias %}
+                        <li>{{ proficiencia }}</li>
+                        {% endfor %}
+                        <button type="button" onclick="adicionarItem('lista-proficiencias')">+ Adicionar</button>
                     </ul>
+                    <ul class="p-3" id="lista-idiomas">
+                        <p class="fw-bolder">Idiomas:</p>
+                        {% for idioma in idiomas %}
+                        <li>{{ idioma }}</li>
+                        {% endfor %}
+                        <button type="button" onclick="adicionarItem('lista-idiomas')">+ Adicionar</button>
+                    </ul>
+                </div>
 
-                    <div class="salvaguarda">
-                        <p class="subtitulo">Salvaguarda:</p>
-                        <div class="linha">
-                            <label>Sucessos:</label>
-                            <div class="bolas">
-                                <input type="checkbox">
-                                <input type="checkbox">
-                                <input type="checkbox">
-                            </div>
-                        </div>
-                        <div class="linha">
-                            <label>Falhas:</label>
-                            <div class="bolas">
-                                <input type="checkbox">
-                                <input type="checkbox">
-                                <input type="checkbox">
-                            </div>
-                        </div>
-                    </div>
+        </div>
 
-                    <div class="proficiencia-card overflow-auto scroll-custom">
-                        <ul class="p-3" id="lista-proficiencias">
-                            <p class="fw-bolder">Proficiências:</p>
-                            {% for proficiencia in proficiencias %}
-                            <li>{{ proficiencia }}</li>
-                            {% endfor %}
-                            <button type="button" onclick="adicionarItem('lista-proficiencias')">+ Adicionar</button>
-                        </ul>
-                        <ul class="p-3" id="lista-idiomas">
-                            <p class="fw-bolder">Idiomas:</p>
-                            {% for idioma in idiomas %}
-                            <li>{{ idioma }}</li>
-                            {% endfor %}
-                            <button type="button" onclick="adicionarItem('lista-idiomas')">+ Adicionar</button>
-                        </ul>
-                    </div>
+        <hr>
 
-            </div>
+        <div class="col-12 col-lg-6 section overflow-auto scroll-custom" style="max-height: 75vh;">
 
-            <hr>
-
-            <div class="col-12 col-lg-6 section overflow-auto scroll-custom" style="max-height: 75vh;">
-
-                <h1 class="titulo">MAGIAS E TRUQUES</h1>
+            <h1 class="titulo">MAGIAS E TRUQUES</h1>
+            <div>
                 <div>
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="subtitulo">Truques</p>
-                            <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
-                        </div>
-                        <div class="section w-100 mb-2 text-center">
-                            <ul class="list-group" id="lista-truques">
-
-                                {% for truque in truques %}
-                                <div class="text-start mb-2">
-                                    <!-- Cabeçalho do truque -->
-                                    <div class="spell-card bg-light text-dark p-2 rounded-top">
-                                        <strong>{{ truque.nome }}</strong> - {{ truque.escola }}<br>
-                                        <strong>Tempo de Conjuração:</strong> {{ truque.tempoConjuracao }}<br>
-                                        <strong>Alcance:</strong> {{ truque.alcance }}<br>
-                                        <strong>Componentes:</strong> {{ truque.componentes }}<br>
-                                        <strong>Duração:</strong> {{ truque.duracao }}<br>
-                                    </div>
-
-                                    <!-- Descrição com colapso automático -->
-                                    <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}"
-                                        style="background-color: #297fd4;">
-                                        {{ truque.descricao }}
-                                    </div>
-
-                                    <!-- Botão Mostrar mais/menos -->
-                                    <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
-                                        data-target="#descricao{{ id_truque }}" style="display: none;">
-                                        ▼
-                                    </button>
-                                </div>
-                                {% endfor %}
-
-                                <!-- Botão para adicionar novo truque -->
-                                <button type="button" class="btn btn-sm btn-primary mt-2"
-                                    onclick="mostrarFormularioTruque()">+ Adicionar</button>
-                            </ul>
-                        </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Truques</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
                     </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group" id="lista-truques">
 
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="subtitulo">Nível 1</p>
-                            <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
-                            <p class="text-white">Qtde de magias carregadas: {{ magias|length }}</p>
+                            {% for truque in truques %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do truque -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ truque.nome_truque }}</strong> - {{ truque.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ truque.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ truque.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ truque.componentes }}<br>
+                                    <strong>Duração:</strong> {{ truque.duracao }}<br>
+                                </div>
 
-                            {% for magia in magias %}
-                            <p>{{ magia }}</p>
+                                <!-- Descrição com colapso automático -->
+                                <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ truque.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_truque }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
                             {% endfor %}
-                        </div>
-                        <div class="section w-100 mb-2 text-center">
-                            <ul class="list-group">
-                                {% for magia in magias %}
-                                {% if magia.nivel == 1 %}
-                                <div class="text-start mb-2">
 
-                                    <div class="spell-card">
-                                        <strong>{{ magia.nome_magia }}</strong> - {{ magia.escola }}<br>
-                                        <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
-                                        <strong>Alcance:</strong> {{ magia.alcance }}<br>
-                                        <strong>Componentes:</strong> {{ magia.componentes }}<br>
-                                        <strong>Duração:</strong> {{ magia.duraca }}<br>
-                                    </div>
-
-                                    <div class="" style="background-color: #297fd4;">
-                                        {{ magia.descricao }}
-                                    </div>
-
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </div>
+                            <!-- Botão para adicionar novo truque 
+                                <button type="button" class="btn btn-sm btn-primary mt-2"
+                                    onclick="mostrarFormularioTruque()">+ Adicionar</button>-->
+                        </ul>
                     </div>
-
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="subtitulo">Nível 2</p>
-                            <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
-                        </div>
-                        <div class="atributo w-100 mb-2 text-center">
-                            <ul class="list-group">
-
-                                {% for magia in magias%}
-                                {% if magia.nivel == 2 %}
-                                <div class="text-start mb-2">
-                                    <div class="spell-card">
-                                        {{magia.nome}} - {{magia.escola}}<br>
-                                        Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
-                                        Alcance: {{magia.alcance}}<br>
-                                        Componentes: {{magia.componentes}}<br>
-                                        Duração: {{magia.duraca}}<br>
-                                    </div>
-                                    <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
-                                        {{magia.descricao}}
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="subtitulo">Nível 3</p>
-                            <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
-                        </div>
-                        <div class="atributo w-100 mb-2 text-center">
-                            <ul class="list-group">
-
-                                {% for magia in magias%}
-                                {% if magia.nivel == 3 %}
-                                <div class="text-start mb-2">
-                                    <div class="spell-card">
-                                        {{magia.nome}} - {{magia.escola}}<br>
-                                        Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
-                                        Alcance: {{magia.alcance}}<br>
-                                        Componentes: {{magia.componentes}}<br>
-                                        Duração: {{magia.duraca}}<br>
-                                    </div>
-                                    <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
-                                        {{magia.descricao}}
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="subtitulo">Nível 4</p>
-                            <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
-                        </div>
-                        <div class="atributo w-100 mb-2 text-center">
-                            <ul class="list-group">
-
-                                {% for magia in magias%}
-                                {% if magia.nivel == 4 %}
-                                <div class="text-start mb-2">
-                                    <div class="spell-card">
-                                        {{magia.nome}} - {{magia.escola}}<br>
-                                        Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
-                                        Alcance: {{magia.alcance}}<br>
-                                        Componentes: {{magia.componentes}}<br>
-                                        Duração: {{magia.duraca}}<br>
-                                    </div>
-                                    <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
-                                        {{magia.descricao}}
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="subtitulo">Nível 5</p>
-                            <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
-                        </div>
-                        <div class="atributo w-100 mb-2 text-center">
-                            <ul class="list-group">
-
-                                {% for magia in magias%}
-                                {% if magia.nivel == 5 %}
-                                <div class="text-start mb-2">
-                                    <div class="spell-card">
-                                        {{magia.nome}} - {{magia.escola}}<br>
-                                        Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
-                                        Alcance: {{magia.alcance}}<br>
-                                        Componentes: {{magia.componentes}}<br>
-                                        Duração: {{magia.duraca}}<br>
-                                    </div>
-                                    <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
-                                        {{magia.descricao}}
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="subtitulo">Nível 6</p>
-                            <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
-                        </div>
-                        <div class="atributo w-100 mb-2 text-center">
-                            <ul class="list-group">
-
-                                {% for magia in magias%}
-                                {% if magia.nivel == 6 %}
-                                <div class="text-start mb-2">
-                                    <div class="spell-card">
-                                        {{magia.nome}} - {{magia.escola}}<br>
-                                        Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
-                                        Alcance: {{magia.alcance}}<br>
-                                        Componentes: {{magia.componentes}}<br>
-                                        Duração: {{magia.duraca}}<br>
-                                    </div>
-                                    <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
-                                        {{magia.descricao}}
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="subtitulo">Nível 7</p>
-                            <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
-                        </div>
-                        <div class="atributo w-100 mb-2 text-center">
-                            <ul class="list-group">
-
-                                {% for magia in magias%}
-                                {% if magia.nivel == 7 %}
-                                <div class="text-start mb-2">
-                                    <div class="spell-card">
-                                        {{magia.nome}} - {{magia.escola}}<br>
-                                        Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
-                                        Alcance: {{magia.alcance}}<br>
-                                        Componentes: {{magia.componentes}}<br>
-                                        Duração: {{magia.duraca}}<br>
-                                    </div>
-                                    <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
-                                        {{magia.descricao}}
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="subtitulo">Nível 8</p>
-                            <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
-                        </div>
-                        <div class="atributo w-100 mb-2 text-center">
-                            <ul class="list-group">
-
-                                {% for magia in magias%}
-                                {% if magia.nivel == 8 %}
-                                <div class="text-start mb-2">
-                                    <div class="spell-card">
-                                        {{magia.nome}} - {{magia.escola}}<br>
-                                        Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
-                                        Alcance: {{magia.alcance}}<br>
-                                        Componentes: {{magia.componentes}}<br>
-                                        Duração: {{magia.duraca}}<br>
-                                    </div>
-                                    <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
-                                        {{magia.descricao}}
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="subtitulo">Nível 9</p>
-                            <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
-                        </div>
-                        <div class="atributo w-100 mb-2 text-center">
-                            <ul class="list-group">
-
-                                {% for magia in magias%}
-                                {% if magia.nivel == 9 %}
-                                <div class="text-start mb-2">
-                                    <div class="spell-card">
-                                        {{magia.nome}} - {{magia.escola}}<br>
-                                        Tempo de Conjuração: {{magia.tempoConjuracao}}<br>
-                                        Alcance: {{magia.alcance}}<br>
-                                        Componentes: {{magia.componentes}}<br>
-                                        Duração: {{magia.duraca}}<br>
-                                    </div>
-                                    <div class="" style="background-color: #297fd4;"> <!--ESTILIZAÇÃO IMPROVISADA-->
-                                        {{magia.descricao}}
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-
-                            </ul>
-                        </div>
-                    </div>
-
-
                 </div>
-            </div>
-            <div class="col-12 col-lg-6 section overflow-auto scroll-custom" style="max-height: 75vh;">
-                <h1 class="titulo">CARACTERISTICAS E TALENTOS</h1>
 
-                <!-- ✅ Uma única row com duas colunas dentro -->
-                <div class="row">
-
-                    <!-- Coluna 1 -->
-                    <div class="col-6">
-                        <div class="atributo w-100 mb-2 text-center">
-                            <ul class="list-group">
-
-                                {% for truque in truques %}
-                                <div class="text-start mb-2">
-                                    <div class="content-card bg-light text-dark p-2 rounded-top">
-                                        <strong>{{ truque.nome }}</strong> - {{ truque.escola }}<br>
-                                        <strong>Tempo de Conjuração:</strong> {{ truque.tempoConjuracao }}<br>
-                                        <strong>Alcance:</strong> {{ truque.alcance }}<br>
-                                        <strong>Componentes:</strong> {{ truque.componentes }}<br>
-                                        <strong>Duração:</strong> {{ truque.duracao }}<br>
-                                    </div>
-
-                                    <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}"
-                                        style="background-color: #297fd4;">
-                                        {{ truque.descricao }}
-                                    </div>
-
-                                    <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
-                                        data-target="#descricao{{ id_truque }}" style="display: none;">
-                                        ▼
-                                    </button>
-                                </div>
-                                {% endfor %}
-
-                            </ul>
-                        </div>
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 1</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
                     </div>
-
-                    <!-- Coluna 2 -->
-                    <div class="col-6">
-                        <div class="atributo w-100 mb-2 text-center">
-                            <ul class="list-group">
-
-                                {% for truque in truques %}
-                                <div class="text-start mb-2">
-                                    <div class="content-card bg-light text-dark p-2 rounded-top">
-                                        <strong>{{ truque.nome }}</strong> - {{ truque.escola }}<br>
-                                        <strong>Tempo de Conjuração:</strong> {{ truque.tempoConjuracao }}<br>
-                                        <strong>Alcance:</strong> {{ truque.alcance }}<br>
-                                        <strong>Componentes:</strong> {{ truque.componentes }}<br>
-                                        <strong>Duração:</strong> {{ truque.duracao }}<br>
-                                    </div>
-
-                                    <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}"
-                                        style="background-color: #297fd4;">
-                                        {{ truque.descricao }}
-                                    </div>
-
-                                    <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
-                                        data-target="#descricao{{ id_truque }}" style="display: none;">
-                                        ▼
-                                    </button>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 1 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
                                 </div>
-                                {% endfor %}
 
-                            </ul>
-                        </div>
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
                     </div>
-
                 </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 2</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 2 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 3</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 3 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 4</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 4 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 5</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 5 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 6</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 6 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 7</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 7 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 8</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 8 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 9</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 9 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+
             </div>
+        </div>
+        <div class="col-12 col-lg-6 section overflow-auto scroll-custom" style="max-height: 75vh;">
+            <h1 class="titulo">CARACTERISTICAS E TALENTOS</h1>
 
-            <hr>
+            <!-- ✅ Uma única row com duas colunas dentro -->
+            <div class="row">
 
-            <div class="col-12 col-lg-12 section scroll-custom" style="max-height: 75vh;">
-                <h1 class="titulo">DESCRIÇÃO DO PERSONAGEM</h1>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="content-card overflow-auto scroll-custom">
-                            <ul class="">
-                                <li>Proficiências:</li>
-                                {% for proficiencia in proficiencias%}
-                                <li class="">{{ proficiencia}}</li>
-                                {% endfor %}
+                <!-- Coluna 1 -->
+                <div class="col-6">
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
 
-                                <li>Idiomas:</li>
-                                {% for idioma in idiomas%}
-                                <li>{{idioma}}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                            {% for truque in truques %}
+                            <div class="text-start mb-2">
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ truque.nome }}</strong> - {{ truque.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ truque.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ truque.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ truque.componentes }}<br>
+                                    <strong>Duração:</strong> {{ truque.duracao }}<br>
+                                </div>
+
+                                <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ truque.descricao }}
+                                </div>
+
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_truque }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endfor %}
+
+                        </ul>
                     </div>
-                    <div class="col-8">
-                        <div class="content-card overflow-auto scroll-custom">
-                            <ul class="">
-                                <li>Proficiências:</li>
-                                {% for proficiencia in proficiencias%}
-                                <li class="">{{ proficiencia}}</li>
-                                {% endfor %}
+                </div>
 
-                                <li>Idiomas:</li>
-                                {% for idioma in idiomas%}
-                                <li>{{idioma}}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                <!-- Coluna 2 -->
+                <div class="col-6">
+                    <div class="atributo w-100 mb-2 text-center">
+                        <ul class="list-group">
 
+                            {% for truque in truques %}
+                            <div class="text-start mb-2">
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ truque.nome }}</strong> - {{ truque.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ truque.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ truque.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ truque.componentes }}<br>
+                                    <strong>Duração:</strong> {{ truque.duracao }}<br>
+                                </div>
+
+                                <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ truque.descricao }}
+                                </div>
+
+                                <button class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_truque }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endfor %}
+
+                        </ul>
                     </div>
-                    <div class="col-4">
-                        <div class="content-card overflow-auto scroll-custom">
-                            <ul class="">
-                                <li>Proficiências:</li>
-                                {% for proficiencia in proficiencias%}
-                                <li class="">{{ proficiencia}}</li>
-                                {% endfor %}
-
-                                <li>Idiomas:</li>
-                                {% for idioma in idiomas%}
-                                <li>{{idioma}}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="col-4">
-                        <div class="content-card overflow-auto scroll-custom">
-                            <ul class="">
-                                <li>Proficiências:</li>
-                                {% for proficiencia in proficiencias%}
-                                <li class="">{{ proficiencia}}</li>
-                                {% endfor %}
-
-                                <li>Idiomas:</li>
-                                {% for idioma in idiomas%}
-                                <li>{{idioma}}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="col-4">
-                        <div class="content-card overflow-auto scroll-custom">
-                            <ul class="">
-                                <li>Proficiências:</li>
-                                {% for proficiencia in proficiencias%}
-                                <li class="">{{ proficiencia}}</li>
-                                {% endfor %}
-
-                                <li>Idiomas:</li>
-                                {% for idioma in idiomas%}
-                                <li>{{idioma}}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-
                 </div>
 
             </div>
         </div>
-    </form>
+
+        <hr>
+
+        <div class="col-12 col-lg-12 section scroll-custom" style="max-height: 75vh;">
+            <h1 class="titulo">DESCRIÇÃO DO PERSONAGEM</h1>
+            <form method="POST" id="form-ficha">
+                <div class="row">
+                            {% csrf_token %}
+                            
+
+                    <div class="col-4">
+                        <div class="content-card overflow-auto scroll-custom">
+                            
+                            <p class="text-center">Aparência do Personagem</p>
+                            <textarea class="form-control mb-2 descricaoPersonagem" id="id_aparenciaPersonagem"
+                                name="tesouro" placeholder="Descreva a aparência do seu personagem aqui..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="content-card overflow-auto scroll-custom">
+                            <p class="text-center">História do Personagem</p>
+                            <textarea class="form-control mb-2 descricaoPersonagem" id="id_historiaPersonagem"
+                                name="tesouro" placeholder="Descreva a história do seu personagem aqui..."></textarea>
+                        </div>
+
+                    </div>
+                    <div class="col-4">
+                        <div class="content-card overflow-auto scroll-custom">
+                            <p class="text-center">Aliados e Organizações</p>
+                            <textarea class="form-control mb-2 descricaoPersonagem" id="id_aliadosOrganizacoes"
+                                name="tesouro"
+                                placeholder="Descreva os aliados e organizações do seu personagem aqui..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="content-card overflow-auto scroll-custom">
+                            <p class="text-center">Traços e Características Adicionais</p>
+                            <textarea class="form-control mb-2 descricaoPersonagem" id="id_tracosCaracteristicas"
+                                name="tesouro"
+                                placeholder="Descreva os traços e características adicionais do seu personagem aqui..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="content-card overflow-auto scroll-custom">
+                            <p class="text-center">Tesouro</p>
+
+                            <textarea class="form-control mb-2 descricaoPersonagem" id="id_tesouro" name="tesouro"
+                                placeholder="Descreva o tesouro do seu personagem aqui..."></textarea>
+
+                        </div>
+                    </div>
+            </form>
+        </div>
+
+    </div>
+    </div>
 </body>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -1057,86 +1154,111 @@
         });
     });
 
-    function adicionarItem(listaId) {
-        const nome = prompt("Digite o novo item:");
-        if (nome && nome.trim() !== "") {
-            const ul = document.getElementById(listaId);
-            const novoItem = document.createElement("li");
-            novoItem.textContent = nome;
-            ul.insertBefore(novoItem, ul.querySelector(`button[onclick="adicionarItem('${listaId}')"]`));
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".magia-descricao").forEach(desc => {
+            const button = desc.parentElement.querySelector(".ver-mais");
+
+            // Se o conteúdo ultrapassar o limite visível, mostra o botão
+            if (desc.scrollHeight > desc.clientHeight + 5) {
+                button.style.display = "block";
+            }
+
+            // Evento de clique para expandir/recolher
+            button.addEventListener("click", () => {
+                const expandido = desc.classList.toggle("expandido");
+                button.textContent = expandido ? "▲" : "▼";
+            });
+        });
+    });
+
+
+
+
+    /*
+        function adicionarItem(listaId) {
+            const nome = prompt("Digite o novo item:");
+            if (nome && nome.trim() !== "") {
+                const ul = document.getElementById(listaId);
+                const novoItem = document.createElement("li");
+                novoItem.textContent = nome;
+                ul.insertBefore(novoItem, ul.querySelector(`button[onclick="adicionarItem('${listaId}')"]`));
+            }
         }
-    }
-
-    function mostrarFormularioTruque() {
-        // Verifica se já existe um formulário aberto
-        if (document.getElementById("form-novo-truque")) return;
-
-        const lista = document.getElementById("lista-truques");
-        const form = document.createElement("div");
-        form.id = "form-novo-truque";
-        form.classList.add("p-2", "bg-light", "text-dark", "rounded", "mt-2",);
-
-        form.innerHTML = `
-    <h6>Adicionar Novo Truque</h6>
-    <input type="text" class="form-control mb-1" id="novo-nome" placeholder="Nome">
-    <input type="text" class="form-control mb-1" id="nova-escola" placeholder="Escola">
-    <input type="text" class="form-control mb-1" id="novo-tempo" placeholder="Tempo de Conjuração">
-    <input type="text" class="form-control mb-1" id="novo-alcance" placeholder="Alcance">
-    <input type="text" class="form-control mb-1" id="novos-componentes" placeholder="Componentes">
-    <input type="text" class="form-control mb-1" id="nova-duracao" placeholder="Duração">
-    <textarea class="form-control mb-2" id="nova-descricao" placeholder="Descrição (opcional)"></textarea>
-    <button class="btn btn-success btn-sm" onclick="adicionarTruque()">Salvar</button>
-    <button class="btn btn-secondary btn-sm" onclick="cancelarFormulario()">Cancelar</button>
-  `;
-
-        lista.appendChild(form);
-    }
-
-    function cancelarFormulario() {
-        const form = document.getElementById("form-novo-truque");
-        if (form) form.remove();
-    }
-
-    function adicionarTruque() {
-        const nome = document.getElementById("novo-nome").value.trim();
-        const escola = document.getElementById("nova-escola").value.trim();
-        const tempo = document.getElementById("novo-tempo").value.trim();
-        const alcance = document.getElementById("novo-alcance").value.trim();
-        const componentes = document.getElementById("novos-componentes").value.trim();
-        const duracao = document.getElementById("nova-duracao").value.trim();
-        const descricao = document.getElementById("nova-descricao").value.trim();
-
-        if (!nome) {
-            alert("Por favor, preencha pelo menos o nome.");
-            return;
+    
+        function mostrarFormularioTruque() {
+            // Verifica se já existe um formulário aberto
+            if (document.getElementById("form-novo-truque")) return;
+    
+            const lista = document.getElementById("lista-truques");
+            const form = document.createElement("div");
+            form.id = "form-novo-truque";
+            form.classList.add("p-2", "bg-light", "text-dark", "rounded", "mt-2",);
+    
+            form.innerHTML = `
+        <h6>Adicionar Novo Truque</h6>
+        <input type="text" class="form-control mb-1" id="novo-nome" placeholder="Nome">
+        <input type="text" class="form-control mb-1" id="nova-escola" placeholder="Escola">
+        <input type="text" class="form-control mb-1" id="novo-tempo" placeholder="Tempo de Conjuração">
+        <input type="text" class="form-control mb-1" id="novo-alcance" placeholder="Alcance">
+        <input type="text" class="form-control mb-1" id="novos-componentes" placeholder="Componentes">
+        <input type="text" class="form-control mb-1" id="nova-duracao" placeholder="Duração">
+        <textarea class="form-control mb-2" id="nova-descricao" placeholder="Descrição (opcional)"></textarea>
+        <button class="btn btn-success btn-sm" onclick="adicionarTruque()">Salvar</button>
+        <button class="btn btn-secondary btn-sm" onclick="cancelarFormulario()">Cancelar</button>
+      `;
+    
+            lista.appendChild(form);
         }
+    
+        function cancelarFormulario() {
+            const form = document.getElementById("form-novo-truque");
+            if (form) form.remove();
+        }
+    
+        function adicionarTruque() {
+            const nome = document.getElementById("novo-nome").value.trim();
+            const escola = document.getElementById("nova-escola").value.trim();
+            const tempo = document.getElementById("novo-tempo").value.trim();
+            const alcance = document.getElementById("novo-alcance").value.trim();
+            const componentes = document.getElementById("novos-componentes").value.trim();
+            const duracao = document.getElementById("nova-duracao").value.trim();
+            const descricao = document.getElementById("nova-descricao").value.trim();
+    
+            if (!nome) {
+                alert("Por favor, preencha pelo menos o nome.");
+                return;
+            }
+    
+            const novoTruque = document.createElement("div");
+            novoTruque.classList.add("text-start", "mb-2");
+            novoTruque.innerHTML = `
+        <div class="content-card bg-light text-dark p-2 rounded-top">
+          <strong>${nome}</strong> - ${escola}<br>
+          <strong>Tempo de Conjuração:</strong> ${tempo}<br>
+          <strong>Alcance:</strong> ${alcance}<br>
+          <strong>Componentes:</strong> ${componentes}<br>
+          <strong>Duração:</strong> ${duracao}<br>
+        </div>
+        <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}" style="background-color: #297fd4;">
+          ${descricao || ""}
+        </div>
+      `;
+    
+    
+            // Insere antes do botão "+ Adicionar"
+            const lista = document.getElementById("lista-truques");
+            const botaoAdicionar = lista.querySelector("button.btn-primary");
+            lista.insertBefore(novoTruque, botaoAdicionar);
+    
+            cancelarFormulario();
+        }*/
 
-        const novoTruque = document.createElement("div");
-        novoTruque.classList.add("text-start", "mb-2");
-        novoTruque.innerHTML = `
-    <div class="content-card bg-light text-dark p-2 rounded-top">
-      <strong>${nome}</strong> - ${escola}<br>
-      <strong>Tempo de Conjuração:</strong> ${tempo}<br>
-      <strong>Alcance:</strong> ${alcance}<br>
-      <strong>Componentes:</strong> ${componentes}<br>
-      <strong>Duração:</strong> ${duracao}<br>
-    </div>
-    <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}" style="background-color: #297fd4;">
-      ${descricao || ""}
-    </div>
-  `;
+    // Carrega o nome do personagem do localStorage ao carregar a página
+    document.addEventListener('DOMContentLoaded', function () {
+        let playerNome = localStorage.getItem("playerNome") ?? "";
 
-
-        // Insere antes do botão "+ Adicionar"
-        const lista = document.getElementById("lista-truques");
-        const botaoAdicionar = lista.querySelector("button.btn-primary");
-        lista.insertBefore(novoTruque, botaoAdicionar);
-
-        cancelarFormulario();
-    }
+        playerName = document.getElementById("id_nome").value = playerNome
+    });
 </script>
-
-
-
 
 </html>
