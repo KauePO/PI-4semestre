@@ -7,11 +7,8 @@ from core.models import Personagem, Usuario
 
 class viewPaginaInicial(LoginRequiredMixin, View):
     def get(self, request):
-       
         personagens = Personagem.objects.filter(usuario__user=request.user)
         usuario = Usuario.objects.get(user=request.user)
-        
-        print(personagens.count())
         
         context = {
             "personagens":personagens,
