@@ -12,12 +12,10 @@ class viewTelaCadastro(View):
         return render(request, "templateCadastro.html")
 
     def post(self, request):
-        print(request.POST['username'])
         form = UserCreationForm(request.POST)
 
         if not form.is_valid():
             error = list(form.errors.values())[0]
-            print(error)
             return render(request, "templateCadastro.html",{"error":error})
 
         form.save()
