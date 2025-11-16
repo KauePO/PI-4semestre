@@ -12,7 +12,7 @@ class viewSucessoPagamento (LoginRequiredMixin, View):
         
         try:
             usuario = Usuario.objects.get(user = request.user)
-            cobranca = Cobranca.objects.get(usuario = usuario)
+            cobranca = Cobranca.objects.filter(usuario = usuario, status_cobranca = "PENDING").first()
             
             usuario.plano_ativo = True
             usuario.data_ativacao = date.today()
