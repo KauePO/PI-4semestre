@@ -8,7 +8,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class Antecedente(models.Model):
     id_antecedente = models.AutoField(primary_key=True)
     nome = models.CharField()
@@ -17,10 +16,12 @@ class Antecedente(models.Model):
 
     class Meta:
         db_table = 'antecedente'
-
-
+    
+    def __str__(self):
+        return self.nome
 class Arma(models.Model):
     id_arma = models.AutoField(primary_key=True)
+    nome = models.CharField()
     tipo = models.CharField()
     custo = models.IntegerField()
     peso = models.FloatField()
@@ -30,8 +31,9 @@ class Arma(models.Model):
 
     class Meta:
         db_table = 'arma'
-
-
+    
+    def __str__(self):
+        return self.nome
 class Armadura(models.Model):
     id_armadura = models.AutoField(primary_key=True)
     tipo_armadura = models.ForeignKey('TipoArmadura', models.DO_NOTHING)
@@ -48,8 +50,6 @@ class Armadura(models.Model):
         
     def __str__(self):
         return self.nome
-        
-
 class Classe(models.Model):
     id_classe = models.AutoField(primary_key=True)
     nome = models.CharField()
@@ -70,7 +70,6 @@ class Classe(models.Model):
     def __str__(self):
         return self.nome
     
-
 class ConjuntoEquipamento(models.Model):
     id_conjunto_equipamento = models.AutoField(primary_key=True)
     nome = models.CharField()
@@ -79,7 +78,9 @@ class ConjuntoEquipamento(models.Model):
 
     class Meta:
         db_table = 'conjunto_equipamento'
-
+    
+    def __str__(self):
+        return self.nome
 
 class EquipamentoDeAventura(models.Model):
     id_equipamento_de_aventura = models.AutoField(primary_key=True)
@@ -93,7 +94,9 @@ class EquipamentoDeAventura(models.Model):
 
     class Meta:
         db_table = 'equipamento_de_aventura'
-
+    
+    def __str__(self):
+        return self.nome
 
 class Ferramenta(models.Model):
     id_ferramenta = models.AutoField(primary_key=True)
@@ -105,7 +108,9 @@ class Ferramenta(models.Model):
 
     class Meta:
         db_table = 'ferramenta'
-
+    
+    def __str__(self):
+        return self.nome_ferramenta
 
 class HabilidadeEspecial(models.Model):
     id_habilidade_especial = models.AutoField(primary_key=True)
@@ -114,7 +119,9 @@ class HabilidadeEspecial(models.Model):
 
     class Meta:
         db_table = 'habilidade_especial'
-
+        
+    def __str__(self):
+        return self.nome
 
 class Idiomas(models.Model):
     id_idioma = models.AutoField(primary_key=True)
@@ -124,7 +131,9 @@ class Idiomas(models.Model):
 
     class Meta:
         db_table = 'idiomas'
-
+    
+    def __str__(self):
+        return self.nome
 
 class IncrementoHabilidade(models.Model):
     id_incremento_habilidade = models.AutoField(primary_key=True)
@@ -134,7 +143,9 @@ class IncrementoHabilidade(models.Model):
 
     class Meta:
         db_table = 'incremento_habilidade'
-
+        
+    def __str__(self):
+        return self.nome
 
 class Magia(models.Model):
     id_magia = models.AutoField(primary_key=True)
@@ -150,6 +161,9 @@ class Magia(models.Model):
 
     class Meta:
         db_table = 'magia'
+        
+    def __str__(self):
+        return self.nome_magia
 
 
 class Usuario (models.Model):
@@ -157,6 +171,9 @@ class Usuario (models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     plano_ativo = models.BooleanField(default=False)
     data_ativacao = models.DateField(blank=True, null=True)
+    
+    def __str__(self):
+        return  self.user.username
     
 class Cobranca(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
@@ -166,7 +183,6 @@ class Cobranca(models.Model):
     class Meta:
         db_table = 'cobranca'
     
-
 
 class Personagem(models.Model):
     id_personagem = models.AutoField(primary_key=True)
@@ -197,7 +213,9 @@ class Personagem(models.Model):
 
     class Meta:
         db_table = 'personagem'
-
+        
+    def __str__(self):
+        return self.nome
 
 class Proficiencia(models.Model):
     id_proficiencia = models.AutoField(primary_key=True)
@@ -208,7 +226,9 @@ class Proficiencia(models.Model):
 
     class Meta:
         db_table = 'proficiencia'
-
+    
+    def __str__(self):
+        return self.nome
 
 class Propriedade(models.Model):
     id_propriedade = models.AutoField(primary_key=True)
@@ -218,7 +238,9 @@ class Propriedade(models.Model):
 
     class Meta:
         db_table = 'propriedade'
-
+        
+    def __str__(self):
+        return self.nome
 
 class Raca(models.Model):
     id_raca = models.AutoField(primary_key=True)
@@ -234,7 +256,9 @@ class Raca(models.Model):
 
     class Meta:
         db_table = 'raca'
-
+    
+    def __str__(self):
+        return self.nome
 
 class Subraca(models.Model):
     id_subraca = models.AutoField(primary_key=True)
@@ -244,7 +268,9 @@ class Subraca(models.Model):
 
     class Meta:
         db_table = 'subraca'
-
+        
+    def __str__(self):
+        return self.nome
 
 class TipoArmadura(models.Model):
     id_tipo_armadura = models.AutoField(primary_key=True)
@@ -258,7 +284,6 @@ class TipoArmadura(models.Model):
     def __str__(self):
         return self.nome_tipo_armadura
         
-
 
 class Truque(models.Model):
     id_truque = models.AutoField(primary_key=True)
@@ -275,4 +300,7 @@ class Truque(models.Model):
 
     class Meta:
         db_table = 'truque'
+        
+    def __str__(self):
+        return self.nome_truque
 
