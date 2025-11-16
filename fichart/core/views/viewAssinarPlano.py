@@ -17,7 +17,7 @@ class viewAssinarPlano(LoginRequiredMixin, View):
         
         
         usuario = Usuario.objects.get(user = request.user)
-        cobrancaExistente = Cobranca.objects.filter(status_cobranca = "PENDING").first()
+        cobrancaExistente = Cobranca.objects.filter(status_cobranca = "PENDING",usuario = usuario).first()
         
         if cobrancaExistente:
             

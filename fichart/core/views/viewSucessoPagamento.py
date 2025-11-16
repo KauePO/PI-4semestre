@@ -21,8 +21,6 @@ class viewSucessoPagamento (LoginRequiredMixin, View):
             cobranca.status_cobranca = "PAID"
             
             cobranca.save()
-            
-            print(request)
         
         except Exception as e:
             errors.append(e)
