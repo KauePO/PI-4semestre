@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from core.models import Usuario, Cobranca
 from datetime import date
+from django.contrib import messages
 
 class viewSucessoPagamento (LoginRequiredMixin, View):
     
@@ -21,9 +22,11 @@ class viewSucessoPagamento (LoginRequiredMixin, View):
             cobranca.status_cobranca = "PAID"
             
             cobranca.save()
+            messages.success(request, "O pagamento foi um sucesso")
         
         except Exception as e:
             errors.append(e)
+            messages.error(request, "Não foi possivel registrar o seu pagamento")
         
         
         return redirect("paginaInicial")
