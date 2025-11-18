@@ -23,6 +23,8 @@ class viewTelaEquipamentos(LoginRequiredMixin, View):
                         "Medias":tipo_armaduraobjects.filter(nome_tipo_armadura = 'media'),
                         "Pesadas":tipo_armaduraobjects.filter(nome_tipo_armadura = 'pesada'),
         }
+
+        
         
         conjuntoEquipamentoObjects = ConjuntoEquipamento.objects.all().filter(classes__nome = classeAtual)
 
@@ -32,4 +34,4 @@ class viewTelaEquipamentos(LoginRequiredMixin, View):
         
         form = nomeForm()
         
-        return render(request, "templateTelaSelecaoMagia.html", {"form":form, "armaObjects":armaObjects, 'armaduraObjects':armaduraObjects,"conjuntoEquipamentoObjects":conjuntoEquipamentoObjects, "equipamentoDeAventuraObjects":equipamentoDeAventuraObjects, "ferramentasobjects":ferramentaObjects})
+        return render(request, "templateEscolhaEquipamentos.html", {"form":form, "armaObjects":armaObjects, 'armaduraObjects':listaArmaduras,"conjuntoEquipamentoObjects":conjuntoEquipamentoObjects, "equipamentoDeAventuraObjects":equipamentoDeAventuraObjects, "ferramentasobjects":ferramentaObjects})
