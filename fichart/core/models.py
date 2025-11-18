@@ -6,7 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Antecedente(models.Model):
     id_antecedente = models.AutoField(primary_key=True)
@@ -16,35 +16,9 @@ class Antecedente(models.Model):
 
     class Meta:
         db_table = 'antecedente'
-
-
-class AntecedenteHasEquipamentoDeAventura(models.Model):
-    pk = models.CompositePrimaryKey('antecedente_id', 'equipamento_de_aventura_id')
-    antecedente = models.ForeignKey(Antecedente, models.DO_NOTHING)
-    equipamento_de_aventura = models.ForeignKey('EquipamentoDeAventura', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'antecedente_has_equipamento_de_aventura'
-
-
-class AntecedenteHasFerramenta(models.Model):
-    pk = models.CompositePrimaryKey('antecedente_id', 'ferramenta_id')
-    antecedente = models.ForeignKey(Antecedente, models.DO_NOTHING)
-    ferramenta = models.ForeignKey('Ferramenta', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'antecedente_has_ferramenta'
-
-
-class AntecedenteHasProficiencia(models.Model):
-    pk = models.CompositePrimaryKey('antecedente_id', 'proficiencia_id')
-    antecedente = models.ForeignKey(Antecedente, models.DO_NOTHING)
-    proficiencia = models.ForeignKey('Proficiencia', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'antecedente_has_proficiencia'
-
-
+    
+    def __str__(self):
+        return self.nome
 class Arma(models.Model):
     id_arma = models.AutoField(primary_key=True)
     nome = models.CharField()
@@ -59,6 +33,9 @@ class Arma(models.Model):
         db_table = 'arma'
 
 
+    
+    def __str__(self):
+        return self.nome
 class Armadura(models.Model):
     id_armadura = models.AutoField(primary_key=True)
     tipo_armadura = models.ForeignKey('TipoArmadura', models.DO_NOTHING)
@@ -75,8 +52,6 @@ class Armadura(models.Model):
         
     def __str__(self):
         return self.nome
-        
-
 class Classe(models.Model):
     id_classe = models.AutoField(primary_key=True)
     nome = models.CharField()
@@ -97,19 +72,7 @@ class Classe(models.Model):
     
     def __str__(self):
         return self.nome
-
-
-class ClasseHasProficiencia(models.Model):
-    pk = models.CompositePrimaryKey('classe_id', 'proficiencia_id')
-    classe = models.ForeignKey(Classe, models.DO_NOTHING)
-    proficiencia = models.ForeignKey('Proficiencia', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'classe_has_proficiencia'
-        
-        
-
-
+    
 class ConjuntoEquipamento(models.Model):
     id_conjunto_equipamento = models.AutoField(primary_key=True)
     nome = models.CharField()
@@ -119,6 +82,9 @@ class ConjuntoEquipamento(models.Model):
     class Meta:
         db_table = 'conjunto_equipamento'
 
+    
+    def __str__(self):
+        return self.nome
 
 class EquipamentoDeAventura(models.Model):
     id_equipamento_de_aventura = models.AutoField(primary_key=True)
@@ -126,23 +92,29 @@ class EquipamentoDeAventura(models.Model):
     descricao = models.TextField(blank=True, null=True)
     custo = models.IntegerField()
     peso = models.FloatField()
+    antecedente = models.ManyToManyField(Antecedente)
     classe = models.ManyToManyField(Classe)
     conjunto_equipamento = models.ManyToManyField(ConjuntoEquipamento)
 
     class Meta:
         db_table = 'equipamento_de_aventura'
-
+    
+    def __str__(self):
+        return self.nome
 
 class Ferramenta(models.Model):
     id_ferramenta = models.AutoField(primary_key=True)
     nome_ferramenta = models.CharField()
     custo = models.IntegerField()
     peso = models.IntegerField()
+    antecedente = models.ManyToManyField(Antecedente)
     classe = models.ManyToManyField(Classe)
 
     class Meta:
         db_table = 'ferramenta'
-
+    
+    def __str__(self):
+        return self.nome_ferramenta
 
 class HabilidadeEspecial(models.Model):
     id_habilidade_especial = models.AutoField(primary_key=True)
@@ -151,16 +123,9 @@ class HabilidadeEspecial(models.Model):
 
     class Meta:
         db_table = 'habilidade_especial'
-
-
-class IdiomaHasRaca(models.Model):
-    pk = models.CompositePrimaryKey('idioma_id', 'raca_id')
-    idioma = models.ForeignKey('Idiomas', models.DO_NOTHING)
-    raca = models.ForeignKey('Raca', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'idioma_has_raca'
-
+        
+    def __str__(self):
+        return self.nome
 
 class Idiomas(models.Model):
     id_idioma = models.AutoField(primary_key=True)
@@ -170,17 +135,21 @@ class Idiomas(models.Model):
 
     class Meta:
         db_table = 'idiomas'
-
+    
+    def __str__(self):
+        return self.nome
 
 class IncrementoHabilidade(models.Model):
     id_incremento_habilidade = models.AutoField(primary_key=True)
-    subraca = models.ForeignKey('Subraca', models.DO_NOTHING)
+    subraca = models.ForeignKey('Subraca', models.DO_NOTHING, blank=1, null=1)
     nome = models.CharField()
     valor_incremento = models.IntegerField()
 
     class Meta:
         db_table = 'incremento_habilidade'
-
+        
+    def __str__(self):
+        return self.nome
 
 class Magia(models.Model):
     id_magia = models.AutoField(primary_key=True)
@@ -196,7 +165,28 @@ class Magia(models.Model):
 
     class Meta:
         db_table = 'magia'
+        
+    def __str__(self):
+        return self.nome_magia
 
+
+class Usuario (models.Model):
+    id_usuario = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    plano_ativo = models.BooleanField(default=False)
+    data_ativacao = models.DateField(blank=True, null=True)
+    
+    def __str__(self):
+        return  self.user.username
+    
+class Cobranca(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_cobranca_externo = models.CharField()
+    status_cobranca = models.CharField(max_length=255)
+    
+    class Meta:
+        db_table = 'cobranca'
+    
 
 class Personagem(models.Model):
     id_personagem = models.AutoField(primary_key=True)
@@ -220,144 +210,84 @@ class Personagem(models.Model):
     traco_personalidade = models.CharField(blank=True, null=True)
     ideais = models.CharField(blank=True, null=True)
     ligacoes = models.CharField(blank=True, null=True)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     arma = models.ManyToManyField(Arma)
+    magia = models.ManyToManyField(Magia)
+    equipamento_de_aventura = models.ManyToManyField(EquipamentoDeAventura)
+
     class Meta:
         db_table = 'personagem'
-
-
-class PersonagemHasEquipamentoDeAventura(models.Model):
-    pk = models.CompositePrimaryKey('personagem_id', 'equipamento_de_aventura_id')
-    personagem = models.ForeignKey(Personagem, models.DO_NOTHING)
-    equipamento_de_aventura = models.ForeignKey(EquipamentoDeAventura, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'personagem_has_equipamento_de_aventura'
-
-
-class PersonagemHasMagia(models.Model):
-    pk = models.CompositePrimaryKey('personagem_id', 'magia_id')
-    personagem = models.ForeignKey(Personagem, models.DO_NOTHING)
-    magia = models.ForeignKey(Magia, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'personagem_has_magia'
-
-
-class PersonagemHasTipoArmadura(models.Model):
-    pk = models.CompositePrimaryKey('personagem_id', 'tipo_armadura_id')
-    personagem = models.ForeignKey(Personagem, models.DO_NOTHING)
-    tipo_armadura = models.ForeignKey('TipoArmadura', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'personagem_has_tipo_armadura'
-
+        
+    def __str__(self):
+        return self.nome
 
 class Proficiencia(models.Model):
     id_proficiencia = models.AutoField(primary_key=True)
     nome = models.CharField()
     tipo = models.CharField()
+    antecedente = models.ManyToManyField(Antecedente)
+    classe = models.ManyToManyField(Classe)
 
     class Meta:
         db_table = 'proficiencia'
-
+    
+    def __str__(self):
+        return self.nome
 
 class Propriedade(models.Model):
     id_propriedade = models.AutoField(primary_key=True)
     nome = models.CharField()
     descricao = models.TextField()
+    arma = models.ManyToManyField(Arma)
 
     class Meta:
         db_table = 'propriedade'
-
-
-class PropriedadeHasArma(models.Model):
-    pk = models.CompositePrimaryKey('propriedade_id', 'arma_id')
-    propriedade = models.ForeignKey(Propriedade, models.DO_NOTHING)
-    arma = models.ForeignKey(Arma, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'propriedade_has_arma'
-
+        
+    def __str__(self):
+        return self.nome
 
 class Raca(models.Model):
     id_raca = models.AutoField(primary_key=True)
     nome = models.CharField()
     velocidade = models.FloatField()
     tamanho = models.IntegerField()
-    id_subraca = models.IntegerField()
     descricao = models.TextField()
     icone = models.ImageField( upload_to="racas/" ,blank=True, null=True)
+    incremento_habilidade = models.ManyToManyField(IncrementoHabilidade)
+    idioma = models.ManyToManyField('Idiomas')
+    habilidade_especial = models.ManyToManyField(HabilidadeEspecial)
+    incremento_habilidade = models.ManyToManyField(IncrementoHabilidade)
 
     class Meta:
         db_table = 'raca'
-
-
-class RacaHasHabilidadeEspecial(models.Model):
-    pk = models.CompositePrimaryKey('raca_id', 'habilidade_especial_id')
-    raca = models.ForeignKey(Raca, models.DO_NOTHING)
-    habilidade_especial = models.ForeignKey(HabilidadeEspecial, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'raca_has_habilidade_especial'
-
-
-class RacaHasIncrementoHabilidade(models.Model):
-    pk = models.CompositePrimaryKey('raca_id', 'incremento_habilidade_id')
-    raca = models.ForeignKey(Raca, models.DO_NOTHING)
-    incremento_habilidade = models.ForeignKey(IncrementoHabilidade, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'raca_has_incremento_habilidade'
-
-
-class RacaHasTruque(models.Model):
-    pk = models.CompositePrimaryKey('raca_id', 'truque_id')
-    raca = models.ForeignKey(Raca, models.DO_NOTHING)
-    truque = models.ForeignKey('Truque', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'raca_has_truque'
-
+    
+    def __str__(self):
+        return self.nome
 
 class Subraca(models.Model):
     id_subraca = models.AutoField(primary_key=True)
     raca = models.ForeignKey(Raca, models.DO_NOTHING)
     nome = models.CharField()
+    habilidade_especial = models.ManyToManyField(HabilidadeEspecial)
 
     class Meta:
         db_table = 'subraca'
-
-
-class SubracaHasHabilidadeEspecial(models.Model):
-    pk = models.CompositePrimaryKey('subraca_id', 'habilidade_especial_id')
-    subraca = models.ForeignKey(Subraca, models.DO_NOTHING)
-    habilidade_especial = models.ForeignKey(HabilidadeEspecial, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'subraca_has_habilidade_especial'
-
-
-class SubracaHasTruque(models.Model):
-    pk = models.CompositePrimaryKey('subraca_id', 'truque_id')
-    subraca = models.ForeignKey(Subraca, models.DO_NOTHING)
-    truque = models.ForeignKey('Truque', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'subraca_has_truque'
-
+        
+    def __str__(self):
+        return self.nome
 
 class TipoArmadura(models.Model):
     id_tipo_armadura = models.AutoField(primary_key=True)
     nome_tipo_armadura = models.CharField(blank=True, null=True)
     descricao = models.TextField(blank=True, null=True)
     personagem = models.ManyToManyField(Personagem)
+
     class Meta:
         db_table = 'tipo_armadura'
     
     def __str__(self):
         return self.nome_tipo_armadura
         
-
 
 class Truque(models.Model):
     id_truque = models.AutoField(primary_key=True)
@@ -369,7 +299,12 @@ class Truque(models.Model):
     duracao = models.CharField()
     descricao = models.CharField()
     classes = models.ManyToManyField(Classe)
+    raca = models.ManyToManyField(Raca)
+    subraca = models.ManyToManyField(Subraca)
 
     class Meta:
         db_table = 'truque'
+        
+    def __str__(self):
+        return self.nome_truque
 

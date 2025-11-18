@@ -1,0 +1,542 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+
+    <style>
+        body {
+            background-color: #282828;
+            font-family: "Inter";
+            font-weight: bold;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .avatar-img {
+            width: 483px;
+            height: 314px;
+            object-fit: cover;
+            border: 3px solid #dee2e6;
+        }
+
+        .overflow-y {
+            overflow-y: auto;
+            scrollbar-width: thin;
+            /* For Firefox */
+        }
+
+        .raca-option {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .raca-option:hover {
+            background-color: #ffc014;
+            transform: translateX(5px);
+        }
+
+        .raca-option.active {
+            background-color: #ffc014;
+            color: #ffffff;
+            -webkit-text-stroke: 0.5px black;
+            font-weight: bold;
+        }
+
+
+        /* Wizard Navigation Styles */
+        .wizard-nav {
+            padding: 1.5rem;
+            margin-bottom: 30px;
+        }
+
+        .wizard-step {
+            text-align: center;
+            position: relative;
+            padding: 0 10px;
+            z-index: 3;
+        }
+
+        .wizard-step .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e3e3e3;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 3;
+        }
+
+        .wizard-step.active .step-number {
+            background-color: #ffc014;
+            box-shadow: 0 0 10px #ffc014;
+            transform: scale(1.1);
+        }
+
+        .wizard-step.completed .step-number {
+            background-color: #ffc014;
+        }
+
+
+
+
+        .wizard-step .step-label {
+            position: relative;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 3;
+        }
+
+        .wizard-connector {
+            position: absolute;
+            top: 45px;
+            left: -30%;
+            width: 60%;
+            height: 8px;
+            background-color: #e3e3e3;
+            z-index: 2;
+        }
+
+        .wizard-connector.completed {
+            background-color: rgb(235, 141, 74);
+        }
+
+        .wizard-step:first-child .wizard-connector {
+            display: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .wizard-step .step-label {
+                font-size: 0.75rem;
+            }
+
+            .wizard-step {
+                padding: 0 5px;
+            }
+        }
+
+
+        .scroll-custom::-webkit-scrollbar {
+            scrollbar-width: thin;
+        }
+
+        .scroll-custom::-webkit-scrollbar-track {
+            background: #929292;
+            border-radius: 6px;
+        }
+
+        .scroll-custom::-webkit-scrollbar-thumb {
+            background: #e3e3e3;
+            border-radius: 6px;
+        }
+
+        .scroll-custom::-webkit-scrollbar-corner {
+            background: #929292;
+        }
+
+        /*---------------------------------------------*/
+
+        .subRacaContainer {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            /* reserva espaço para o botão */
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 20px;
+            user-select: none;
+        }
+
+        /* Esconde o input original */
+        .defaultRadio {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Quadradinho/botão */
+        .btnRadio {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #e3e3e3;
+            border-radius: 50%;
+            /* opcional se quiser estilo radio */
+        }
+
+        /* Hover */
+        .subRacaContainer:hover input~.btnRadio {
+            background-color: #ffc014;
+        }
+
+        /* Quando marcado */
+        .subRacaContainer input:checked~.btnRadio {
+            background-color: #ffc014;
+            box-shadow: 0 0 10px #ffc014;
+            transform: scale(1.1);
+        }
+
+        #descricaoRaca {
+            overflow-y: scroll;
+        }
+
+        #iconeRaca {
+            width: 50%;
+            height: 400px;
+            border-radius: 35px;
+            box-shadow: 2px 2px bisque;
+        }
+
+        #listaMagias {
+            margin-bottom: 40px;
+        }
+
+        .check_salva {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .check_pericia {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .custom_check {
+            position: absolute;
+            top: 10%;
+            left: 0;
+            border-radius: 50%;
+            height: 25px;
+            width: 25px;
+            background-color: black;
+            border: white 3px solid;
+        }
+
+        .container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 22px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container:hover input~.custom_check {
+            background-color: #f5cf68;
+        }
+
+
+        .container input:checked~.custom_check {
+            background-color: #FFC014;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-8 ">
+
+                <!-- Wizard Navigation -->
+                <div class="wizard-nav">
+                    <div class="row align-items-center">
+                        <div class="col wizard-step completed" data-step="1">
+                            <div class="step-label pb-2 ">Classe</div>
+                            <div class="wizard-connector rounded-5"></div>
+                            <a href="{% url 'TelaClasses' %}" class="step-number"></a>
+
+                        </div>
+                        <div class="col wizard-step completed" data-step="2">
+                            <div class="step-label pb-2 ">Raça</div>
+                            <div class="wizard-connector rounded-5 completed"></div>
+                            <a href="{% url 'TelaEscolhaRaca' %}" class="step-number"></a>
+                        </div>
+                        <div class="col wizard-step  completed" data-step="3">
+                            <div class="step-label pb-2">Antecedente</div>
+                            <div class="wizard-connector rounded-5 completed"></div>
+                            <a href="{% url 'TelaAntecedente' %}" class="step-number"></a>
+                        </div>
+                        <div class="col wizard-step completed" data-step="4">
+                            <div class="step-label pb-2">Magia</div>
+                            <div class="wizard-connector rounded-5 completed"></div>
+                            <div class="step-number"></div>
+                        </div>
+                        <div class="col wizard-step active" data-step="5">
+                            <div class="step-label pb-2">Atributo</div>
+                            <div class="wizard-connector rounded-5 completed"></div>
+                            <div class="step-number"></div>
+                        </div>
+                        <div class="col wizard-step" data-step="6">
+                            <div class="step-label pb-2">Equipamento</div>
+                            <div class="wizard-connector rounded-5"></div>
+                            <div class="step-number"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" >
+                    <div class="col overflow-x-hidden scroll-custom scroll-thin d-flex row-gap-3 align-items-center flex-column" style="max-height: 84.5dvh;">
+
+                        <h3> Atributos </h3>
+
+                        {% for nome, label in atributos.items %}
+                        <div class="text-dark d-flex flex-column justify-content-center align-items-center rounded-5"
+                            style="padding: 10px; width: 25%; background-color: #D9D9D9;">
+
+                            <span id="modificador_{{ nome }}"
+                                style="background-color: #FFFFFF; padding:1px 10px; font-size: 1.5rem;"
+                                class="rounded-5 align-self-end border border-black">
+                                0
+                            </span>
+
+                            <input id="input_{{ nome }}" data-nome_atributo="{{ nome }}" type="number" min="1" max="20"
+                                value="10" class="text-center w-100 campoAtributo"
+                                style="font-size: 4rem; font-weight:900; border:none; background-color:#D9D9D9; outline:none;">
+
+                            <span>{{ label }}</span>
+                        </div>
+                        {% endfor %}
+
+
+                    </div>
+
+                    <div class="col ms-5 overflow-x-hidden scroll-custom scroll-thin" style="max-height: 84.5dvh;">
+
+                        <center>
+                            <h2>SALVAGUARDAS</h2>
+                        </center>
+
+                        <div >
+
+                            {% for nome, atributo in salvaguardas.items %}
+                            <label for="check_{{ nome }}" style="display: block;" class="container">
+                                <span id="valor_salva_{{ nome }}">0</span>
+                                {{ atributo|capfirst }}
+                                <input class="check_salva" id="check_{{ nome }}" type="checkbox" value="{{ nome }}"
+                                    data-tipo_atributo="{{ atributo }}" />
+                                <span class="custom_check"></span>
+                            </label>
+                            {% endfor %}
+
+
+                        </div>
+
+                        <center>
+                            <h2>Perícias</h2>
+                        </center>
+
+
+                        <div>
+
+                            {% for nome, atributo in pericias.items %}
+                            <label for="check_{{ nome }}" style="display: block;" class="container">
+                                <span id="valor_pericia_{{ nome }}">0</span>
+                                {{ nome|capfirst }} ({{ atributo }})
+                                <input class="check_pericia" id="check_{{ nome }}" type="checkbox" value="{{ nome }}"
+                                    data-tipo_atributo="{{ atributo }}" />
+                                <span class="custom_check"></span>
+                            </label>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-4 container-fluid mt-5">
+                <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78dvh;">
+                    <div class="card-body text-center">
+                        <img src="{% static 'images/PLACEHOLDER.png' %}" alt="Avatar"
+                            class="avatar-img img-fluid mb-3 rounded-5">
+                        <!-- CAMPO DE TEXTO -->
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                {{ form.nome }}
+                                {% if form.nome.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.nome.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </form>
+
+                        <div class="row">
+                            <div class="col-5">
+                                <p class="text-end">Nível 1</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="">-</p>
+                            </div>
+                            <div class="col-5">
+                                <p class="text-start" id="current-class">Não definida</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/cc7beb20bf.js" crossorigin="anonymous"></script>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let playerNome = localStorage.getItem("playerNome") ?? "";
+        document.getElementById("id_nome").value = playerNome;
+        updateWizardProgress(5);
+
+        // ---- RECUPERA COOKIES E REAPLICA ESTADOS ----
+        carregarAtributosDosCookies();
+        carregarCheckboxesDosCookies();
+    });
+
+    // WIZARD
+    function updateWizardProgress(completedStep) {
+        document.querySelectorAll('.wizard-step').forEach((step) => {
+            const stepNumber = parseInt(step.dataset.step);
+            step.classList.remove('active', 'completed');
+            if (stepNumber < completedStep) step.classList.add('completed');
+            else if (stepNumber === completedStep) step.classList.add('active');
+        });
+    }
+
+    // PLAYER NAME
+    document.getElementById("id_nome").addEventListener("change", function () {
+        localStorage.setItem("playerNome", this.value);
+    });
+
+    // ---------------- FUNÇÕES DE COOKIES ----------------
+
+    function pegar_cookie(nome_cookie) {
+        nome_cookie = nome_cookie + "=";
+        const cookie_deconded = decodeURIComponent(document.cookie);
+        const lista_cookies = cookie_deconded.split(";");
+        for (let i of lista_cookies) {
+            i = i.trimStart();
+            if (i.startsWith(nome_cookie)) {
+                return i.substring(nome_cookie.length, i.length);
+            }
+        }
+        return null;
+    }
+
+    function salvar_cookie(nome, valor) {
+        document.cookie = `${nome}=${valor}; path=/`;
+    }
+
+    // ---------------- ATRIBUTOS ----------------
+    document.querySelectorAll(".campoAtributo").forEach(input => {
+        input.addEventListener("change", () => modificarAtributo(input));
+    });
+
+    function modificarAtributo(input) {
+        const valorAtributo = Math.max(1, Math.min(20, parseInt(input.value)));
+        const nomeAtributo = input.dataset.nome_atributo;
+        const campoModificador = document.getElementById(`modificador_${nomeAtributo}`);
+        input.value = valorAtributo;
+        const modificador = Math.floor((valorAtributo - 10) / 2);
+        campoModificador.innerHTML = modificador;
+
+        // Salva nos cookies
+        salvar_cookie(nomeAtributo, valorAtributo);
+
+        // Atualiza salvaguardas e perícias relacionadas
+        document.getElementById(`valor_salva_${nomeAtributo}`).innerHTML = modificador;
+        modificarSalva(document.querySelector(`[data-tipo_atributo='${nomeAtributo}']`));
+        document.querySelectorAll(`.check_pericia[data-tipo_atributo='${nomeAtributo}']`)
+            .forEach(modificarPericia);
+    }
+
+    function carregarAtributosDosCookies() {
+        document.querySelectorAll(".campoAtributo").forEach(input => {
+            const valorCookie = pegar_cookie(input.dataset.nome_atributo);
+            if (valorCookie) {
+                input.value = valorCookie;
+                input.dispatchEvent(new Event("change"));
+            }
+        });
+    }
+
+    // ---------------- SALVAGUARDAS ----------------
+    document.querySelectorAll('.check_salva').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            modificarSalva(checkbox);
+            salvar_cookie(checkbox.id, checkbox.checked ? "1" : "0");
+        });
+    });
+
+    function modificarSalva(checkbox) {
+        const tipo_atributo = checkbox.dataset.tipo_atributo;
+        const valor_mod = parseInt(document.getElementById(`modificador_${tipo_atributo}`).innerHTML);
+        const campo = document.getElementById(`valor_salva_${tipo_atributo}`);
+        campo.innerHTML = checkbox.checked ? valor_mod + 2 : valor_mod;
+    }
+
+    // ---------------- PERÍCIAS ----------------
+    document.querySelectorAll('.check_pericia').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            modificarPericia(checkbox);
+            salvar_cookie(checkbox.id, checkbox.checked ? "1" : "0");
+        });
+    });
+
+    function modificarPericia(checkbox) {
+        const tipo_atributo = checkbox.dataset.tipo_atributo;
+        const nome_pericia = checkbox.value;
+        const valor_mod = parseInt(document.getElementById(`modificador_${tipo_atributo}`).innerHTML);
+        const campo = document.getElementById(`valor_pericia_${nome_pericia}`);
+        campo.innerHTML = checkbox.checked ? valor_mod + 2 : valor_mod;
+    }
+
+    // ---------------- RECUPERA CHECKBOXES ----------------
+    function carregarCheckboxesDosCookies() {
+        document.querySelectorAll('.check_salva, .check_pericia').forEach(checkbox => {
+            const valorCookie = pegar_cookie(checkbox.id);
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+    }
+</script>
+
+
+</html>
