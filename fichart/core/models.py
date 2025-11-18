@@ -31,6 +31,8 @@ class Arma(models.Model):
 
     class Meta:
         db_table = 'arma'
+
+
     
     def __str__(self):
         return self.nome
@@ -63,6 +65,7 @@ class Classe(models.Model):
     armadura = models.ManyToManyField(Armadura)
     arma = models.ManyToManyField(Arma)
     
+    
 
     class Meta:
         db_table = 'classe'
@@ -78,6 +81,7 @@ class ConjuntoEquipamento(models.Model):
 
     class Meta:
         db_table = 'conjunto_equipamento'
+
     
     def __str__(self):
         return self.nome
