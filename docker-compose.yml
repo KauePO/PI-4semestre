@@ -1,6 +1,6 @@
 services:
   fichart:
-    image: jp8002/fichart:v0.1
+    image: jp8002/fichart:v0.2
     ports:
       - "8000:8000"
 

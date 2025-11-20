@@ -198,25 +198,23 @@
             overflow-y: scroll;
         }
 
-        #iconeRaca{
+        #iconeRaca {
             width: 50%;
             height: 400px;
             border-radius: 35px;
             box-shadow: 2px 2px bisque;
         }
 
-        #listaMagias{
+        #listaMagias {
             margin-bottom: 40px;
         }
-
-       
     </style>
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-8 ">
+            <div class="col-8">
 
                 <!-- Wizard Navigation -->
                 <div class="wizard-nav">
@@ -244,146 +242,202 @@
                         </div>
                         <div class="col wizard-step" data-step="5">
                             <div class="step-label pb-2">Atributo</div>
-                            <div class="wizard-connector rounded-5"></div>
+                            <div class="wizard-connector rounded-5 completed"></div>
                             <div class="step-number"></div>
                         </div>
                         <div class="col wizard-step" data-step="6">
                             <div class="step-label pb-2">Equipamento</div>
-                            <div class="wizard-connector rounded-5"></div>
+                            <div class="wizard-connector rounded-5 completed"></div>
                             <div class="step-number"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col">
-                       <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+                    <div class="col-6">
+                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
                             <div class="list-group pe-2" id="seletorArma">
-                                
-                                
-                                    <div id="listaArmas mb-3">
-                                        <h3>Armas</h3>
-                                        {% for arma in armaObjects %}
-                                            {% if arma %}
-                                                <div class="mb-2" id="arma{{arma.id_arma}}">
+
+                                <div id="listaArmas mb-3">
+                                    <h3>Armas</h3>
+                                    {% for arma in armaObjects %}
+                                    {% if arma %}
+                                    <div class="mb-2" id="arma{{arma.id_arma}}">
+
+                                        <p class="d-inline-flex gap-1">
+                                            <!-- Collapse toggle button -->
+                                            <button
+                                                class="btn text-light d-flex gap-1 justify-content-between align-items-center text-capitalize"
+                                                type="button" id="Arma{{arma.id_arma}}" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseArma{{ arma.id_arma }}" aria-expanded="false"
+                                                aria-controls="collaFerramentarma{{ arma.id_arma }}">
+                                                <span data-bs-toggle="tooltip" data-bs-placement="botton"
+                                                    title="Arma">{{ arma.nome }}</span>
+                                                <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                                            </button>
+
+                                            <button
+                                                class="btn btn-outline-light btn-sm text-capitalize class escolherArma"
+                                                data-Arma-id="{{arma.id_arma}}" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseExample" aria-expanded="false"
+                                                aria-controls="collapseExample">
+                                                +
+                                            </button>
+
+                                            <button style="display: none;"
+                                                class="btn btn-outline-light btn-sm text-capitalize class removerArma"
+                                                data-arma-id="{{arma.id_arma}}" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseExample" aria-expanded="false"
+                                                aria-controls="collapseExample">
+                                                -
+                                            </button>
+                                        </p>
+
+                                        <!-- Collapse content -->
+                                        <div class="collapse" id="collapseArma{{ arma.id_arma }}">
+                                            <div class="card card-body mt-1 bg-secondary">
+                                                {{ arma.tipo }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+
+                                <div id="listaArmaduras mb-3">
+                                    <h3>Tipos de Armadura </h3>
+                                    {% for nome_tipo_armadura, armaduras in armaduraObjects.items %}
+                                    {% if armaduras %}
+                                    <ul>
+                                        <li>
+                                            {{ nome_tipo_armadura }}
+                                            <ul style="padding: 0px 0px 0px 5px;">
+                                                <dd>
+                                                    {% for armadura in armaduras %}
+                                                    <div class="mb-2" id="armadura{{armadura.id_armadura}}">
 
                                                         <p class="d-inline-flex gap-1">
                                                             <!-- Collapse toggle button -->
-                                                            <button class="btn text-light d-flex gap-1 justify-content-between align-items-center text-capitalize"  type="button"  id="Arma{{arma.id_arma}}" data-bs-toggle="collapse" data-bs-target="#collapseArma{{ arma.id_arma }}" aria-expanded="false" aria-controls="collaFerramentarma{{ arma.id_arma }}">
-                                                                <span data-bs-toggle="tooltip" data-bs-placement="botton" title="Arma">{{ arma.nome }}</span>
+                                                            <button
+                                                                class="btn text-light d-flex gap-1 justify-content-between align-items-center text-capitalize"
+                                                                type="button" id="armadura{{armadura.id_armadura}}"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseArmadura{{ armadura.id_armadura }}"
+                                                                aria-expanded="false"
+                                                                aria-controls="collapseArmadura{{ armadura.id_armadura }}">
+                                                                <span data-bs-toggle="tooltip"
+                                                                    data-bs-placement="botton"
+                                                                    title="armadura tipo {{nome_tipo_armadura}}"> - {{armadura.nome }}</span>
+
                                                                 <i class="fa-solid fa-chevron-down arrow-icon"></i>
                                                             </button>
 
-                                                            <button class="btn btn-outline-light btn-sm text-capitalize class escolherArma" data-Arma-id="{{arma.id_arma}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                                            <button
+                                                                class="btn btn-outline-light btn-sm text-capitalize class escolherArmadura"
+                                                                data-armadura-id="{{armadura.id_armadura}}"
+                                                                type="button" data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseExample" aria-expanded="false"
+                                                                aria-controls="collapseExample">
                                                                 +
                                                             </button>
 
-                                                            <button style="display: none;" class="btn btn-outline-light btn-sm text-capitalize class removerArma" data-magia-id="{{arma.id_arma}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                                            <button style="display: none;"
+                                                                class="btn btn-outline-light btn-sm text-capitalize class removerArmadura"
+                                                                data-armadura-id="{{armadura.id_armadura}}"
+                                                                type="button" data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseExample" aria-expanded="false"
+                                                                aria-controls="collapseExample">
                                                                 -
                                                             </button>
                                                         </p>
 
                                                         <!-- Collapse content -->
-                                                        <div class="collapse" id="collapseArma{{ arma.id_arma }}">
+                                                        <div class="collapse"
+                                                            id="collapseArmadura{{ armadura.id_armadura }}">
                                                             <div class="card card-body mt-1 bg-secondary">
-                                                                {{ arma.tipo }}
+                                                                {{ armadura.descricao }}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>    
-                                
-                                    
+                                                    {% endfor %}
+                                                </dd>
+                                            </ul>
+                                        </li>
+                                    </ul>
 
-                                {% for nome_tipo_armadura, armadura in armaduraObjects.items %}
-                                    {% if armadura %}
-                                        <div id="listaArmaduras mb-3">
-                                            <h3>Tipos de Armadura {{ nome_tipo_armadura }}</h3>
-                                            
-                                            {% for armadura in armaduraObjects %}
-                                                <div class="mb-2" id="magia{{magia.id_magia}}">
-
-                                                    <p class="d-inline-flex gap-1">
-                                                        <!-- Collapse toggle button -->
-                                                        <button class="btn text-light d-flex gap-1 justify-content-between align-items-center text-capitalize"  type="button"  id="magia{{magia.id_magia}}" data-bs-toggle="collapse" data-bs-target="#collapseMagia{{ armadura.id_armadura }}" aria-expanded="false" aria-controls="collapseMagia{{ armadura.id_armadura }}">
-                                                            <span data-bs-toggle="tooltip" data-bs-placement="botton" title="Magia nível {{nivel}}">{{ magia.nome_magia }}</span>
-
-                                                            <i class="fa-solid fa-chevron-down arrow-icon"></i>
-                                                        </button>
-
-                                                        <button class="btn btn-outline-light btn-sm text-capitalize class escolherMagia" data-magia-id="{{magia.id_magia}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                                            +
-                                                        </button>
-
-                                                        <button style="display: none;" class="btn btn-outline-light btn-sm text-capitalize class removerMagia" data-magia-id="{{magia.id_magia}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                                            -
-                                                        </button>
-                                                    </p>
-
-                                                    <!-- Collapse content -->
-                                                    <div class="collapse" id="collapseMagia{{ armadura.id_magia }}">
-                                                        <div class="card card-body mt-1 bg-secondary">
-                                                            {{ Armadura.descricao }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
                                     {% endif %}
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
+                                <div id="listaArmas mb-3">
+                                    <h3>Ferramentas</h3>
+                                    {% for ferramenta in ferramentaObjects %}
+                                    {% if ferramenta %}
+                                    <div class="mb-2" id="ferramenta{{ferramenta.id_ferramenta}}">
+    
+                                        <p class="d-inline-flex gap-1">
+                                            <!-- Collapse toggle button -->
+                                            <button
+                                                class="btn text-light d-flex gap-1 justify-content-between align-items-center text-capitalize"
+                                                type="button" id="Ferramenta{{ferramenta.id_ferramenta}}"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#collapseferramenta{{ ferramenta.id_ferramenta }}"
+                                                aria-expanded="false"
+                                                aria-controls="collapseferramenta{{ ferramenta.id_ferramenta }}">
+                                                <span data-bs-toggle="tooltip" data-bs-placement="botton"
+                                                    title="Ferramenta">{{
+                                                    ferramenta.nome }}</span>
+                                                <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                                            </button>
+    
+                                            <button class="btn btn-outline-light btn-sm text-capitalize class escolherArma"
+                                                data-Ferramenta-id="{{Ferramenta.id_Ferramenta}}" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                                                aria-expanded="false" aria-controls="collapseExample">
+                                                +
+                                            </button>
+    
+                                            <button style="display: none;"
+                                                class="btn btn-outline-light btn-sm text-capitalize class removerArma"
+                                                data-ferramenta-id="{{Ferramenta.id_Ferramenta}}" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                                                aria-expanded="false" aria-controls="collapseExample">
+                                                -
+                                            </button>
+                                        </p>
+    
+                                        <!-- Collapse content -->
+                                        <div class="collapse" id="collapseferramenta{{ Ferramenta.id_Ferramenta }}">
+                                            <div class="card card-body mt-1 bg-secondary">
+                                                {{ Ferramenta.custo }}
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
 
                     </div>
 
-                    <div id="listaArmas mb-3">
-                                        <h3>Ferramentas</h3>
-                                        {% for ferramenta in ferramentaObjects %}
-                                            {% if ferramenta %}
-                                                <div class="mb-2" id="ferramenta{{ferramenta.id_ferramenta}}">
 
-                                                        <p class="d-inline-flex gap-1">
-                                                            <!-- Collapse toggle button -->
-                                                            <button class="btn text-light d-flex gap-1 justify-content-between align-items-center text-capitalize"  type="button"  id="Ferramenta{{ferramenta.id_ferramenta}}" data-bs-toggle="collapse" data-bs-target="#collapseferramenta{{ ferramenta.id_ferramenta }}" aria-expanded="false" aria-controls="collapseferramenta{{ ferramenta.id_ferramenta }}">
-                                                                <span data-bs-toggle="tooltip" data-bs-placement="botton" title="Ferramenta">{{ ferramenta.nome }}</span>
-                                                                <i class="fa-solid fa-chevron-down arrow-icon"></i>
-                                                            </button>
+                    <div class="col-5 ms-5">
 
-                                                            <button class="btn btn-outline-light btn-sm text-capitalize class escolherArma" data-Ferramenta-id="{{Ferramenta.id_Ferramenta}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                                                +
-                                                            </button>
+                       
+                        <h2>Equipamentos do Personagem</h2>
+                        
+                        <div class="overflow-x-hidden scroll-custom scroll-thin p-3" style="max-height: 78vh;">
+                            <h3>Armas</h3>
+                            <div class=" mb-3" id="listaArmasEscolhidas">
 
-                                                            <button style="display: none;" class="btn btn-outline-light btn-sm text-capitalize class removerArma" data-magia-id="{{Ferramenta.id_Ferramenta}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                                                -
-                                                            </button>
-                                                        </p>
+                            </div>
+                        </div>
+                        <div class="overflow-x-hidden scroll-custom scroll-thin p-3" style="max-height: 78vh;">
+                            <h3>Armaduras</h3>
+                            <div class=" mb-3" id="listaArmaduraEscolhida">
 
-                                                        <!-- Collapse content -->
-                                                        <div class="collapse" id="collapseferramenta{{ Ferramenta.id_Ferramenta }}">
-                                                            <div class="card card-body mt-1 bg-secondary">
-                                                                {{ Ferramenta.custo }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-
-                                    
-
-
-
-
-
-                    <div class="col ms-5">
-                 
-                        <center> <h2>Escolhidas</h2> </center>
-                        <div  class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;" >
-                            <div class=" mb-3" id="listaArmaduras">
-                                    
                             </div>
                         </div>
 
@@ -391,7 +445,6 @@
                 </div>
 
             </div>
-
             <div class="col-4 container-fluid mt-5">
                 <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
                     <div class="card-body text-center">
@@ -426,6 +479,7 @@
                 </div>
 
             </div>
+
         </div>
     </div>
 
@@ -438,172 +492,177 @@
 
 <script>
 
-        let listaArmasEscolhidas = [];
+    let listaArmasEscolhidas = [];
 
-        document.addEventListener("DOMContentLoaded", () => {
-
-            // Escolher Truques
-            document.querySelectorAll(".escolherArma").forEach(button => {
-                button.addEventListener("click", () => {
-                    const ArmaId = button.dataset.armaId;
-                    let ArmaOriginal = document.getElementById("arma"+armaId);
-                    let cloneArma = ArmaOriginal.cloneNode(true);
-
-                    cloneArma.id = "cloneArma" + armaId;
-
-                    cloneArma.querySelector(".escolherArma").remove();
-                    cloneArma.querySelector(".removerArma").style.display="initial";
-
-                    ArmaOriginal.style.display = "none";
-
-                    document.getElementById("listaArmasEscolhidas").appendChild(cloneArma);
-
-                    listaArmasEscolhidas.push(armaId);
-                    document.cookie = "arma=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas));
-
-                    const btnRemoveClone = cloneArma.querySelector(".removerArma");
-                    if (btnRemoveClone) {
-                        btnRemoveClone.style.display = "initial";
-                        btnRemoveClone.addEventListener("click", () => {
-                            cloneArma.remove();
-                            armaOriginal.style.display = "";
-
-                            const index = listaArmasEscolhidas.indexOf(armaId);
-                            if (index > -1){
-                                listaArmasEscolhidas.splice(index,1);
-                            }
-
-                            document.cookie = "arma=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas));
-                        });
-                    }
-                });
-            });
-        });
-
-        let listaArmaduraEscolhida = [];
-
-        document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll(".escolherArmadura").forEach(button => {
-                button.addEventListener("click", (e) => {
-                    const armaduraId = button.dataset.magiaId;
-                    let armaduraOriginal = document.getElementById("armadura"+armaduraId);
-                    let cloneArmadura = magiaOriginal.cloneNode(true);
-
-                    cloneArmadura.id = "cloneArmadura" + armaduraId;
-
-                    cloneArmadura.querySelector(".escolherArmadura").remove();
-                    cloneArmadura.querySelector(".removerArmadura").style.display="initial";
-
-                    armaduraOriginal.style.display = "none";
-
-                    document.getElementById("listaArmaduraEscolhida").appendChild(cloneArmadura);
-
-                    const btnRemoveClone = cloneArmadura.querySelector(".removerArmadura");
-
-                    
-                    listaMagiasEscolhidas.push(armaduraId);
-
-                    document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscolhida));
+    document.addEventListener("DOMContentLoaded", () => {
 
 
-                    if (btnRemoveClone) {
-                        btnRemoveClone.style.display = "initial";
-                        btnRemoveClone.addEventListener("click", () => {
-                            cloneArmadura.remove();
-                            armaduraOriginal.style.display = "";
+        document.querySelectorAll(".escolherArma").forEach(button => {
+            button.addEventListener("click", () => {
 
-                            const index = listaArmaduraEscolhida.indexOf(armaduraId)
+                const armaId = button.dataset.armaId;
+                let ArmaOriginal = document.getElementById("arma" + armaId);
+                let cloneArma = ArmaOriginal.cloneNode(true);
 
-                            if (index > -1){
-                                listaArmaduraEscolhida.splice(index,1)
-                            }
-
-                            document.cookie = "magias=" + encodeURIComponent(JSON.stringify(listaArmaduraEscoArmadura));
-                        });
-                    }
-                    
-                });
-            });
-        });
+                console.log(cloneArma);
 
 
-        let listaFerramentaEscolhida = [];
+                cloneArma.id = "cloneArma" + armaId;
 
-        document.addEventListener("DOMContentLoaded", () => {
+                cloneArma.querySelector(".escolherArma").remove();
+                cloneArma.querySelector(".removerArma").style.display = "initial";
 
-            // Escolher Truques
-            document.querySelectorAll(".escolherFerramenta").forEach(button => {
-                button.addEventListener("click", () => {
-                    const FerramentaId = button.dataset.ferramentaId;
-                    let FerramentaOriginal = document.getElementById("ferramenta"+ferramentaId);
-                    let cloneFerramenta = FerramentaOriginal.cloneNode(true);
+                ArmaOriginal.style.display = "none";
 
-                    cloneFerramenta.id = "cloneFerramenta" + ferramentaId;
+                document.getElementById("listaArmasEscolhidas").appendChild(cloneArma);
 
-                    cloneFerramenta.querySelector(".escolherFerramenta").remove();
-                    cloneFerramenta.querySelector(".removerFerramenta").style.display="initial";
+                listaArmasEscolhidas.push(armaId);
+                document.cookie = "arma=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas));
 
-                    FerramentaOriginal.style.display = "none";
+                const btnRemoveClone = cloneArma.querySelector(".removerArma");
+                if (btnRemoveClone) {
+                    btnRemoveClone.style.display = "initial";
+                    btnRemoveClone.addEventListener("click", () => {
+                        cloneArma.remove();
+                        ArmaOriginal.style.display = "";
 
-                    document.getElementById("listaFerramentaEscolhida").appendChild(cloneFerramenta);
+                        const index = listaArmasEscolhidas.indexOf(armaId);
+                        if (index > -1) {
+                            listaArmasEscolhidas.splice(index, 1);
+                        }
 
-                    listaFerramentaEscolhida.push(ferramentaId);
-                    document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida));
-
-                    const btnRemoveClone = cloneFerramenta.querySelector(".removerFerramenta");
-                    if (btnRemoveClone) {
-                        btnRemoveClone.style.display = "initial";
-                        btnRemoveClone.addEventListener("click", () => {
-                            cloneFerramenta.remove();
-                            ferramentaOriginal.style.display = "";
-
-                            const index = listaFerramentaEscolhida.indexOf(ferramentaId);
-                            if (index > -1){
-                                listaFerramentaEscolhida.splice(index,1);
-                            }
-
-                            document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida));
-                        });
-                    }
-                });
-            });
-        });
-
-
-
-        function updateWizardProgress(completedStep) {
-            // Atualiza as classes dos passos
-            document.querySelectorAll('.wizard-step').forEach((step, index) => {
-                const stepNumber = parseInt(step.dataset.step);
-
-                step.classList.remove('active', 'completed');
-
-                if (stepNumber < completedStep) {
-                    step.classList.add('completed');
-                } else if (stepNumber === completedStep) {
-                    step.classList.add('active');
+                        document.cookie = "arma=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas));
+                    });
                 }
             });
-        }
+        });
+    });
 
-        let playerNome = document.getElementById("id_nome");
+    let listaArmaduraEscolhida = [];
 
-        playerNome.addEventListener("change", function(){
-            localStorage.setItem("playerNome", this.value);
-        })
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".escolherArmadura").forEach(button => {
+            button.addEventListener("click", (e) => {
+                
+                const armaduraId = button.dataset.armaduraId;
+                let armaduraOriginal = document.getElementById("armadura" + armaduraId);
+                let cloneArmadura = armaduraOriginal.cloneNode(true);
 
-        
+                cloneArmadura.id = "cloneArmadura" + armaduraId;
+
+                cloneArmadura.querySelector(".escolherArmadura").remove();
+                cloneArmadura.querySelector(".removerArmadura").style.display = "initial";
+
+                armaduraOriginal.style.display = "none";
+
+                document.getElementById("listaArmaduraEscolhida").appendChild(cloneArmadura);
+
+                const btnRemoveClone = cloneArmadura.querySelector(".removerArmadura");
+
+
+                listaArmaduraEscolhida.push(armaduraId);
+
+                document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscolhida));
+
+
+                if (btnRemoveClone) {
+                    btnRemoveClone.style.display = "initial";
+                    btnRemoveClone.addEventListener("click", () => {
+                        cloneArmadura.remove();
+                        armaduraOriginal.style.display = "";
+
+                        const index = listaArmaduraEscolhida.indexOf(armaduraId)
+
+                        if (index > -1) {
+                            listaArmaduraEscolhida.splice(index, 1)
+                        }
+
+                        document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscoArmadura));
+                    });
+                }
+
+            });
+        });
+    });
+
+
+    let listaFerramentaEscolhida = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        // Escolher Truques
+        document.querySelectorAll(".escolherFerramenta").forEach(button => {
+            button.addEventListener("click", () => {
+                const FerramentaId = button.dataset.ferramentaId;
+                let FerramentaOriginal = document.getElementById("ferramenta" + ferramentaId);
+                let cloneFerramenta = FerramentaOriginal.cloneNode(true);
+
+                cloneFerramenta.id = "cloneFerramenta" + ferramentaId;
+
+                cloneFerramenta.querySelector(".escolherFerramenta").remove();
+                cloneFerramenta.querySelector(".removerFerramenta").style.display = "initial";
+
+                FerramentaOriginal.style.display = "none";
+
+                document.getElementById("listaFerramentaEscolhida").appendChild(cloneFerramenta);
+
+                listaFerramentaEscolhida.push(ferramentaId);
+                document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida));
+
+                const btnRemoveClone = cloneFerramenta.querySelector(".removerFerramenta");
+                if (btnRemoveClone) {
+                    btnRemoveClone.style.display = "initial";
+                    btnRemoveClone.addEventListener("click", () => {
+                        cloneFerramenta.remove();
+                        ferramentaOriginal.style.display = "";
+
+                        const index = listaFerramentaEscolhida.indexOf(ferramentaId);
+                        if (index > -1) {
+                            listaFerramentaEscolhida.splice(index, 1);
+                        }
+
+                        document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida));
+                    });
+                }
+            });
+        });
+    });
+
+
+
+    function updateWizardProgress(completedStep) {
+        // Atualiza as classes dos passos
+        document.querySelectorAll('.wizard-step').forEach((step, index) => {
+            const stepNumber = parseInt(step.dataset.step);
+
+            step.classList.remove('active', 'completed');
+
+            if (stepNumber < completedStep) {
+                step.classList.add('completed');
+            } else if (stepNumber === completedStep) {
+                step.classList.add('active');
+            }
+        });
+    }
+
+    let playerNome = document.getElementById("id_nome");
+
+    playerNome.addEventListener("change", function () {
+        localStorage.setItem("playerNome", this.value);
+    })
+
+
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', function () {
         // Seleciona a primeira classe por padrão, se existir
 
-       
+
         let playerNome = localStorage.getItem("playerNome") ?? "";
 
         playerName = document.getElementById("id_nome").value = playerNome;
         // Inicializa o wizard no passo 4
-        updateWizardProgress(4);
+        updateWizardProgress(6);
     });
 </script>
 

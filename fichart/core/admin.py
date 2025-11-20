@@ -112,7 +112,7 @@ class CobrancaAdmin(admin.ModelAdmin):
 # =============================
 @admin.register(ConjuntoEquipamento)
 class ConjuntoEquipamentoAdmin(admin.ModelAdmin):
-    list_display = ('id_conjuto_equipamento', 'nome', 'descricao', 'classe')
+    list_display = ('nome', 'descricao')
     search_fields = ('nome', 'descricao')
     list_filter = ('classe',)
 
@@ -121,7 +121,7 @@ class ConjuntoEquipamentoAdmin(admin.ModelAdmin):
 # =============================
 @admin.register(EquipamentoDeAventura)
 class EquipamentoAventuraAdmin(admin.ModelAdmin):
-    list_display = ('id_equipamento_de_aventura', 'nome_ferramenta', 'descricao', 'custo', 'peso', 'classe', 'conjunto_equipamento')
+    list_display = ( 'nome', 'descricao', 'custo', 'peso')
     search_fields = ('nome', 'custo')
     list_filter = ('classe',)
 
@@ -130,6 +130,6 @@ class EquipamentoAventuraAdmin(admin.ModelAdmin):
 # =============================
 @admin.register(Ferramenta)
 class FerramentaAdmin(admin.ModelAdmin):
-    list_display = ('id_ferramenta', 'nome_ferramenta', 'custo', 'peso', 'classe')
+    list_display = ('nome_ferramenta', 'custo', 'peso')
     search_fields = ('nome_ferramenta', 'custo')
     list_filter = ('classe',)
