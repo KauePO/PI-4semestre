@@ -8,12 +8,14 @@ coverage==7.11.2
 Django==5.2.6
 django-jazzmin==3.0.1
 dotenv==0.9.9
+gunicorn==23.0.0
 h11==0.16.0
 httpcore==1.0.9
 httpx==0.28.1
 idna==3.11
+packaging==25.0
 pillow==11.3.0
-psycopg2==2.9.10
+psycopg2-binary==2.9.11
 pydantic==2.12.4
 pydantic_core==2.41.5
 python-dotenv==1.1.1
@@ -26,3 +28,4 @@ typing-inspection==0.4.2
 typing_extensions==4.15.0
 tzdata==2025.2
 urllib3==2.5.0
+whitenoise==6.11.0

@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'fichart.urls'
@@ -134,10 +135,15 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,"core/static"),
 )
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Onde o collectstatic joga tudo em produção (OBRIGATÓRIO ter!)
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # MEDIA (uploads do usuário/admin)
 MEDIA_URL = '/media/'                   # URL para acessar no navegador
 MEDIA_ROOT = BASE_DIR / 'media'         # Pasta física para armazenar os arquivos
+
 
 
 
