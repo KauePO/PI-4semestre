@@ -1,24 +1,24 @@
 services:
   fichart:
-    image: jp8002/fichart:v0.2
+    image: jp8002/fichart
     ports:
       - "8000:8000"
 
     volumes:
-      - .:/djangoapp
+      - ./fichart:/djangoapp
 
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
 
     environment:
       - "PIP_ROOT_USER_ACTION=ignore"
   
-  db:
-    image: postgres:18
-    volumes:
-      - postgres_data:/var/lib/postgresql/
-    environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
+#   db:
+#     image: postgres:18
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/
+#     environment:
+#       - "POSTGRES_HOST_AUTH_METHOD=trust"
 
-volumes:
-  postgres_data:
+# volumes:
+#   postgres_data:
