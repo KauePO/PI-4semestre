@@ -41,7 +41,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-     'jazzmin',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -134,10 +135,15 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,"core/static"),
 )
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Onde o collectstatic joga tudo em produção (OBRIGATÓRIO ter!)
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # MEDIA (uploads do usuário/admin)
 MEDIA_URL = '/media/'                   # URL para acessar no navegador
 MEDIA_ROOT = BASE_DIR / 'media'         # Pasta física para armazenar os arquivos
+
 
 
 

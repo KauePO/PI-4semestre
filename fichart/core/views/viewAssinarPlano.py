@@ -17,11 +17,11 @@ class viewAssinarPlano(LoginRequiredMixin, View):
         
         
         usuario = Usuario.objects.get(user = request.user)
-        cobrancaExistente = Cobranca.objects.filter(status_cobranca = "PENDING").first()
+        cobrancaExistente = Cobranca.objects.filter(status_cobranca = "PENDING",usuario = usuario).first()
+        
         
         if cobrancaExistente:
             
-            print("Ta devendo")
             url = "https://api.abacatepay.com/v1/billing/list"
             
             headers ={
@@ -30,14 +30,14 @@ class viewAssinarPlano(LoginRequiredMixin, View):
             
             response = requests.get(url, headers=headers).json()
             
+            
             if (response.get("data",{})[0].get("status") == "PENDING"):
                 urlPagamento = response.get("data",{})[0].get("url")
                 return redirect(urlPagamento)
             
             
             cobrancaExistente.status_cobranca = response.get("data",{})[0].get("status")
-            
-            
+            cobrancaExistente.save()
             
         
         headers ={
@@ -76,10 +76,14 @@ class viewAssinarPlano(LoginRequiredMixin, View):
             novaCobranca = Cobranca(usuario = usuario, id_cobranca_externo = id_cobranca, status_cobranca = status_cobranca)
             
             novaCobranca.save()
+            return redirect(urlPagamento)
         
         except Exception as e:
             error.append(e)
+            print(e)
         
-        return redirect(urlPagamento)
+        return redirect("paginaInicial")    
+        
+        
         
     

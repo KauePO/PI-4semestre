@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Raca, Subraca, Personagem, Classe, Magia, Truque, Antecedente, Armadura, TipoArmadura, IncrementoHabilidade, Usuario, Cobranca
+
+from .models import Raca, Subraca, Personagem, Classe, Magia, Truque, Antecedente, Armadura, TipoArmadura, Arma, ConjuntoEquipamento, EquipamentoDeAventura, Ferramenta, IncrementoHabilidade, Usuario, Cobranca
+
 
 # =============================
 # Admin otimizado para Raca
@@ -61,6 +63,17 @@ class AntecedenteAdmin(admin.ModelAdmin):
     list_display = ('id_antecedente', 'nome', 'descricao')
     search_fields = ('nome',)
     list_filter = ('nome',)
+
+    
+# =============================
+# Admin para Arma
+# =============================
+
+@admin.register(Arma)
+class ArmaAdmin(admin.ModelAdmin):
+    list_display = ('id_arma', 'nome', 'tipo', 'custo', 'peso', 'numero_dado_dano', 'dado_dano', 'tipo_dano')
+    search_fields = ('nome', 'tipo')
+    list_filter = ('custo', 'tipo_dano')
     
 
 # =============================
@@ -94,3 +107,29 @@ class UsuarioAdmin(admin.ModelAdmin):
 class CobrancaAdmin(admin.ModelAdmin):
     list_display = ("usuario","status_cobranca")
 
+# =============================
+# Admin para ConjutoEquipamento
+# =============================
+@admin.register(ConjuntoEquipamento)
+class ConjuntoEquipamentoAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'descricao')
+    search_fields = ('nome', 'descricao')
+    list_filter = ('classe',)
+
+# =============================
+# Admin para EquipamentoAventura
+# =============================
+@admin.register(EquipamentoDeAventura)
+class EquipamentoAventuraAdmin(admin.ModelAdmin):
+    list_display = ( 'nome', 'descricao', 'custo', 'peso')
+    search_fields = ('nome', 'custo')
+    list_filter = ('classe',)
+
+# =============================
+# Admin para Ferramenta
+# =============================
+@admin.register(Ferramenta)
+class FerramentaAdmin(admin.ModelAdmin):
+    list_display = ('nome_ferramenta', 'custo', 'peso')
+    search_fields = ('nome_ferramenta', 'custo')
+    list_filter = ('classe',)

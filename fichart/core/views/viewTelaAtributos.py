@@ -11,9 +11,6 @@ class viewTelaAtributos( LoginRequiredMixin, View):
         
         raca_escolhida = request.COOKIES.get("raca_escolhida",0)
         
-        incremento_habilidade = IncrementoHabilidade.objects.get(raca=raca_escolhida)
-        
-        
         form = nomeForm()
         
         atributos = {
@@ -59,8 +56,7 @@ class viewTelaAtributos( LoginRequiredMixin, View):
             "form":form, 
             "pericias":pericias, 
             "salvaguardas":salvaguardas, 
-            "atributos":atributos, 
-            "incremento_habilidade":incremento_habilidade
+            "atributos":atributos
             }
         
         
