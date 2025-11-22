@@ -35,13 +35,16 @@ class viewTelaEquipamentos(LoginRequiredMixin, View):
         
         form = nomeForm()
         
+        avatarAtual = request.session.get("avatar","")
+        
         context = {
             "form":form, 
             "armaObjects":armaObjects, 
             'armaduraObjects':listaArmaduras,
             "conjuntoEquipamentoObjects":conjuntoEquipamentoObjects, 
             "equipamentoDeAventuraObjects":equipamentoDeAventuraObjects, 
-            "ferramentasobjects":ferramentaObjects
+            "ferramentasobjects":ferramentaObjects,
+            "avatar":avatarAtual
         }
         
         return render(request, "templateEscolhaEquipamentos.html", context)

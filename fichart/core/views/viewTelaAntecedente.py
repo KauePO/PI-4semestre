@@ -11,9 +11,12 @@ class viewTelaAntecedente(LoginRequiredMixin,View):
     def get(self, request):
         
         antecedentes = Antecedente.objects.all()
+        
+        
+        avatarAtual = request.session.get("avatar","")
 
         form = nomeForm()
-        return render(request, 'templateTelaAntecedentes.html', {'antecedentes': antecedentes, 'form': form})
+        return render(request, 'templateTelaAntecedentes.html', {'antecedentes': antecedentes, 'form': form, "avatar":avatarAtual})
 
 
 

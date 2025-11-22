@@ -8,5 +8,12 @@ class nomeForm(forms.Form):
     widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Insira o nome',
-    })
+    }),
 )
+    avatar_personagem = forms.ImageField(   #
+        required=True,
+        widget=forms.FileInput(attrs={       
+            'class': 'form-control',
+            'accept': 'image/*'              
+        })
+    )
