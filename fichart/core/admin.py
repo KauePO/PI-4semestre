@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Raca, Subraca, Personagem, Classe, Magia, Truque, Antecedente, Armadura, TipoArmadura, Arma, ConjuntoEquipamento, EquipamentoDeAventura, Ferramenta, IncrementoHabilidade, Usuario, Cobranca
+from .models import Raca, Subraca, Personagem, Classe, Magia, Proficiencia, Truque, Antecedente, Armadura, TipoArmadura, Idiomas, Arma, ConjuntoEquipamento, EquipamentoDeAventura, Ferramenta, IncrementoHabilidade, Usuario, Cobranca, HabilidadeEspecial
 
 
 # =============================
@@ -133,3 +133,30 @@ class FerramentaAdmin(admin.ModelAdmin):
     list_display = ('nome_ferramenta', 'custo', 'peso')
     search_fields = ('nome_ferramenta', 'custo')
     list_filter = ('classe',)
+    
+# =============================
+# Admin para Habilidade Especial
+# =============================
+@admin.register(HabilidadeEspecial)
+class HabilidadeEspecialAdmin(admin.ModelAdmin):
+    list_display = ('id_habilidade_especial', 'nome', 'descricao', )
+    search_fields = ('nome',)
+    list_filter = ('nome',)
+
+# =============================
+# Admin para Idiomas
+# =============================
+@admin.register(Idiomas)
+class IdiomasAdmin(admin.ModelAdmin):
+    list_display = ('id_idioma', 'subraca', 'nome', 'descricao', )
+    search_fields = ('nome',)
+    list_filter = ('nome',)
+
+# =============================
+# Admin para Proficiencias
+# =============================
+@admin.register(Proficiencia)
+class ProficienciaAdmin(admin.ModelAdmin):
+    list_display = ('id_proficiencia', 'nome', 'tipo',)
+    search_fields = ('nome',)
+    list_filter = ('nome',)

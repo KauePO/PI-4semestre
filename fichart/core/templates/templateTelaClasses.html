@@ -332,9 +332,24 @@
 
 
         //Adiciona classe ao cookie
-        document.cookie = `classe=${classeData.name}; path=/`
+        document.cookie = `classe=${classeData.name}; path=/`;
 
+        if (classeData.name == "Bardo") {
+            const idproficiencias = ["1","3"]
+            const idproficienciasStr = JSON.stringify(idproficiencias);
+            document.cookie = `idproficiencias=${encodeURIComponent(idproficienciasStr)}; path=/; max-age=3600`;
 
+            const idhabilidade_especiais = ["4","5"]
+            const idhabilidade_especiaisStr = JSON.stringify(idhabilidade_especiais);
+            document.cookie = `idhabilidade_especiais=${encodeURIComponent(idhabilidade_especiaisStr)}; path=/; max-age=3600`;
+
+            document.cookie = `check_carisma=1; path=/; max-age=3600`;
+            document.cookie = `check_destreza=1; path=/; max-age=3600`;
+
+        }
+
+            
+        
     }
 
 
