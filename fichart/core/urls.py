@@ -15,6 +15,7 @@ from .views.viewLogout import viewLogout
 from .views.viewAssinarPlano import viewAssinarPlano
 from .views.viewSucessoPagamento import viewSucessoPagamento
 from .views.viewTelaEscolhaEquipamentos import viewTelaEquipamentos
+from .views.viewMudarAvatar import viewMudarAvatar
 
 
 urlpatterns = [
@@ -29,5 +30,6 @@ urlpatterns = [
     path("logout/",viewLogout.as_view(), name="logout"),
     path("assinarPlano/", viewAssinarPlano.as_view(), name="assinarPlano"),
     path("sucessoPagamento/", viewSucessoPagamento.as_view(), name="sucessoPagamento"),
-    path("selecaoEquipamento/", viewTelaEquipamentos.as_view(), name="TelaEquipamento")
+    path("selecaoEquipamento/", viewTelaEquipamentos.as_view(), name="TelaEquipamento"),
+    path("mudarAvatar/", viewMudarAvatar.as_view(), name="mudarAvatar")
 ]

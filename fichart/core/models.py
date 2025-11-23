@@ -44,7 +44,7 @@ class Armadura(models.Model):
     classe_de_armadura = models.IntegerField()
     forca = models.IntegerField()
     furtividade_desvantagem = models.BooleanField()
-    peso = models.IntegerField()
+    peso = models.FloatField()
     custo = models.IntegerField()
 
     class Meta:
@@ -92,9 +92,9 @@ class EquipamentoDeAventura(models.Model):
     descricao = models.TextField(blank=True, null=True)
     custo = models.IntegerField()
     peso = models.FloatField()
-    antecedente = models.ManyToManyField(Antecedente)
-    classe = models.ManyToManyField(Classe)
-    conjunto_equipamento = models.ManyToManyField(ConjuntoEquipamento)
+    antecedente = models.ManyToManyField(Antecedente, blank=True)
+    classe = models.ManyToManyField(Classe, blank=True)
+    conjunto_equipamento = models.ManyToManyField(ConjuntoEquipamento, blank=True)
 
     class Meta:
         db_table = 'equipamento_de_aventura'
@@ -105,6 +105,7 @@ class EquipamentoDeAventura(models.Model):
 class Ferramenta(models.Model):
     id_ferramenta = models.AutoField(primary_key=True)
     nome_ferramenta = models.CharField()
+    categoria = models.CharField(null=True,blank=True)
     custo = models.IntegerField()
     peso = models.IntegerField()
     antecedente = models.ManyToManyField(Antecedente)
@@ -201,15 +202,6 @@ class Personagem(models.Model):
     inteligencia = models.IntegerField()
     carisma = models.IntegerField()
     constituicao = models.IntegerField()
-    altura = models.FloatField(blank=True, null=True)
-    peso = models.FloatField(blank=True, null=True)
-    cor_cabelo = models.CharField(blank=True, null=True)
-    cor_pele = models.CharField(blank=True, null=True)
-    cor_olhos = models.CharField(blank=True, null=True)
-    defeitos = models.CharField(blank=True, null=True)
-    traco_personalidade = models.CharField(blank=True, null=True)
-    ideais = models.CharField(blank=True, null=True)
-    ligacoes = models.CharField(blank=True, null=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     arma = models.ManyToManyField(Arma)
     magia = models.ManyToManyField(Magia)
