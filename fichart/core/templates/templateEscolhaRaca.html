@@ -451,7 +451,66 @@
             })
 
             console.log(localStorage.getItem("raca"))
+
+            if (racaId == "1") {
+            const idiomas = ["3", "4"]
+            const idiomasStr = JSON.stringify(idiomas);
+            document.cookie = `idiomas=${encodeURIComponent(idiomasStr)}; path=/; max-age=3600`;
+
+            appendToCookie('idhabilidade_especiais', ["1","3"], 1); // 1 dia
         }
+
+        }
+
+        // Função para ler cookie
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        // Função para definir cookie
+        function setCookie(name, value, days) {
+            const expires = days ? `; max-age=${days * 24 * 60 * 60}` : '';
+            document.cookie = `${name}=${value}; path=/${expires}`;
+        }
+
+        function appendToCookie(name, valuesToAdd, days) {
+        var currentValue = getCookie(name);
+        var newArray;
+        
+        if (currentValue) {
+            // Decodifica e parseia o JSON existente
+            try {
+                newArray = JSON.parse(decodeURIComponent(currentValue));
+            } catch (e) {
+                // Se der erro no parse, começa com array vazio
+                console.error(`Erro ao parsear cookie ${name}:`, e);
+                newArray = [];
+            }
+        } else {
+            newArray = [];
+        }
+        
+        // Garante que valuesToAdd seja um array
+        if (!Array.isArray(valuesToAdd)) {
+            valuesToAdd = [valuesToAdd];
+        }
+        
+        // Adiciona novos valores e remove duplicatas
+        valuesToAdd.forEach(value => {
+            if (!newArray.includes(value)) {
+                newArray.push(value);
+            }
+        });
+        
+        // Codifica o array atualizado e salva no cookie
+        var newValue = encodeURIComponent(JSON.stringify(newArray));
+        setCookie(name, newValue, days);
+        
+        return newArray;
+    }
 
     
         // Event listeners para seleção de raca

@@ -107,8 +107,8 @@ class Ferramenta(models.Model):
     nome_ferramenta = models.CharField()
     custo = models.IntegerField()
     peso = models.IntegerField()
-    antecedente = models.ManyToManyField(Antecedente)
-    classe = models.ManyToManyField(Classe)
+    antecedente = models.ManyToManyField(Antecedente, blank=True, null=True)
+    classe = models.ManyToManyField(Classe, blank=True, null=True)
 
     class Meta:
         db_table = 'ferramenta'
@@ -129,7 +129,7 @@ class HabilidadeEspecial(models.Model):
 
 class Idiomas(models.Model):
     id_idioma = models.AutoField(primary_key=True)
-    subraca = models.ForeignKey('Subraca', models.DO_NOTHING)
+    subraca = models.ForeignKey('Subraca', models.DO_NOTHING, blank=1, null=1)
     nome = models.CharField()
     descricao = models.TextField()
 
@@ -156,7 +156,7 @@ class Magia(models.Model):
     nome_magia = models.CharField()
     escola = models.CharField()
     tempo_conjuracao = models.CharField()
-    alcance = models.IntegerField()
+    alcance = models.CharField()
     componentes = models.CharField()
     duraca = models.CharField()
     descricao = models.CharField()
@@ -201,19 +201,12 @@ class Personagem(models.Model):
     inteligencia = models.IntegerField()
     carisma = models.IntegerField()
     constituicao = models.IntegerField()
-    altura = models.FloatField(blank=True, null=True)
-    peso = models.FloatField(blank=True, null=True)
-    cor_cabelo = models.CharField(blank=True, null=True)
-    cor_pele = models.CharField(blank=True, null=True)
-    cor_olhos = models.CharField(blank=True, null=True)
-    defeitos = models.CharField(blank=True, null=True)
-    traco_personalidade = models.CharField(blank=True, null=True)
-    ideais = models.CharField(blank=True, null=True)
-    ligacoes = models.CharField(blank=True, null=True)
+    aparencia_do_personagem = models.CharField(blank=True, null=True)
+    historia_do_personagem = models.CharField(blank=True, null=True)
+    aliados_e_organizacoes = models.CharField(blank=True, null=True)
+    tracos_e_caracteristicas_adicionais = models.CharField(blank=True, null=True)
+    tesouro = models.CharField(blank=True, null=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    arma = models.ManyToManyField(Arma)
-    magia = models.ManyToManyField(Magia)
-    equipamento_de_aventura = models.ManyToManyField(EquipamentoDeAventura)
 
     class Meta:
         db_table = 'personagem'
@@ -225,8 +218,8 @@ class Proficiencia(models.Model):
     id_proficiencia = models.AutoField(primary_key=True)
     nome = models.CharField()
     tipo = models.CharField()
-    antecedente = models.ManyToManyField(Antecedente)
-    classe = models.ManyToManyField(Classe)
+    antecedente = models.ManyToManyField(Antecedente, blank=True, null=True)
+    classe = models.ManyToManyField(Classe, blank=True, null=True)
 
     class Meta:
         db_table = 'proficiencia'
@@ -294,14 +287,14 @@ class Truque(models.Model):
     id_truque = models.AutoField(primary_key=True)
     nome_truque = models.CharField()
     escola = models.CharField()
-    tempo_conjuracao = models.IntegerField()
-    alcance = models.IntegerField()
+    tempo_conjuracao = models.CharField()
+    alcance = models.CharField()
     componentes = models.CharField()
     duracao = models.CharField()
     descricao = models.CharField()
     classes = models.ManyToManyField(Classe)
-    raca = models.ManyToManyField(Raca)
-    subraca = models.ManyToManyField(Subraca)
+    raca = models.ManyToManyField(Raca, blank=True, null=True)
+    subraca = models.ManyToManyField(Subraca, blank=True, null=True)
 
     class Meta:
         db_table = 'truque'

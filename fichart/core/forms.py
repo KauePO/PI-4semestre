@@ -15,5 +15,5 @@ class nomeForm(forms.Form):
 class personagemForm(forms.ModelForm):
     class Meta:
         model = Personagem
-        fields = ['nome', 'idade', 'raca', 'classe', 'antecedente', 'forca', 'destreza', 'sabedoria', 'inteligencia', 'carisma', 'constituicao', 'altura', 'peso', 'cor_cabelo', 'cor_pele', 'cor_olhos', 'defeitos', 'traco_personalidade', 'ideais', 'ligacoes']
+        fields = ['nome', 'idade', 'raca', 'classe', 'antecedente', 'forca', 'destreza', 'sabedoria', 'inteligencia', 'carisma', 'constituicao', 'aparencia_do_personagem', 'historia_do_personagem', 'aliados_e_organizacoes', 'tracos_e_caracteristicas_adicionais', 'tesouro']
         

@@ -7,65 +7,88 @@ import json
 import urllib.parse
 
 
-from core.models import Personagem, Magia, Truque, Classe, Raca, PersonagemHasMagia
+from core.models import Personagem, Magia, Truque, Classe, Raca, HabilidadeEspecial, Usuario, Antecedente, Proficiencia, Idiomas
 
 class viewFichaPersonagem(LoginRequiredMixin,View):
     def get(self, request):
-        lista_proficiencias = request.COOKIES.get('proficiencias')
+        #Puxar informações salvas nos cookies
+        #Antecedente======================================================================
+        antecedenteNome = request.COOKIES.get('antecedente')
+        antecedente = Antecedente.objects.get(nome = antecedenteNome)
 
-        if lista_proficiencias:
-            lista_decodificada = urllib.parse.unquote(lista_proficiencias)
-            proficiencias = json.loads(lista_decodificada)
+        #Proficiencias======================================================================
+        idproficiencias = request.COOKIES.get('idproficiencias')
+        lista_decodificada = urllib.parse.unquote(idproficiencias)
+        id = json.loads(lista_decodificada)
 
-        #=========================================================================
-        lista_idiomas = request.COOKIES.get('idiomas')
+        proficiencias = Proficiencia.objects.all().filter(id_proficiencia__in = id)
 
-        if lista_idiomas:
-            lista_decodificada = urllib.parse.unquote(lista_idiomas)
-            idiomas = json.loads(lista_decodificada)
-        #=========================================================================
-        idtruques = request.COOKIES.get('idtruques')
+        #Idiomas======================================================================
+        ididiomas = request.COOKIES.get('idiomas')
+        lista_decodificada = urllib.parse.unquote(ididiomas)
+        id = json.loads(lista_decodificada)
+
+        idiomas = Idiomas.objects.all().filter(id_idioma__in = id)
+
+        #Truques======================================================================
+        idtruques = request.COOKIES.get('truques')
         lista_decodificada = urllib.parse.unquote(idtruques)
         id = json.loads(lista_decodificada)
 
         truques = Truque.objects.all().filter(id_truque__in = id)
-        #=========================================================================
-        idmagias = request.COOKIES.get('idmagias')
+        #Magias=========================================================================
+        idmagias = request.COOKIES.get('magias')
         lista_decodificada = urllib.parse.unquote(idmagias)
         id = json.loads(lista_decodificada)
 
         magias = Magia.objects.all().filter(id_magia__in = id)
-        #=========================================================================
+        #Classe=========================================================================
         classeNome = request.COOKIES.get('classe')
         classe = Classe.objects.get(nome = classeNome)
+        
+        #Raça=========================================================================
+        idraca = request.COOKIES.get('raca_escolhida')
+        id = json.loads(idraca)
+        raca = Raca.objects.get(id_raca= id)
 
-        racaNome = request.COOKIES.get('raca')
-        raca = Raca.objects.get(nome = racaNome)
-
-        #=========================================================================
+        #Atributos=========================================================================
         atrForca = request.COOKIES.get('forca')
         atrDestreza = request.COOKIES.get('destreza')
         atrConstituicao = request.COOKIES.get('constituicao')
         atrInteligencia = request.COOKIES.get('inteligencia')
         atrSabedoria = request.COOKIES.get('sabedoria')
         atrCarisma = request.COOKIES.get('carisma')
-        
 
-        #=========================================================================
+        atributos = {
+            "Forca": atrForca, "Destreza": atrDestreza, "Constituicao": atrConstituicao,
+            "Inteligencia": atrInteligencia, "Sabedoria": atrSabedoria, "Carisma": atrCarisma
+        }
+        #Salvaguardas(Proficiencia)=========================================================================
+        salvaguardas = {
+            "forca": "forca",
+            "destreza": "destreza",
+            "constituicao": "constituicao",
+            "inteligencia": "inteligencia",
+            "sabedoria": "sabedoria",
+            "carisma": "carisma",
+        }
 
-        personagem = Personagem.objects.get(id_personagem=1)
+        #Habilidades Especiais=========================================================================
+        idhabilidade_especiais = request.COOKIES.get('idhabilidade_especiais')
+        lista_decodificada = urllib.parse.unquote(idhabilidade_especiais)
+        id = json.loads(lista_decodificada)
+
+        habilidade_especiais = HabilidadeEspecial.objects.all().filter(id_habilidade_especial__in = id)
+
 
         form = personagemForm()
-        return render(request, 'templateFichaPersonagem.html', {'personagem': personagem, 'form': form, 'proficiencias': proficiencias, 'idiomas': idiomas, 'truques': truques, 'magias': magias, 'classe': classe, 'raca': raca, 'atrForca': atrForca, 'atrDestreza': atrDestreza, 'atrConstituicao': atrConstituicao, 'atrInteligencia': atrInteligencia, 'atrSabedoria': atrSabedoria, 'atrCarisma': atrCarisma})
+        return render(request, 'templateFichaPersonagem.html', {"habilidade_especiais": habilidade_especiais,"salvaguardas":salvaguardas, 'form': form, 'proficiencias': proficiencias, 'idiomas': idiomas, 'truques': truques, 'magias': magias, 'classe': classe, 'raca': raca, 'antecedente': antecedente,"atributos": atributos})
     
     def post(self, request):
         form = personagemForm(request.POST)
-        
-        
-        # Salva o formulário mas não commita ainda (para adicionar dados extras)
         personagem = Personagem()
         
-        # CONVERSÃO DOS ATRIBUTOS PARA INTEIRO (importante!)
+        # CONVERSÃO DOS ATRIBUTOS PARA INTEIRO
         personagem.forca = int(request.COOKIES.get('forca', 10))
         personagem.destreza = int(request.COOKIES.get('destreza', 10))
         personagem.constituicao = int(request.COOKIES.get('constituicao', 10))
@@ -73,68 +96,54 @@ class viewFichaPersonagem(LoginRequiredMixin,View):
         personagem.sabedoria = int(request.COOKIES.get('sabedoria', 10))
         personagem.carisma = int(request.COOKIES.get('carisma', 10))
         
-        # Classe - como seu model Personagem.classe é CharField, armazena o nome
+        # Classe
         classe_nome = request.COOKIES.get('classe')
         if classe_nome:
-            personagem.classe = classe_nome  # Armazena apenas o nome como string
+            personagem.classe = classe_nome
 
-        # Raça - como seu model Personagem.raca é CharField, armazena o nome
-        raca_nome = request.COOKIES.get('raca')
+        # Raça
+        idraca = request.COOKIES.get('raca_escolhida')
+        id = json.loads(idraca)
+        raca = Raca.objects.get(id_raca= id)
+
+        raca_nome = raca.nome
         if raca_nome:
-            personagem.raca = raca_nome  # Armazena apenas o nome como string
+            personagem.raca = raca_nome
 
-        # ANTECEDENTE - você precisa adicionar isso também
+        # ANTECEDENTE
         antecedente_nome = request.COOKIES.get('antecedente')
         if antecedente_nome:
             personagem.antecedente = antecedente_nome
 
-        # NÍVEL - você precisa definir um nível padrão
-        personagem.nivel = 1  # Ou obtenha do cookie se disponível
+        # NÍVEL
+        personagem.nivel = 1
 
         # DADOS DO FORMULÁRIO DO TEMPLATE
-        personagem.cor_cabelo = request.POST.get('cor_cabelo', '')
-        personagem.cor_pele = request.POST.get('cor_pele', '')
-        personagem.cor_olhos = request.POST.get('cor_olhos', '')
-        personagem.defeitos = request.POST.get('defeitos', '')
-        personagem.traco_personalidade = request.POST.get('traco_personalidade', '')
-        personagem.ideais = request.POST.get('ideais', '')
-        personagem.ligacoes = request.POST.get('ligacoes', '')
-
+        personagem.aparencia_do_personagem = request.POST.get('aparencia_do_personagem', '')
+        personagem.historia_do_personagem = request.POST.get('historia_do_personagem', '')
+        personagem.aliados_e_organizacoes = request.POST.get('aliados_e_organizacoes', '')
+        personagem.tracos_e_caracteristicas_adicionais = request.POST.get('tracos_e_caracteristicas_adicionais', '')
+        personagem.tesouro = request.POST.get('tesouro', '')
         
-
-        # CAMPOS ADICIONAIS DO TEMPLATE (você precisa adicionar ao modelo)
-        # Se você quiser salvar esses, precisa adicionar campos ao modelo Personagem:
-        # aparencia = models.TextField(blank=True, null=True)
-        # historia = models.TextField(blank=True, null=True)
-        # aliados_organizacoes = models.TextField(blank=True, null=True)
-        # tracos_caracteristicas = models.TextField(blank=True, null=True)
-        # tesouro = models.TextField(blank=True, null=True)
         personagem.nome = request.POST.get('nome', 'Personagem Sem Nome')
 
-        # NOME - deve ser definido ANTES de salvar
-        #if not personagem.nome:  # Se não foi preenchido no form
-        #    personagem.nome = "Personagem Sem Nome"
+        # Usuario
+        usuario = Usuario.objects.get(user=request.user)
+        personagem.usuario_id = usuario.id_usuario
         
         # Salva o objeto completo no banco de dados
         personagem.save()
 
-            # AGORA ADICIONAMOS AS MAGIAS SELECIONADAS USANDO SUA ABORDAGEM
+        # Adiciona Magias e Truques ao personagem
         try:
             idmagias = request.COOKIES.get('idmagias')
             if idmagias:
-                # Decodifica a string URL e converte para lista de IDs
                 lista_decodificada = urllib.parse.unquote(idmagias)
                 ids_magias = json.loads(lista_decodificada)
                 
-                # Filtra as magias no banco de dados
                 magias = Magia.objects.filter(id_magia__in=ids_magias)
                 
-                # Adiciona cada magia ao personagem
-                for magia in magias:
-                    PersonagemHasMagia.objects.create(
-                        personagem=personagem, 
-                        magia=magia
-                    )
+                personagem.magia.add(*magias)
                 
                 print(f"Adicionadas {magias.count()} magias ao personagem {personagem.nome}")
             else:
@@ -142,8 +151,23 @@ class viewFichaPersonagem(LoginRequiredMixin,View):
                 
         except Exception as e:
             print(f"Erro ao adicionar magias: {e}")
-            # Não impedir a criação do personagem se houver erro nas magias
 
+        try:
+            idtruques = request.COOKIES.get('idtruques')
+            if idtruques:
+                lista_decodificada = urllib.parse.unquote(idtruques)
+                ids_truques = json.loads(lista_decodificada)
+                
+                truques = Truque.objects.filter(id_truque__in=ids_truques)
+                print(truques)
+                
+                personagem.truque_set.add(*truques)
+                
+                print(f"Adicionados {truques.count()} truques ao personagem {personagem.nome}")
+            else:
+                print("Nenhum truque encontrado nos cookies")
 
-        # Redireciona para evitar reenvio do formulário
-        return redirect('TelaClasses')
+        except Exception as e:
+            print(f"Erro ao adicionar truques: {e}")
+
+        return redirect('paginaInicial')

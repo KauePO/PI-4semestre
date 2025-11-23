@@ -320,6 +320,8 @@
             document.getElementById("iconeAntecedente").src = antecedenteData.icone;
         }
 
+        document.cookie = `antecedente=${antecedenteData.name}; path=/; max-age=86400`;
+
 
         console.log(localStorage.getItem("antecedente"))
     }

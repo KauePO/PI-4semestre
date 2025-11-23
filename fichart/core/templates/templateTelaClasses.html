@@ -322,67 +322,23 @@
 
 
         //Adiciona classe ao cookie
-        document.cookie = `classe=${classeData.name}; path=/`
+        document.cookie = `classe=${classeData.name}; path=/`;
 
-            //====================================================================================================
+        if (classeData.name == "Bardo") {
+            const idproficiencias = ["1","3"]
+            const idproficienciasStr = JSON.stringify(idproficiencias);
+            document.cookie = `idproficiencias=${encodeURIComponent(idproficienciasStr)}; path=/; max-age=3600`;
 
-            //TEMP APAGAR
-    const proficiencias = ["Kit de Disfarce", "Alaúde", "Lira", "Lira", "Lira", "Lira", "Lira", "Lira", "Lira", "Lira", "Lira"];
+            const idhabilidade_especiais = ["4","5"]
+            const idhabilidade_especiaisStr = JSON.stringify(idhabilidade_especiais);
+            document.cookie = `idhabilidade_especiais=${encodeURIComponent(idhabilidade_especiaisStr)}; path=/; max-age=3600`;
 
-    // converte para string JSON
-    const proficienciasStr = JSON.stringify(proficiencias);
+            document.cookie = `check_carisma=1; path=/; max-age=3600`;
+            document.cookie = `check_destreza=1; path=/; max-age=3600`;
 
-    // salva no cookie
-    document.cookie = `proficiencias=${encodeURIComponent(proficienciasStr)}; path=/; max-age=3600`;
+        }
 
-    //====================================================================================================
-
-    const idiomas = ["Comum", "Anão"]
-
-    // converte para string JSON
-    const idiomasStr = JSON.stringify(idiomas);
-
-    // salva no cookie
-    document.cookie = `idiomas=${encodeURIComponent(idiomasStr)}; path=/; max-age=3600`;
-
-    document.cookie = `raca=${"Elfo"}; path=/; max-age=3600`;
-        
-    
-
-    //====================================================================================================
-    const idtruques = ["1"]
-    // converte para string JSON
-    const idtruquesStr = JSON.stringify(idtruques);
-    // salva no cookie
-    document.cookie = `idtruques=${encodeURIComponent(idtruquesStr)}; path=/; max-age=3600`;
-    //====================================================================================================
-    const idmagias = ["1","2"]
-    // converte para string JSON
-    const idmagiasStr = JSON.stringify(idmagias);
-    // salva no cookie
-    document.cookie = `idmagias=${encodeURIComponent(idmagiasStr)}; path=/; max-age=3600`;
-    //====================================================================================================
-
-    const forca = 15;
-    const destreza = 14;
-    const constituicao = 13;
-    const inteligencia = 12;
-    const sabedoria = 10;
-    const carisma = 8;
-
-    document.cookie = `forca=${forca}; path=/; max-age=3600`;
-    document.cookie = `destreza=${destreza}; path=/; max-age=3600`;
-    document.cookie = `constituicao=${constituicao}; path=/; max-age=3600`;
-    document.cookie = `inteligencia=${inteligencia}; path=/; max-age=3600`;
-    document.cookie = `sabedoria=${sabedoria}; path=/; max-age=3600`;
-    document.cookie = `carisma=${carisma}; path=/; max-age=3600`;
-
-
-    //====================================================================================================
-    
-
-
-
+            
         
     }
 
