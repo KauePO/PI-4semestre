@@ -281,7 +281,7 @@ class TipoArmadura(models.Model):
     nome_tipo_armadura = models.CharField(blank=True, null=True)
     descricao = models.TextField(blank=True, null=True)
     classe = models.ManyToManyField(Classe, blank=True)
-    personagem = models.ManyToManyField(Personagem, blank=True, null=True)
+    personagem = models.ManyToManyField(Personagem, blank=True)
 
     class Meta:
         db_table = 'tipo_armadura'
