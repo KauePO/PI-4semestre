@@ -208,6 +208,12 @@
         #listaMagias {
             margin-bottom: 40px;
         }
+
+        #iconeMudarAvatar{
+            top: 6%;
+            right: 8%;
+            color: #282828;
+        }
     </style>
 </head>
 
@@ -238,12 +244,12 @@
                         <div class="col wizard-step active" data-step="4">
                             <div class="step-label pb-2">Magia</div>
                             <div class="wizard-connector rounded-5 completed"></div>
-                            <div class="step-number"></div>
+                            <a href="{% url 'TelaMagia' %}" class="step-number"></a>
                         </div>
                         <div class="col wizard-step" data-step="5">
                             <div class="step-label pb-2">Atributo</div>
                             <div class="wizard-connector rounded-5 completed"></div>
-                            <div class="step-number"></div>
+                            <a href="{% url 'TelaAtributos' %}" class="step-number"></a>
                         </div>
                         <div class="col wizard-step" data-step="6">
                             <div class="step-label pb-2">Equipamento</div>
@@ -328,7 +334,8 @@
                                                                 aria-controls="collapseArmadura{{ armadura.id_armadura }}">
                                                                 <span data-bs-toggle="tooltip"
                                                                     data-bs-placement="botton"
-                                                                    title="armadura tipo {{nome_tipo_armadura}}"> - {{armadura.nome }}</span>
+                                                                    title="armadura tipo {{nome_tipo_armadura}}"> -
+                                                                    {{armadura.nome }}</span>
 
                                                                 <i class="fa-solid fa-chevron-down arrow-icon"></i>
                                                             </button>
@@ -374,7 +381,7 @@
                                     {% for ferramenta in ferramentaObjects %}
                                     {% if ferramenta %}
                                     <div class="mb-2" id="ferramenta{{ferramenta.id_ferramenta}}">
-    
+
                                         <p class="d-inline-flex gap-1">
                                             <!-- Collapse toggle button -->
                                             <button
@@ -389,14 +396,15 @@
                                                     ferramenta.nome }}</span>
                                                 <i class="fa-solid fa-chevron-down arrow-icon"></i>
                                             </button>
-    
-                                            <button class="btn btn-outline-light btn-sm text-capitalize class escolherArma"
+
+                                            <button
+                                                class="btn btn-outline-light btn-sm text-capitalize class escolherArma"
                                                 data-Ferramenta-id="{{Ferramenta.id_Ferramenta}}" type="button"
                                                 data-bs-toggle="collapse" data-bs-target="#collapseExample"
                                                 aria-expanded="false" aria-controls="collapseExample">
                                                 +
                                             </button>
-    
+
                                             <button style="display: none;"
                                                 class="btn btn-outline-light btn-sm text-capitalize class removerArma"
                                                 data-ferramenta-id="{{Ferramenta.id_Ferramenta}}" type="button"
@@ -405,7 +413,7 @@
                                                 -
                                             </button>
                                         </p>
-    
+
                                         <!-- Collapse content -->
                                         <div class="collapse" id="collapseferramenta{{ Ferramenta.id_Ferramenta }}">
                                             <div class="card card-body mt-1 bg-secondary">
@@ -413,7 +421,7 @@
                                             </div>
                                         </div>
                                     </div>
-    
+
                                     {% endif %}
                                     {% endfor %}
                                 </div>
@@ -425,9 +433,9 @@
 
                     <div class="col-5 ms-5">
 
-                       
+
                         <h2>Equipamentos do Personagem</h2>
-                        
+
                         <div class="overflow-x-hidden scroll-custom scroll-thin p-3" style="max-height: 78vh;">
                             <h3>Armas</h3>
                             <div class=" mb-3" id="listaArmasEscolhidas">
@@ -447,13 +455,14 @@
             </div>
             <div class="col-4 container-fluid mt-5">
                 <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
-                    <div class="card-body text-center">
+                    <div class="card-body text-center position-relative">
+                        <label for="id_avatar_personagem" class="fa-solid fa-square-pen position-absolute fa-2xl"
+                            id="iconeMudarAvatar"></label>
                         <img src="{% static 'images/PLACEHOLDER.png' %}" alt="Avatar"
-                            class="avatar-img img-fluid mb-3 rounded-5">
+                            class="avatar-img img-fluid mb-3 rounded-5" id="preview_avatar">
                         <!-- CAMPO DE TEXTO -->
                         <form method="post">
                             {% csrf_token %}
-
                             <div class="mb-3">
                                 {{ form.nome }}
                                 {% if form.nome.errors %}
@@ -462,17 +471,19 @@
                                 </div>
                                 {% endif %}
                             </div>
+
+                            <input type="file" id="id_avatar_personagem" class="d-none">
                         </form>
 
                         <div class="row">
                             <div class="col-5">
-                                <p class="text-end">Nível 1</p>
+                                <p class="text-end mb-0">Nível 1</p>
                             </div>
                             <div class="col-2">
-                                <p class="">-</p>
+                                <p class="mb-0">-</p>
                             </div>
                             <div class="col-5">
-                                <p class="text-start" id="current-class">Não definida</p>
+                                <p class="text-start mb-0" id="current-class"></p>
                             </div>
                         </div>
                     </div>
@@ -543,7 +554,7 @@
     document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".escolherArmadura").forEach(button => {
             button.addEventListener("click", (e) => {
-                
+
                 const armaduraId = button.dataset.armaduraId;
                 let armaduraOriginal = document.getElementById("armadura" + armaduraId);
                 let cloneArmadura = armaduraOriginal.cloneNode(true);
@@ -651,7 +662,52 @@
         localStorage.setItem("playerNome", this.value);
     })
 
+    // Criar um preview da imagem a ser enviada
+    let inputAvatar = document.getElementById("id_avatar_personagem");
+    const preview = document.getElementById("preview_avatar");
 
+    console.log(inputAvatar);
+    
+
+    inputAvatar.addEventListener("change", function(){
+        const image = this.files[0];
+        
+        
+        if (!image){
+            return;
+        }
+
+        if (image.size >= 1756364.8 ){
+            alert("Imagem grande demais");
+            return;
+        }
+        
+        preview.src = URL.createObjectURL(image);
+
+        //Converter o dado bruto da URI em Base64
+
+        const reader = new FileReader();
+        reader.onload = function(event){
+            const base64 = event.target.result;
+
+            fetch(
+                " {% url 'TelaClasses' %}",
+                {
+
+                    method : "POST",
+                    headers : {
+                        "X-CSRFToken":"{{ csrf_token }}",
+                        "Content-Type": "application/json"
+                    },
+                    body : JSON.stringify({avatar : base64})          
+                }
+            );
+        };
+
+        reader.readAsDataURL(image);
+
+    
+    });
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', function () {
@@ -661,6 +717,14 @@
         let playerNome = localStorage.getItem("playerNome") ?? "";
 
         playerName = document.getElementById("id_nome").value = playerNome;
+
+        avatarExistente = "{{ avatar }}";
+
+        if( avatarExistente != "" ){
+            preview.src = avatarExistente;
+            
+        }
+
         // Inicializa o wizard no passo 4
         updateWizardProgress(6);
     });

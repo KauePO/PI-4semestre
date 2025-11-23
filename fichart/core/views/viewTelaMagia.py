@@ -28,4 +28,14 @@ class viewTelaMagia(LoginRequiredMixin, View):
         
         form = nomeForm()
         
-        return render(request, "templateTelaSelecaoMagia.html", {"form":form, "listaMagias":listaMagias,"truquesObjects":truquesObjects})
+        avatarAtual = request.session.get("avatar", "")
+        
+        context =  {
+            "form":form, 
+            "listaMagias":listaMagias,
+            "truquesObjects":truquesObjects,
+            "avatar":avatarAtual
+            
+        }
+        
+        return render(request, "templateTelaSelecaoMagia.html",context)

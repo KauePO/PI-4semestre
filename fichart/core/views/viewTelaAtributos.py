@@ -52,11 +52,14 @@ class viewTelaAtributos( LoginRequiredMixin, View):
             "sobrevivencia": "sabedoria",
         }
         
+        avatarAtual = request.session.get("avatar","")
+        
         context = {
             "form":form, 
             "pericias":pericias, 
             "salvaguardas":salvaguardas, 
-            "atributos":atributos
+            "atributos":atributos,
+            "avatar":avatarAtual
             }
         
         

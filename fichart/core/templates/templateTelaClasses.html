@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <script src="https://kit.fontawesome.com/cc7beb20bf.js" crossorigin="anonymous"></script>
 
     <style>
         body {
@@ -24,7 +25,7 @@
             max-width: 483px;
             height: auto;
             max-height: 314px;
-            object-fit: cover;
+            object-fit:fill;
             border: 3px solid #dee2e6;
         }
 
@@ -117,7 +118,7 @@
         }
 
         .scroll-custom::-webkit-scrollbar {
-           scrollbar-width: thin;
+            scrollbar-width: thin;
         }
 
         .scroll-custom::-webkit-scrollbar-track {
@@ -146,29 +147,35 @@
             .wizard-step .step-label {
                 font-size: 0.65rem;
             }
-            
+
             .wizard-step .step-number {
                 width: 30px;
                 height: 30px;
                 font-size: 0.8rem;
             }
-            
+
             .wizard-connector {
                 top: 35px;
                 height: 5px;
             }
-            
+
             .container-fluid {
                 padding: 0 10px;
             }
-            
+
             .classe-option h6 {
                 font-size: 1.1rem !important;
             }
-            
+
             #descricaoClasse {
                 font-size: 1rem !important;
             }
+        }
+
+        #iconeMudarAvatar{
+            top: 6%;
+            right: 8%;
+            color: #282828;
         }
 
         @media (max-width: 576px) {
@@ -210,12 +217,12 @@
                         <div class="col wizard-step" data-step="5">
                             <div class="step-label pb-2">Atributo</div>
                             <div class="wizard-connector rounded-5"></div>
-                            <div class="step-number"></div>
+                            <a href="{% url 'TelaAtributos' %}" class="step-number"></a>
                         </div>
                         <div class="col wizard-step" data-step="6">
                             <div class="step-label pb-2">Equipamento</div>
                             <div class="wizard-connector rounded-5"></div>
-                            <div class="step-number"></div>
+                            <a href="{% url 'TelaEquipamento' %}" class="step-number"></a>
                         </div>
                     </div>
                 </div>
@@ -255,9 +262,10 @@
             <!-- Coluna lateral -->
             <div class="col-12 col-lg-4 mt-3 mt-lg-5">
                 <div class="scroll-custom overflow-x-hidden" style="max-height: 78vh; overflow-y: auto;">
-                    <div class="card-body text-center">
+                    <div class="card-body text-center position-relative">
+                        <label for="id_avatar_personagem" class="fa-solid fa-square-pen position-absolute fa-2xl" id="iconeMudarAvatar"></label>
                         <img src="{% static 'images/PLACEHOLDER.png' %}" alt="Avatar"
-                            class="avatar-img img-fluid mb-3 rounded-5">
+                            class="avatar-img img-fluid mb-3 rounded-5" id="preview_avatar">
                         <!-- CAMPO DE TEXTO -->
                         <form method="post">
                             {% csrf_token %}
@@ -269,6 +277,8 @@
                                 </div>
                                 {% endif %}
                             </div>
+
+                            <input type="file" id="id_avatar_personagem" class="d-none">
                         </form>
 
                         <div class="row">
@@ -380,13 +390,62 @@
         });
     }
 
+    function salvar_cookie(nome, valor) {
+        document.cookie = `${nome}=${valor}; path=/`;
+    }
+
     let playerNome = document.getElementById("id_nome");
 
     playerNome.addEventListener("change", function () {
         localStorage.setItem("playerNome", this.value);
     })
 
+    // Criar um preview da imagem a ser enviada
+    let inputAvatar = document.getElementById("id_avatar_personagem");
+    const preview = document.getElementById("preview_avatar");
 
+    console.log(inputAvatar);
+    
+
+    inputAvatar.addEventListener("change", function(){
+        const image = this.files[0];
+        
+        
+        if (!image){
+            return;
+        }
+
+        if (image.size >= 1756364.8 ){
+            alert("Imagem grande demais");
+            return;
+        }
+        
+        preview.src = URL.createObjectURL(image);
+
+        //Converter o dado bruto da URI em Base64
+
+        const reader = new FileReader();
+        reader.onload = function(event){
+            const base64 = event.target.result;
+
+            fetch(
+                " {% url 'TelaClasses' %}",
+                {
+
+                    method : "POST",
+                    headers : {
+                        "X-CSRFToken":"{{ csrf_token }}",
+                        "Content-Type": "application/json"
+                    },
+                    body : JSON.stringify({avatar : base64})          
+                }
+            );
+        };
+
+        reader.readAsDataURL(image);
+
+    
+    });
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', function () {
@@ -411,6 +470,12 @@
             document.querySelector(`a[data-class-id='${classe}']`).click();
         }
 
+        avatarExistente = "{{ avatar }}";
+
+        if( avatarExistente != "" ){
+            preview.src = avatarExistente;
+            
+        }
 
         // Inicializa o wizard no passo 1
         updateWizardProgress(1);
