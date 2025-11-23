@@ -1,0 +1,1619 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ficha de Personagem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+
+    <style>
+    body {
+        background-color: #1e1e1e;
+        color: #FFFFFF;
+        font-family: "Inter", sans-serif;
+        font-weight: 600;
+    }
+
+    hr {
+        border: none;
+        height: 8px;
+        background-color: #e3e3e3;
+        margin: 20px 0;
+    }
+
+    .titulo {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        font-size: 2.3rem;
+        color: #FFFFFF;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .subtitulo {
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: #FFFFFF;
+        text-align: left;
+        margin-bottom: 10px;
+    }
+
+    .spell-slot {
+        color: #282828;
+        background-color: #e3e3e3;
+        border-top-left-radius: 1.5rem !important;
+    }
+
+    .avatar-img {
+        width: 100%;
+        max-width: 483px;
+        height: auto;
+        max-height: 314px;
+        object-fit: cover;
+        border: 3px solid #dee2e6;
+    }
+
+    .atributo {
+        background-color: #D9D9D9;
+        border-radius: 15px;
+        padding: 10px;
+        text-align: center;
+        color: #000000;
+        height: auto;
+    }
+
+    .atributo h3 {
+        font-size: 2.5rem;
+        margin: 0;
+    }
+
+    .atributo span {
+        font-size: 1rem;
+        color: #000000;
+    }
+
+    .section {
+        padding: 15px;
+    }
+
+    .proficienciaSalvaguarda {
+        padding-bottom: 5%;
+        position: relative;
+        bottom: 0.3rem;
+    }
+
+    .descricaoPersonagem {
+        width: 100%;
+        height: 150px;
+        background-color: #e3e3e3;
+    }
+
+    .scroll-section {
+        max-height: 300px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+    .scroll-section::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .scroll-section::-webkit-scrollbar-thumb {
+        background-color: #ffc014;
+        border-radius: 5px;
+    }
+
+    .avatar {
+        width: 100%;
+        max-width: 150px;
+        border-radius: 10px;
+        border: 3px solid #ffc014;
+    }
+
+    .stat-box {
+        background-color: #3b3b3b;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .back-cinza {
+        background-color: #8d8d8d;
+        color: #ffffff
+    }
+
+    .scroll-custom::-webkit-scrollbar {
+        scrollbar-width: thin;
+    }
+
+    .scroll-custom::-webkit-scrollbar-track {
+        background: #929292;
+        border-radius: 6px;
+    }
+
+    .scroll-custom::-webkit-scrollbar-thumb {
+        background: #e3e3e3;
+        border-radius: 6px;
+    }
+
+    .scroll-custom::-webkit-scrollbar-corner {
+        background: #929292;
+    }
+
+    .status-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #d9d9d9;
+        /* Cor clara do lado direito */
+        border-radius: 15px;
+        overflow: hidden;
+        /* Faz o arredondamento cortar o conteúdo */
+        font-family: 'Inter', sans-serif;
+        font-weight: bold;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .status-label {
+        flex: 1;
+        background-color: #8D8D8D;
+        /* Parte cinza escura à esquerda */
+        color: #FFFFFF;
+        padding: 20px 25px;
+        font-size: 1.2rem;
+        border-right: 2px solid #d9d9d9;
+        /* Pequeno contraste na divisão */
+    }
+
+    .status-value {
+        flex: 1;
+        text-align: center;
+        color: #282828;
+        font-size: 2rem;
+        padding: 10px 15px;
+    }
+
+
+    .salvaguarda {
+        display: inline-block;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    .linha {
+        margin: 0.6rem 0;
+    }
+
+    label {
+        margin-right: 0.5rem;
+    }
+
+    .bolas {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        /* Espaçamento entre as bolinhas */
+        position: relative;
+        bottom: -0.4rem;
+    }
+
+    /* Linha de fundo conectando as bolinhas */
+    .bolas::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0.5rem;
+        right: 0.5rem;
+        height: 3px;
+        background: white;
+        z-index: 0;
+    }
+
+    input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 22px;
+        height: 22px;
+        border: 2px solid white;
+        border-radius: 50%;
+        background: #1e1e1e;
+        cursor: pointer;
+        position: relative;
+        z-index: 1;
+        transition: background 0.2s;
+    }
+
+    input[type="checkbox"]:checked {
+        background: #FFC107;
+        /* Amarelo dourado */
+    }
+
+    .proficiencia-card {
+        flex: 1;
+        background-color: #e3e3e3;
+        /* Parte cinza escura à esquerda */
+        color: #000000;
+        padding: 20px 25px;
+        font-size: 1.2rem;
+        /* Pequeno contraste na divisão */
+        max-height: 340px;
+    }
+
+    .content-card {
+        flex: 1;
+        background-color: #e3e3e3;
+        /* Parte cinza escura à esquerda */
+        color: #282828;
+        padding: 20px 25px;
+        font-size: 1.2rem;
+        border-right: 2px solid #d9d9d9;
+        /* Pequeno contraste na divisão */
+        max-height: 40vh;
+        margin-bottom: 1.5rem;
+    }
+
+    .spell-card {
+        flex: 1;
+        background-color: #e3e3e3;
+        /* Parte cinza escura à esquerda */
+        color: #282828;
+        padding: 20px 25px;
+        font-size: 1.2rem;
+        border-right: 2px solid #d9d9d9;
+        /* Pequeno contraste na divisão */
+        max-height: 40vh;
+    }
+
+    .truque-descricao {
+        max-height: 90px;
+        /* Altura máxima antes do colapso */
+        overflow: hidden;
+        position: relative;
+        transition: max-height 0.3s ease;
+        margin-bottom: 1.5rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+        /* Garante que espaços sejam respeitados */
+    }
+
+    .truque-descricao.expandido {
+        max-height: 1000px;
+        /* Altura expandida */
+    }
+
+    /* Remove os gradientes padrão */
+    .truque-descricao::after,
+    .magia-descricao::after {
+        display: none;
+    }
+
+    /* Mostra o gradiente apenas quando houver botão */
+    .truque-descricao.com-botao::after,
+    .magia-descricao.com-botao::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        background: linear-gradient(to top, #040404, transparent);
+        pointer-events: none;
+        display: block;
+    }
+
+    /* Remove o gradiente quando expandido */
+    .truque-descricao.com-botao.expandido::after,
+    .magia-descricao.com-botao.expandido::after {
+        display: none;
+    }
+
+    .magia-descricao {
+        max-height: 90px;
+        /* Altura máxima antes do colapso */
+        overflow: hidden;
+        position: relative;
+        transition: max-height 0.3s ease;
+        margin-bottom: 1.5rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+        /* Garante que espaços sejam respeitados */
+    }
+
+    .magia-descricao.expandido {
+        max-height: 1000px;
+        /* Altura expandida */
+    }
+
+    .ver-mais {
+        position: absolute;
+        bottom: 2.7rem;
+        left: 50%;
+        transform: translate(-50%, 50%);
+        z-index: 2;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid #fff;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+
+    .ver-mais:hover {
+        background-color: #ffc014;
+        color: #1a1a1a;
+        border-color: #ffc014;
+    }
+
+    .text-start.mb-2 {
+        position: relative;
+        margin-bottom: 2rem !important;
+    }
+
+    .atributo {
+        background-color: #D9D9D9;
+        border-radius: 15px;
+        padding: 10px;
+        text-align: center;
+        color: #000000;
+        height: auto;
+        position: relative;
+    }
+
+    .atributo h3 {
+        font-size: 2.5rem;
+        margin: 0;
+    }
+
+    .atributo span {
+        font-size: 1rem;
+        color: #000000;
+    }
+
+    .modificador {
+        position: absolute;
+        top: -4px;
+        right: -7px;
+        background-color: #FFFFFF;
+        border: 2px solid #000000;
+        border-radius: 15px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    /* Novos estilos para modificadores de salvaguardas e perícias */
+    .modificador_proficiencia {
+        display: inline-block;
+        min-width: 40px;
+        height: 25px;
+        background-color: #FFFFFF;
+        border: 2px solid #000000;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+        line-height: 21px;
+        color: #000000;
+        margin-left: 10px;
+        padding: 0 5px;
+    }
+
+    .proficiencia-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        padding: 5px 0;
+    }
+
+    .proficiencia-label {
+        flex: 1;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+</style>
+</head>
+
+<body class="container-fluid py-4">
+    <form method="POST" id="form-ficha">
+        {% csrf_token %}
+
+        <div class="row g-3">
+            <div class="col-12 col-lg-12">
+                <button class="btn btn-outline-light" onclick="window.history.back();">
+                    ← Voltar
+                </button>
+
+                <button type="submit" class="btn btn-outline-light ms-2">
+                    Salvar
+                </button>
+            </div>
+
+            <!-- Coluna esquerda: Atributos e informações básicas -->
+            <div class="col-12 col-lg-5">
+                <div class="section text-start">
+                    <div class="row">
+                        <!-- Lado esquerdo -->
+                        <div class="col-6 overflow-auto scroll-custom;" style="max-height: 75vh;">
+                            <div class="text-center pt-3 pb-1">
+                                {{ form.nome }}
+                                {% if form.nome.errors %}
+                                <div class="text-danger mt-1">
+                                    {{ form.nome.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <img src="{% static 'images/PLACEHOLDER.png' %}" alt="Avatar"
+                                class="avatar-img img-fluid mb-3 rounded-5">
+
+                            <ul class="mt-2">
+                                <li class="text-light mb-1">
+                                    {{ raca.nome|default:"Não selecionado" }}
+                                </li>
+                                <li class="text-light mb-1">
+                                    {{ classe.nome|default:"Não selecionado" }} - Nível {{ personagem.nivel|default:"1" }}
+                                </li>
+                                <li class="text-light mb-1">
+                                    {{ antecedente.nome|default:"Não selecionado" }}
+                                </li>
+                            </ul>
+
+                            <ul class="list-group list-group-flush">
+                                <li class="status-box">
+                                    <div class="status-label">Deslocamento:</div>
+                                    <div class="status-value">{{ raca.velocidade|default:"Indefinido" }}m</div>
+                                </li>
+
+                                <li class="status-box">
+                                    <div class="status-label">Classe de Armadura:</div>
+                                    <div class="status-value">{{ personagem.ca|default:"Indefinido" }}</div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Lado direito - ATRIBUTOS COM MODIFICADORES -->
+                        <div class="col-6 overflow-auto scroll-custom;" style="max-height: 75vh;">
+                            <p class="titulo">Atributos</p>
+
+                            <div class="d-flex flex-column align-items-center">
+                                {% for nome, valor in atributos.items %}
+                                <div class="atributo w-100 mb-2 text-center" id="atributo-{{ nome|lower }}">
+                                    <div class="modificador" id="modificador-{{ nome|lower }}">
+                                        {% with modificador=valor|add:"-10"|divisibleby:2|yesno:valor|default:0 %}
+                                        {% widthratio modificador 1 1 as mod_calc %}
+                                        {{ mod_calc }}
+                                        {% endwith %}
+                                    </div>
+                                    <h3>{{ valor }}</h3>
+                                    <span>{{ nome }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coluna do meio: Salvaguardas e Perícias -->
+            <div class="col-12 col-lg-3 section overflow-auto scroll-custom" style="max-height: 75vh;">
+                <h6 class="titulo">Salvaguardas</h6>
+                <div class="w-100 mb-2 text-start">
+                    <!-- Salvaguardas com modificadores -->
+                    <div class="proficiencia-item">
+                        <input class="check_salvaFOR" type="checkbox" id="forcaCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_salva_forca">0</span>
+                        <label class="proficiencia-label" for="forcaCheck">Força</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_salvaDES" type="checkbox" id="destrezaCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_salva_destreza">0</span>
+                        <label class="proficiencia-label" for="destrezaCheck">Destreza</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_salvaCON" type="checkbox" id="constituicaoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_salva_constituicao">0</span>
+                        <label class="proficiencia-label" for="constituicaoCheck">Constituição</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_salvaSAB" type="checkbox" id="sabedoriaCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_salva_sabedoria">0</span>
+                        <label class="proficiencia-label" for="sabedoriaCheck">Sabedoria</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_salvaINT" type="checkbox" id="inteligenciaCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_salva_inteligencia">0</span>
+                        <label class="proficiencia-label" for="inteligenciaCheck">Inteligência</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_salvaCAR" type="checkbox" id="carismaCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_salva_carisma">0</span>
+                        <label class="proficiencia-label" for="carismaCheck">Carisma</label>
+                    </div>
+                </div>
+
+                <h6 class="titulo">Perícias</h6>
+                <div class="w-100 mb-2 text-start">
+                    <!-- Perícias com modificadores -->
+                    <div class="proficiencia-item">
+                        <input class="check_periciaACROBACIA" type="checkbox" id="acrobaciaCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_acrobacia">0</span>
+                        <label class="proficiencia-label" for="acrobaciaCheck">Acrobacia</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaARCANISMO" type="checkbox" id="arcanismoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_arcanismo">0</span>
+                        <label class="proficiencia-label" for="arcanismoCheck">Arcanismo</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaATLETISMO" type="checkbox" id="atletismoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_atletismo">0</span>
+                        <label class="proficiencia-label" for="atletismoCheck">Atletismo</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaATUACAO" type="checkbox" id="atuacaoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_atuacao">0</span>
+                        <label class="proficiencia-label" for="atuacaoCheck">Atuação</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaENGANACAO" type="checkbox" id="enganacaoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_enganacao">0</span>
+                        <label class="proficiencia-label" for="enganacaoCheck">Enganação</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaFURTIVIDADE" type="checkbox" id="furtividadeCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_furtividade">0</span>
+                        <label class="proficiencia-label" for="furtividadeCheck">Furtividade</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaHISTORIA" type="checkbox" id="historiaCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_historia">0</span>
+                        <label class="proficiencia-label" for="historiaCheck">História</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaINTIMIDACAO" type="checkbox" id="intimidacaoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_intimidacao">0</span>
+                        <label class="proficiencia-label" for="intimidacaoCheck">Intimidação</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaINTUICAO" type="checkbox" id="intuicaoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_intuicao">0</span>
+                        <label class="proficiencia-label" for="intuicaoCheck">Intuição</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaINVESTIGACAO" type="checkbox" id="investigacaoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_investigacao">0</span>
+                        <label class="proficiencia-label" for="investigacaoCheck">Investigação</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaLIDARCOMANIMAIS" type="checkbox" id="lidarcomanimaisCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_lidarcomanimais">0</span>
+                        <label class="proficiencia-label" for="lidarcomanimaisCheck">Lidar com Animais</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaMEDICINA" type="checkbox" id="medicinaCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_medicina">0</span>
+                        <label class="proficiencia-label" for="medicinaCheck">Medicina</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaNATUREZA" type="checkbox" id="naturezaCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_natureza">0</span>
+                        <label class="proficiencia-label" for="naturezaCheck">Natureza</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaPERCEPCAO" type="checkbox" id="percepcaoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_percepcao">0</span>
+                        <label class="proficiencia-label" for="percepcaoCheck">Percepção</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaPERSUASAO" type="checkbox" id="persuasaoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_persuasao">0</span>
+                        <label class="proficiencia-label" for="persuasaoCheck">Persuasão</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaPRESTIDIGITACAO" type="checkbox" id="prestidigitacaoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_prestidigitacao">0</span>
+                        <label class="proficiencia-label" for="prestidigitacaoCheck">Prestidigitação</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaRELIGIAO" type="checkbox" id="religiaoCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_religiao">0</span>
+                        <label class="proficiencia-label" for="religiaoCheck">Religião</label>
+                    </div>
+
+                    <div class="proficiencia-item">
+                        <input class="check_periciaSOBREVIVENCIA" type="checkbox" id="sobrevivenciaCheck" disabled>
+                        <span class="modificador_proficiencia" id="valor_pericia_sobrevivencia">0</span>
+                        <label class="proficiencia-label" for="sobrevivenciaCheck">Sobrevivência</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Restante do código permanece igual -->
+            <div class="col-12 col-lg-4 section overflow-auto scroll-custom" style="max-height: 75vh;">
+
+            <ul class="list-group list-group-flush">
+                <div class="row g-3">
+                    <div class="col-12 col-lg-6">
+                        <p class="subtitulo">Pontos de Vida:</p>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <p class="subtitulo">Temporários:</p>
+                    </div>
+                </div>
+                <li class="status-box text-center">
+                    <div class="status-label">
+                        {{ classe.hb_base|default:"13" }}/{{ classe.hb_base|default:"13" }}
+                    </div>
+                    <div class="status-value">
+                        {{ classe.vidaTemporaria|default:"0"}}/{{ classe.vidaTemporaria|default:"0"}}
+                    </div>
+                </li>
+
+                <ul class="list-group list-group-flush">
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <p class="subtitulo">Dados de Vida:</p>
+                        </div>
+                    </div>
+                    <li class="status-box text-center">
+                        <div class="status-label">{{ classe.hp_n_dados|default:"1" }}</div>
+                        <div class="status-value">D{{ classe.hp_dado|default:"D12" }}</div>
+                    </li>
+                </ul>
+
+                <div class="salvaguarda">
+                    <p class="subtitulo">Salvaguarda:</p>
+                    <div class="linha">
+                        <label>Sucessos:</label>
+                        <div class="bolas">
+                            <input type="checkbox">
+                            <input type="checkbox">
+                            <input type="checkbox">
+                        </div>
+                    </div>
+                    <div class="linha">
+                        <label>Falhas:</label>
+                        <div class="bolas">
+                            <input type="checkbox">
+                            <input type="checkbox">
+                            <input type="checkbox">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="proficiencia-card overflow-auto scroll-custom">
+                    <ul class="p-3" id="lista-proficiencias">
+                        <p class="fw-bolder">Proficiências:</p>
+                        {% for proficiencia in proficiencias %}
+                        <li>{{ proficiencia }}</li>
+                        {% endfor %}
+                    </ul>
+                    <ul class="p-3" id="lista-idiomas">
+                        <p class="fw-bolder">Idiomas:</p>
+                        {% for idioma in idiomas %}
+                        <li>{{ idioma }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+        </div>
+
+        <hr>
+
+        <div class="col-12 col-lg-6 section overflow-auto scroll-custom" style="max-height: 75vh;">
+
+            <h1 class="titulo">MAGIAS E TRUQUES</h1>
+            <div>
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Truques</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group" id="lista-truques">
+
+                            {% for truque in truques %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do truque -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ truque.nome_truque }}</strong> - {{ truque.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ truque.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ truque.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ truque.componentes }}<br>
+                                    <strong>Duração:</strong> {{ truque.duracao }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="truque-descricao text-light p-2" id="descricao{{ id_truque }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ truque.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_truque }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endfor %}
+
+                            <!-- Botão para adicionar novo truque 
+                                <button type="button" class="btn btn-sm btn-primary mt-2"
+                                    onclick="mostrarFormularioTruque()">+ Adicionar</button>-->
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 1</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 1 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome_magia }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 2</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 2 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 3</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 3 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 4</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 4 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 5</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 5 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 6</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 6 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 7</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 7 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 8</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 8 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="subtitulo">Nível 9</p>
+                        <p class="subtitulo spell-slot ps-3 pe-3">Espaços:</p>
+                    </div>
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for magia in magias %}
+                            {% if magia.nivel == 9 %}
+                            <div class="text-start mb-2">
+                                <!-- Cabeçalho do magia -->
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ magia.nome }}</strong> - {{ magia.escola }}<br>
+                                    <strong>Tempo de Conjuração:</strong> {{ magia.tempo_conjuracao }}<br>
+                                    <strong>Alcance:</strong> {{ magia.alcance }}<br>
+                                    <strong>Componentes:</strong> {{ magia.componentes }}<br>
+                                    <strong>Duração:</strong> {{ magia.duraca }}<br>
+                                </div>
+
+                                <!-- Descrição com colapso automático -->
+                                <div class="magia-descricao text-light p-2" id="descricao{{ id_magia }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ magia.descricao }}
+                                </div>
+
+                                <!-- Botão Mostrar mais/menos -->
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ id_magia }}" style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 section overflow-auto scroll-custom" style="max-height: 75vh;">
+            <h1 class="titulo">CARACTERISTICAS E TALENTOS</h1>
+
+            <!-- ✅ Uma única row com duas colunas dentro -->
+            <div class="row">
+                <!-- Coluna 1 -->
+                <div class="col-6">
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for habilidade in habilidade_especiais %}
+                            {% if forloop.counter0|divisibleby:"2" %} <!-- Índices pares: 0, 2, 4... -->
+                            <div class="text-start mb-2">
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ habilidade.nome }}</strong><br>
+                                </div>
+
+                                <div class="truque-descricao text-light p-2"
+                                    id="descricao{{ habilidade.id_habilidade_especial }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ habilidade.descricao }}
+                                </div>
+
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ habilidade.id_habilidade_especial }}"
+                                    style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Coluna 2 -->
+                <div class="col-6">
+                    <div class="section w-100 mb-2 text-center">
+                        <ul class="list-group">
+                            {% for habilidade in habilidade_especiais %}
+                            {% if not forloop.counter0|divisibleby:"2" %} <!-- Índices ímpares: 1, 3, 5... -->
+                            <div class="text-start mb-2">
+                                <div class="spell-card bg-light text-dark p-2 rounded-top">
+                                    <strong>{{ habilidade.nome }}</strong><br>
+                                </div>
+
+                                <div class="truque-descricao text-light p-2"
+                                    id="descricao{{ habilidade.id_habilidade_especial }}"
+                                    style="background-color: #8d8d8d;">
+                                    {{ habilidade.descricao }}
+                                </div>
+
+                                <button type="button" class="btn btn-sm btn-outline-light mt-1 ver-mais"
+                                    data-target="#descricao{{ habilidade.id_habilidade_especial }}"
+                                    style="display: none;">
+                                    ▼
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="col-12 col-lg-12 section scroll-custom" style="max-height: 75vh;">
+            <h1 class="titulo">DESCRIÇÃO DO PERSONAGEM</h1>
+            
+                <div class="row">
+
+
+                    <div class="col-4">
+                        <div class="content-card overflow-auto scroll-custom">
+
+                            <p class="text-center">Aparência do Personagem</p>
+                            <textarea class="form-control mb-2 descricaoPersonagem" id="id_aparenciaPersonagem"
+                                name="aparencia_do_personagem" placeholder="Descreva a aparência do seu personagem aqui..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="content-card overflow-auto scroll-custom">
+                            <p class="text-center">História do Personagem</p>
+                            <textarea class="form-control mb-2 descricaoPersonagem" id="id_historiaPersonagem"
+                                name="historia_do_personagem" placeholder="Descreva a história do seu personagem aqui..."></textarea>
+                        </div>
+
+                    </div>
+                    <div class="col-4">
+                        <div class="content-card overflow-auto scroll-custom">
+                            <p class="text-center">Aliados e Organizações</p>
+                            <textarea class="form-control mb-2 descricaoPersonagem" id="id_aliadosOrganizacoes"
+                                name="aliados_e_organizacoes"
+                                placeholder="Descreva os aliados e organizações do seu personagem aqui..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="content-card overflow-auto scroll-custom">
+                            <p class="text-center">Traços e Características Adicionais</p>
+                            <textarea class="form-control mb-2 descricaoPersonagem" id="id_tracosCaracteristicas"
+                                name="tracos_e_caracteristicas_adicionais"
+                                placeholder="Descreva os traços e características adicionais do seu personagem aqui..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-4">
+                        <div class="content-card overflow-auto scroll-custom">
+                            <p class="text-center">Tesouro</p>
+
+                            <textarea class="form-control mb-2 descricaoPersonagem" id="id_tesouro" name="tesouro"
+                                placeholder="Descreva o tesouro do seu personagem aqui..."></textarea>
+
+                        </div>
+                    </div>
+            
+        </div>
+</form>
+    </div>
+    </div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".truque-descricao").forEach(desc => {
+            const button = desc.parentElement.querySelector(".ver-mais");
+
+            // Se o conteúdo ultrapassar o limite visível, mostra o botão
+            if (desc.scrollHeight > desc.clientHeight + 5) {
+                button.style.display = "block";
+                desc.classList.add("com-botao");
+            }
+
+            // Evento de clique para expandir/recolher
+            button.addEventListener("click", () => {
+                const expandido = desc.classList.toggle("expandido");
+                button.textContent = expandido ? "▲" : "▼";
+            });
+        });
+
+        document.querySelectorAll(".magia-descricao").forEach(desc => {
+            const button = desc.parentElement.querySelector(".ver-mais");
+
+            // Se o conteúdo ultrapassar o limite visível, mostra o botão
+            if (desc.scrollHeight > desc.clientHeight + 5) {
+                button.style.display = "block";
+                desc.classList.add("com-botao");
+            }
+
+            // Evento de clique para expandir/recolher
+            button.addEventListener("click", () => {
+                const expandido = desc.classList.toggle("expandido");
+                button.textContent = expandido ? "▲" : "▼";
+            });
+        });
+
+         // ---- RECUPERA COOKIES E REAPLICA ESTADOS ----
+            carregarAtributosDosCookies();
+            carregarCheckboxesDosCookies();
+            // Carrega dados da ficha
+            atualizarModificadoresFicha();
+            atualizarValoresSalvaguardasEPericias();
+
+            // Carrega o nome do personagem do localStorage ao carregar a página
+            let playerNome = localStorage.getItem("playerNome") ?? "";
+            document.getElementById("id_nome").value = playerNome;
+        });
+
+    // ---------------- FUNÇÕES DE MODIFICADORES ----------------
+    // Função para calcular modificador baseado no valor do atributo
+        function calcularModificador(valor) {
+            return Math.floor((valor - 10) / 2);
+        }
+
+        // Função para formatar o modificador (com sinal + para positivos)
+        function formatarModificador(modificador) {
+            return modificador >= 0 ? `+${modificador}` : `${modificador}`;
+        }
+
+        // Função para atualizar todos os modificadores na ficha
+        function atualizarModificadoresFicha() {
+            const atributos = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma'];
+            
+            atributos.forEach(atributo => {
+                const valorCookie = pegar_cookie(atributo);
+                if (valorCookie) {
+                    const valor = parseInt(valorCookie);
+                    const modificador = calcularModificador(valor);
+                    const elementoModificador = document.getElementById(`modificador-${atributo}`);
+                    
+                    if (elementoModificador) {
+                        elementoModificador.textContent = formatarModificador(modificador);
+                    }
+                }
+            });
+        }
+
+    // ---------------- FUNÇÕES PARA ATUALIZAR SALVAGUARDAS E PERÍCIAS ----------------
+function atualizarValoresSalvaguardasEPericias() {
+    // Atualizar salvaguardas
+    const salvaguardas = [
+        { id: 'forca', atributo: 'forca', classe: 'FOR' },
+        { id: 'destreza', atributo: 'destreza', classe: 'DES' },
+        { id: 'constituicao', atributo: 'constituicao', classe: 'CON' },
+        { id: 'sabedoria', atributo: 'sabedoria', classe: 'SAB' },
+        { id: 'inteligencia', atributo: 'inteligencia', classe: 'INT' },
+        { id: 'carisma', atributo: 'carisma', classe: 'CAR' }
+    ];
+
+    salvaguardas.forEach(salvaguarda => {
+        const valorCookie = pegar_cookie(salvaguarda.atributo);
+        if (valorCookie) {
+            const valor = parseInt(valorCookie);
+            const modificador = calcularModificador(valor);
+            const checkbox = document.querySelector(`.check_salva${salvaguarda.classe}`);
+            const valorTotal = checkbox && checkbox.checked ? modificador + 2 : modificador;
+            const elementoValor = document.getElementById(`valor_salva_${salvaguarda.atributo}`);
+            if (elementoValor) {
+                elementoValor.textContent = formatarModificador(valorTotal);
+            }
+        }
+    });
+
+    // Atualizar perícias
+    const pericias = [
+        { id: 'acrobacia', atributo: 'destreza', classe: 'ACROBACIA' },
+        { id: 'arcanismo', atributo: 'inteligencia', classe: 'ARCANISMO' },
+        { id: 'atletismo', atributo: 'forca', classe: 'ATLETISMO' },
+        { id: 'atuacao', atributo: 'carisma', classe: 'ATUACAO' },
+        { id: 'enganacao', atributo: 'carisma', classe: 'ENGANACAO' },
+        { id: 'furtividade', atributo: 'destreza', classe: 'FURTIVIDADE' },
+        { id: 'historia', atributo: 'inteligencia', classe: 'HISTORIA' },
+        { id: 'intimidacao', atributo: 'carisma', classe: 'INTIMIDACAO' },
+        { id: 'intuicao', atributo: 'sabedoria', classe: 'INTUICAO' },
+        { id: 'investigacao', atributo: 'inteligencia', classe: 'INVESTIGACAO' },
+        { id: 'lidarcomanimais', atributo: 'sabedoria', classe: 'LIDARCOMANIMAIS' },
+        { id: 'medicina', atributo: 'sabedoria', classe: 'MEDICINA' },
+        { id: 'natureza', atributo: 'inteligencia', classe: 'NATUREZA' },
+        { id: 'percepcao', atributo: 'sabedoria', classe: 'PERCEPCAO' },
+        { id: 'persuasao', atributo: 'carisma', classe: 'PERSUASAO' },
+        { id: 'prestidigitacao', atributo: 'destreza', classe: 'PRESTIDIGITACAO' },
+        { id: 'religiao', atributo: 'inteligencia', classe: 'RELIGIAO' },
+        { id: 'sobrevivencia', atributo: 'sabedoria', classe: 'SOBREVIVENCIA' }
+    ];
+
+    pericias.forEach(pericia => {
+        const valorCookie = pegar_cookie(pericia.atributo);
+        if (valorCookie) {
+            const valor = parseInt(valorCookie);
+            const modificador = calcularModificador(valor);
+            const checkbox = document.querySelector(`.check_pericia${pericia.classe}`);
+            const valorTotal = checkbox && checkbox.checked ? modificador + 2 : modificador;
+            const elementoValor = document.getElementById(`valor_pericia_${pericia.id}`);
+            if (elementoValor) {
+                elementoValor.textContent = formatarModificador(valorTotal);
+            }
+        }
+    });
+}
+
+    // ---------------- FUNÇÕES DE COOKIES ----------------
+
+    function pegar_cookie(nome_cookie) {
+        nome_cookie = nome_cookie + "=";
+        const cookie_deconded = decodeURIComponent(document.cookie);
+        const lista_cookies = cookie_deconded.split(";");
+        for (let i of lista_cookies) {
+            i = i.trimStart();
+            if (i.startsWith(nome_cookie)) {
+                return i.substring(nome_cookie.length, i.length);
+            }
+        }
+        return null;
+    }
+
+    // ---------------- RECUPERA CHECKBOXES SALVAGUARDAS ----------------
+    function carregarCheckboxesDosCookies() {
+        document.querySelectorAll('.check_salvaFOR').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_forca");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_salvaDES').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_destreza");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_salvaSAB').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_sabedoria");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_salvaINT').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_inteligencia");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_salvaCON').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_constituicao");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_salvaCAR').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_carisma");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+    }
+
+    // ---------------- RECUPERA CHECKBOXES PERICIAS ----------------
+    function carregarAtributosDosCookies() {
+        document.querySelectorAll('.check_periciaACROBACIA').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_acrobacia");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaARCANISMO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_arcanismo");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaATLETISMO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_atletismo");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaATUACAO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_atuacao");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaENGANACAO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_enganacao");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaFURTIVIDADE').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_furtividade");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaHISTORIA').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_historia");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaINTIMIDACAO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_intimidacao");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaINTUICAO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_intuição");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaINVESTIGACAO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_investigacao");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaLIDARCOMANIMAIS').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_lidar com animais");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaMEDICINA').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_medicina");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaNATUREZA').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_natureza");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaPERCEPCAO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_percepcao");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaPERSUASAO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_persuasao");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaPRESTIDIGITACAO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_prestidigitacao");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaRELIGIAO').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_religiao");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+        document.querySelectorAll('.check_periciaSOBREVIVENCIA').forEach(checkbox => {
+            const valorCookie = pegar_cookie("check_sobrevivencia");
+            if (valorCookie === "1") {
+                checkbox.checked = true;
+            } else {
+                checkbox.checked = false;
+            }
+            checkbox.dispatchEvent(new Event("change"));
+        });
+    }
+</script>
+
+</html>
