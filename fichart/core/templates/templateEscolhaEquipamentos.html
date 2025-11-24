@@ -53,31 +53,31 @@
 
         /* Wizard Navigation Styles */
         .wizard-nav {
-            padding: 1.5rem;
-            margin-bottom: 30px;
+            padding: 1rem;
         }
 
         .wizard-step {
             text-align: center;
             position: relative;
-            padding: 0 10px;
+            padding: 0 5px;
             z-index: 3;
         }
 
         .wizard-step .step-number {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             background-color: #e3e3e3;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 10px;
+            margin: 0 auto 5px;
             font-weight: bold;
             transition: all 0.3s ease;
             position: relative;
             z-index: 3;
+            font-size: 0.9rem;
         }
 
         .wizard-step.active .step-number {
@@ -90,23 +90,21 @@
             background-color: #ffc014;
         }
 
-
-
-
         .wizard-step .step-label {
             position: relative;
             color: white;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 500;
             z-index: 3;
+            line-height: 1.2;
         }
 
         .wizard-connector {
             position: absolute;
-            top: 45px;
+            top: 40px;
             left: -30%;
             width: 60%;
-            height: 8px;
+            height: 6px;
             background-color: #e3e3e3;
             z-index: 2;
         }
@@ -122,11 +120,36 @@
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .wizard-step .step-label {
-                font-size: 0.75rem;
+                font-size: 0.65rem;
             }
 
-            .wizard-step {
-                padding: 0 5px;
+            .wizard-step .step-number {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+
+            .wizard-connector {
+                top: 35px;
+                height: 5px;
+            }
+
+            .container-fluid {
+                padding: 0 10px;
+            }
+
+            .antecedente-option h6 {
+                font-size: 1.1rem !important;
+            }
+
+            #descricaoAntecedente {
+                font-size: 1rem !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .wizard-nav {
+                padding: 0.5rem;
             }
         }
 
@@ -262,7 +285,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="overflow-x-hidden scroll-custom scroll-thin"
-                            style="max-height: 78vh;overflow-y: scroll;height: 78vh">
+                            style="max-height: 88vh;overflow-y: scroll;height: 88vh">
                             <div class="list-group pe-2" id="seletorArma">
 
                                 <div id="listaArmas mb-3">
@@ -502,7 +525,7 @@
 
 
                     <div class="col-5 ms-5 overflow-x-hidden scroll-custom scroll-thin"
-                        style="max-height: 78vh;overflow-y: scroll;height: 78vh">
+                        style="max-height: 88vh;overflow-y: scroll;height: 88vh">
 
                         <h2>Equipamentos do Personagem</h2>
 
