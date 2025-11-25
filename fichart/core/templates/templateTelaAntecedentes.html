@@ -148,6 +148,10 @@
             color: #282828;
         }
 
+        #descricaoAntecedente {
+            white-space: pre-line;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .wizard-step .step-label {
@@ -327,7 +331,7 @@
         console.log(antecedenteData)
 
         if (antecedenteData) {
-            document.getElementById('descricaoAntecedente').textContent = antecedenteData.description;
+            document.getElementById('descricaoAntecedente').innerText = antecedenteData.description;
             document.getElementById("iconeAntecedente").src = antecedenteData.icone;
         }
 

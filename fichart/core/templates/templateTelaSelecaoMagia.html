@@ -458,6 +458,7 @@
 <script>
 
     let listaTruquesEscolhidos = [];
+    const listaTruquesAtuais = {{listaTruquesAtuais|default:"[]"|safe}}
 
     document.addEventListener("DOMContentLoaded", () => {
 
@@ -497,9 +498,17 @@
                 }
             });
         });
+
+        listaTruquesAtuais.forEach(id => {
+            btn = document.querySelector(`.escolherTruque[data-truque-id="${id}"]`);
+            console.log(btn);
+            
+            btn.click();
+        })
     });
 
     let listaMagiasEscolhidas = [];
+    const listaMagiasAtuais = {{listaMagiasAtuais|default:"[]"|safe}}
 
     document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".escolherMagia").forEach(button => {
@@ -549,7 +558,14 @@
 
             });
         });
+        listaMagiasAtuais.forEach(id => {
+            btn = document.querySelector(`.escolherMagia[data-magia-id="${id}"]`);
+            console.log(btn);
+            
+            btn.click();
+        })
     });
+
 
     function updateWizardProgress(completedStep) {
         // Atualiza as classes dos passos

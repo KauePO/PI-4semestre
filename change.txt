@@ -1,885 +1,1145 @@
-diff --git a/fichart/core/models.py b/fichart/core/models.py
-index bf979f3..5e50cb0 100644
---- a/fichart/core/models.py
-+++ b/fichart/core/models.py
-@@ -44,7 +44,7 @@ class Armadura(models.Model):
-     classe_de_armadura = models.IntegerField()
-     forca = models.IntegerField()
-     furtividade_desvantagem = models.BooleanField()
--    peso = models.IntegerField()
-+    peso = models.FloatField()
-     custo = models.IntegerField()
- 
-     class Meta:
-@@ -92,9 +92,9 @@ class EquipamentoDeAventura(models.Model):
-     descricao = models.TextField(blank=True, null=True)
-     custo = models.IntegerField()
-     peso = models.FloatField()
--    antecedente = models.ManyToManyField(Antecedente)
--    classe = models.ManyToManyField(Classe)
--    conjunto_equipamento = models.ManyToManyField(ConjuntoEquipamento)
-+    antecedente = models.ManyToManyField(Antecedente, blank=True)
-+    classe = models.ManyToManyField(Classe, blank=True)
-+    conjunto_equipamento = models.ManyToManyField(ConjuntoEquipamento, blank=True)
- 
-     class Meta:
-         db_table = 'equipamento_de_aventura'
-@@ -105,6 +105,7 @@ class EquipamentoDeAventura(models.Model):
- class Ferramenta(models.Model):
-     id_ferramenta = models.AutoField(primary_key=True)
-     nome_ferramenta = models.CharField()
-+    categoria = models.CharField(null=True,blank=True)
-     custo = models.IntegerField()
-     peso = models.IntegerField()
-     antecedente = models.ManyToManyField(Antecedente)
-@@ -201,15 +202,6 @@ class Personagem(models.Model):
-     inteligencia = models.IntegerField()
-     carisma = models.IntegerField()
-     constituicao = models.IntegerField()
--    altura = models.FloatField(blank=True, null=True)
--    peso = models.FloatField(blank=True, null=True)
--    cor_cabelo = models.CharField(blank=True, null=True)
--    cor_pele = models.CharField(blank=True, null=True)
--    cor_olhos = models.CharField(blank=True, null=True)
--    defeitos = models.CharField(blank=True, null=True)
--    traco_personalidade = models.CharField(blank=True, null=True)
--    ideais = models.CharField(blank=True, null=True)
--    ligacoes = models.CharField(blank=True, null=True)
-     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-     arma = models.ManyToManyField(Arma)
-     magia = models.ManyToManyField(Magia)
+diff --git a/change.txt b/change.txt
+index c399491..e69de29 100644
+--- a/change.txt
++++ b/change.txt
+@@ -1,885 +0,0 @@
+-diff --git a/fichart/core/models.py b/fichart/core/models.py
+-index bf979f3..5e50cb0 100644
+---- a/fichart/core/models.py
+-+++ b/fichart/core/models.py
+-@@ -44,7 +44,7 @@ class Armadura(models.Model):
+-     classe_de_armadura = models.IntegerField()
+-     forca = models.IntegerField()
+-     furtividade_desvantagem = models.BooleanField()
+--    peso = models.IntegerField()
+-+    peso = models.FloatField()
+-     custo = models.IntegerField()
+- 
+-     class Meta:
+-@@ -92,9 +92,9 @@ class EquipamentoDeAventura(models.Model):
+-     descricao = models.TextField(blank=True, null=True)
+-     custo = models.IntegerField()
+-     peso = models.FloatField()
+--    antecedente = models.ManyToManyField(Antecedente)
+--    classe = models.ManyToManyField(Classe)
+--    conjunto_equipamento = models.ManyToManyField(ConjuntoEquipamento)
+-+    antecedente = models.ManyToManyField(Antecedente, blank=True)
+-+    classe = models.ManyToManyField(Classe, blank=True)
+-+    conjunto_equipamento = models.ManyToManyField(ConjuntoEquipamento, blank=True)
+- 
+-     class Meta:
+-         db_table = 'equipamento_de_aventura'
+-@@ -105,6 +105,7 @@ class EquipamentoDeAventura(models.Model):
+- class Ferramenta(models.Model):
+-     id_ferramenta = models.AutoField(primary_key=True)
+-     nome_ferramenta = models.CharField()
+-+    categoria = models.CharField(null=True,blank=True)
+-     custo = models.IntegerField()
+-     peso = models.IntegerField()
+-     antecedente = models.ManyToManyField(Antecedente)
+-@@ -201,15 +202,6 @@ class Personagem(models.Model):
+-     inteligencia = models.IntegerField()
+-     carisma = models.IntegerField()
+-     constituicao = models.IntegerField()
+--    altura = models.FloatField(blank=True, null=True)
+--    peso = models.FloatField(blank=True, null=True)
+--    cor_cabelo = models.CharField(blank=True, null=True)
+--    cor_pele = models.CharField(blank=True, null=True)
+--    cor_olhos = models.CharField(blank=True, null=True)
+--    defeitos = models.CharField(blank=True, null=True)
+--    traco_personalidade = models.CharField(blank=True, null=True)
+--    ideais = models.CharField(blank=True, null=True)
+--    ligacoes = models.CharField(blank=True, null=True)
+-     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+-     arma = models.ManyToManyField(Arma)
+-     magia = models.ManyToManyField(Magia)
+-diff --git a/fichart/core/templates/templateEscolhaEquipamentos.html b/fichart/core/templates/templateEscolhaEquipamentos.html
+-index 8a247d7..46199a4 100644
+---- a/fichart/core/templates/templateEscolhaEquipamentos.html
+-+++ b/fichart/core/templates/templateEscolhaEquipamentos.html
+-@@ -209,7 +209,7 @@
+-             margin-bottom: 40px;
+-         }
+- 
+--        #iconeMudarAvatar{
+-+        #iconeMudarAvatar {
+-             top: 6%;
+-             right: 8%;
+-             color: #282828;
+-@@ -261,7 +261,8 @@
+- 
+-                 <div class="row">
+-                     <div class="col-6">
+--                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
+-+                        <div class="overflow-x-hidden scroll-custom scroll-thin"
+-+                            style="max-height: 78vh;overflow-y: scroll;height: 78vh">
+-                             <div class="list-group pe-2" id="seletorArma">
+- 
+-                                 <div id="listaArmas mb-3">
+-@@ -337,25 +338,26 @@
+-                                                                     title="armadura tipo {{nome_tipo_armadura}}"> -
+-                                                                     {{armadura.nome }}</span>
+- 
+--                                                                <i class="fa-solid fa-chevron-down arrow-icon"></i>
+-+                                                                <i
+-+                                                                    class="fa-solid fa-chevron-down arrow-icon small"></i>
+-                                                             </button>
+- 
+-                                                             <button
+--                                                                class="btn btn-outline-light btn-sm text-capitalize class escolherArmadura"
+-+                                                                class="btn btn-outline-light btn-sm escolherArmadura"
+-                                                                 data-armadura-id="{{armadura.id_armadura}}"
+-                                                                 type="button" data-bs-toggle="collapse"
+-                                                                 data-bs-target="#collapseExample" aria-expanded="false"
+-                                                                 aria-controls="collapseExample">
+--                                                                +
+-+                                                                <i class="fa-solid fa-plus"></i>
+-                                                             </button>
+- 
+-                                                             <button style="display: none;"
+--                                                                class="btn btn-outline-light btn-sm text-capitalize class removerArmadura"
+-+                                                                class="btn btn-outline-light btn-sm removerArmadura"
+-                                                                 data-armadura-id="{{armadura.id_armadura}}"
+-                                                                 type="button" data-bs-toggle="collapse"
+-                                                                 data-bs-target="#collapseExample" aria-expanded="false"
+-                                                                 aria-controls="collapseExample">
+--                                                                -
+-+                                                                <i class="fa-solid fa-minus"></i>
+-                                                             </button>
+-                                                         </p>
+- 
+-@@ -363,7 +365,7 @@
+-                                                         <div class="collapse"
+-                                                             id="collapseArmadura{{ armadura.id_armadura }}">
+-                                                             <div class="card card-body mt-1 bg-secondary">
+--                                                                {{ armadura.descricao }}
+-+                                                                {{ armadura.descricao|linebreaks }}
+-                                                             </div>
+-                                                         </div>
+-                                                     </div>
+-@@ -376,51 +378,119 @@
+-                                     {% endif %}
+-                                     {% endfor %}
+-                                 </div>
+--                                <div id="listaArmas mb-3">
+--                                    <h3>Ferramentas</h3>
+--                                    {% for ferramenta in ferramentaObjects %}
+--                                    {% if ferramenta %}
+--                                    <div class="mb-2" id="ferramenta{{ferramenta.id_ferramenta}}">
+- 
+--                                        <p class="d-inline-flex gap-1">
+--                                            <!-- Collapse toggle button -->
+-+                                <div id="listaConjuntoEquipamentos" class="mb-3">
+-+                                    <h3>Conjunto de Equipamentos</h3>
+-+
+-+                                    {% for conjunto in conjuntoEquipamentoObjects %}
+-+                                    {% if conjunto %}
+-+                                    <div class="mb-3" id="conjunto{{ conjunto.id_conjunto_equipamento }}">
+-+
+-+                                        <p class="d-inline-flex gap-1 w-100">
+-+                                            <!-- Botão que abre/fecha os detalhes do conjunto -->
+-                                             <button
+--                                                class="btn text-light d-flex gap-1 justify-content-between align-items-center text-capitalize"
+--                                                type="button" id="Ferramenta{{ferramenta.id_ferramenta}}"
+--                                                data-bs-toggle="collapse"
+--                                                data-bs-target="#collapseferramenta{{ ferramenta.id_ferramenta }}"
+-+                                                class="btn text-light d-flex gap-2 justify-content-between align-items-center text-capitalize "
+-+                                                type="button" data-bs-toggle="collapse"
+-+                                                data-bs-target="#collapseConjunto{{ conjunto.id_conjunto_equipamento }}"
+-                                                 aria-expanded="false"
+--                                                aria-controls="collapseferramenta{{ ferramenta.id_ferramenta }}">
+--                                                <span data-bs-toggle="tooltip" data-bs-placement="botton"
+--                                                    title="Ferramenta">{{
+--                                                    ferramenta.nome }}</span>
+-+                                                aria-controls="collapseConjunto{{ conjunto.id_conjunto_equipamento }}">
+-+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+-+                                                    title="Clique para ver o conteúdo do conjunto">
+-+                                                    {{ conjunto.nome }}
+-+                                                </span>
+-                                                 <i class="fa-solid fa-chevron-down arrow-icon"></i>
+-                                             </button>
+- 
+-+                                            <!-- Botão para escolher o conjunto inteiro -->
+-                                             <button
+--                                                class="btn btn-outline-light btn-sm text-capitalize class escolherArma"
+--                                                data-Ferramenta-id="{{Ferramenta.id_Ferramenta}}" type="button"
+--                                                data-bs-toggle="collapse" data-bs-target="#collapseExample"
+--                                                aria-expanded="false" aria-controls="collapseExample">
+-+                                                class="btn btn-outline-light btn-sm text-capitalize class escolherConjunto "
+-+                                                data-conjunto-id="{{ conjunto.id_conjunto_equipamento }}" type="button">
+-                                                 +
+-                                             </button>
+- 
+--                                            <button style="display: none;"
+--                                                class="btn btn-outline-light btn-sm text-capitalize class removerArma"
+--                                                data-ferramenta-id="{{Ferramenta.id_Ferramenta}}" type="button"
+--                                                data-bs-toggle="collapse" data-bs-target="#collapseExample"
+--                                                aria-expanded="false" aria-controls="collapseExample">
+--                                                -
+-+                                            <!-- Botão para remover (inicia oculto, aparece após escolher) -->
+-+                                            <button
+-+                                                class="btn btn-outline-light btn-sm text-capitalize class removerConjunto "
+-+                                                data-conjunto-id="{{ conjunto.id_conjunto_equipamento }}" type="button"
+-+                                                style="display: none;">
+-+                                                <i class="fa-solid fa-minus"></i>
+-                                             </button>
+-                                         </p>
+- 
+--                                        <!-- Collapse content -->
+--                                        <div class="collapse" id="collapseferramenta{{ Ferramenta.id_Ferramenta }}">
+--                                            <div class="card card-body mt-1 bg-secondary">
+--                                                {{ Ferramenta.custo }}
+-+                                        <!-- Conteúdo expansível com a descrição e itens -->
+-+                                        <div class="collapse"
+-+                                            id="collapseConjunto{{ conjunto.id_conjunto_equipamento }}">
+-+                                            <div class="card card-body mt-1 bg-secondary text-light">
+-+                                                {{conjunto.descricao|linebreaks }}</p>
+-                                             </div>
+-                                         </div>
+-                                     </div>
+-+                                    {% endif %}
+-+                                    {% endfor %}
+-+                                </div>
+-+
+-+                                <div id="listaFerramentas" class="mb-4">
+-+                                    <h3>Ferramentas</h3>
+-+
+-+                                    {% for nome_categoria, ferramentas in ferramentasObjects.items %}
+-+                                    {% if ferramentas %}
+-+
+-+                                    <ul>
+-+
+-+                                        <li>{{ nome_categoria }}</li>
+-+
+-+
+-+                                        <ul class="list-unstyled ms-3">
+-+                                            {% for ferramenta in ferramentas %}
+-+                                            <li>
+-+                                                <div id="ferramenta{{ ferramenta.id_ferramenta }}">
+-+
+-+                                                    <p class="d-inline-flex gap-1 w-100 align-items-center">
+-+
+-+                                                        <!-- Botão expansível com nome da ferramenta -->
+-+                                                        <button
+-+                                                            class="btn text-light d-flex gap-2 justify-content-between align-items-center text-capitalize text-start"
+-+                                                            type="button" data-bs-toggle="collapse"
+-+                                                            data-bs-target="#collapseFerramenta{{ ferramenta.id_ferramenta }}"
+-+                                                            aria-expanded="false"
+-+                                                            aria-controls="collapseFerramenta{{ ferramenta.id_ferramenta }}">
+-+                                                            <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+-+                                                                title="Ferramenta • {{ nome_categoria }}">-
+-+                                                                {{ ferramenta.nome_ferramenta }}
+-+                                                            </span>
+-+                                                            <i class="fa-solid fa-chevron-down arrow-icon small"></i>
+-+                                                        </button>
+-+
+-+                                                        <!-- Botão + para escolher -->
+-+                                                        <button class="btn btn-outline-light btn-sm escolherFerramenta"
+-+                                                            data-ferramenta-id="{{ ferramenta.id_ferramenta }}"
+-+                                                            type="button">
+-+                                                            <i class="fa-solid fa-plus"></i>
+-+                                                        </button>
+-+
+-+                                                        <!-- Botão - (inicialmente oculto) -->
+-+                                                        <button class="btn btn-outline-light btn-sm removerFerramenta"
+-+                                                            data-ferramenta-id="{{ ferramenta.id_ferramenta }}"
+-+                                                            type="button" style="display: none;">
+-+                                                            <i class="fa-solid fa-minus"></i>
+-+                                                        </button>
+-+                                                    </p>
+-+
+-+                                                    <!-- Detalhes expansíveis -->
+-+                                                    <div class="collapse"
+-+                                                        id="collapseFerramenta{{ ferramenta.id_ferramenta }}">
+-+                                                        <div class="card card-body mt-1 bg-secondary text-light small">
+-+
+-+                                                            <p class="mb-1"><strong>Custo:</strong> {{ferramenta.custo}}</p>
+-+                                                            <p class="mb-0"><strong>Peso:</strong> {{ferramenta.peso|floatformat:1 }} lb</p>
+-+                                                            
+-+                                                        </div>
+-+                                                    </div>
+-+                                                </div>
+-+                                            </li>
+-+                                            {% endfor %}
+-+                                        </ul>
+-+                                    </ul>
+- 
+-                                     {% endif %}
+-                                     {% endfor %}
+-@@ -431,8 +501,8 @@
+-                     </div>
+- 
+- 
+--                    <div class="col-5 ms-5">
+--
+-+                    <div class="col-5 ms-5 overflow-x-hidden scroll-custom scroll-thin"
+-+                        style="max-height: 78vh;overflow-y: scroll;height: 78vh">
+- 
+-                         <h2>Equipamentos do Personagem</h2>
+- 
+-@@ -448,6 +518,18 @@
+- 
+-                             </div>
+-                         </div>
+-+                        <div class="overflow-x-hidden scroll-custom scroll-thin p-3" style="max-height: 78vh;">
+-+                            <h3>Conjunto de Equipamentos</h3>
+-+                            <div class=" mb-3" id="listaConjuntosEscolhidos">
+-+
+-+                            </div>
+-+                        </div>
+-+                        <div class="overflow-x-hidden scroll-custom scroll-thin p-3" style="max-height: 78vh;">
+-+                            <h3>Ferramentas</h3>
+-+                            <div class=" mb-3" id="listaFerramentaEscolhida">
+-+
+-+                            </div>
+-+                        </div>
+- 
+-                     </div>
+-                 </div>
+-@@ -502,232 +584,247 @@
+- </body>
+- 
+- <script>
+--
+-+    // === ARRAYS GLOBAIS ===
+-     let listaArmasEscolhidas = [];
+-+    let listaArmaduraEscolhida = [];
+-+    let listaConjuntosEscolhidos = [];
+-+    let listaFerramentaEscolhida = [];
+-+    let listaArmasAtuais = {{ listaArmasAtuais|default:"[]"|safe}};
+-+    let listaArmadurasAtuais = {{ listaArmadurasAtuais|default:"[]"|safe}};
+-+    let listaConjuntosAtuais = {{ listaConjuntosAtuais|default:"[]"|safe}};
+-+    let listaFerramentasAtuais = {{ listaFerramentasAtuais|default:"[]"|safe}};
+- 
+-     document.addEventListener("DOMContentLoaded", () => {
+- 
+--
+-+        // ==================== ARMAS ====================
+-         document.querySelectorAll(".escolherArma").forEach(button => {
+-             button.addEventListener("click", () => {
+--
+-                 const armaId = button.dataset.armaId;
+--                let ArmaOriginal = document.getElementById("arma" + armaId);
+--                let cloneArma = ArmaOriginal.cloneNode(true);
+--
+--                console.log(cloneArma);
+--
+-+                const original = document.getElementById("arma" + armaId);
+-+                if (!original || listaArmasEscolhidas.includes(armaId)) return;
+- 
+--                cloneArma.id = "cloneArma" + armaId;
+--
+--                cloneArma.querySelector(".escolherArma").remove();
+--                cloneArma.querySelector(".removerArma").style.display = "initial";
+--
+--                ArmaOriginal.style.display = "none";
+--
+--                document.getElementById("listaArmasEscolhidas").appendChild(cloneArma);
+-+                const clone = original.cloneNode(true);
+-+                clone.id = "cloneArma" + armaId;
+-+                clone.querySelector(".escolherArma")?.remove();
+-+                const btnRemove = clone.querySelector(".removerArma");
+-+                if (btnRemove) btnRemove.style.display = "inline-block";
+- 
+-+                original.style.display = "none";
+-+                document.getElementById("listaArmasEscolhidas").appendChild(clone);
+-                 listaArmasEscolhidas.push(armaId);
+--                document.cookie = "arma=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas));
+--
+--                const btnRemoveClone = cloneArma.querySelector(".removerArma");
+--                if (btnRemoveClone) {
+--                    btnRemoveClone.style.display = "initial";
+--                    btnRemoveClone.addEventListener("click", () => {
+--                        cloneArma.remove();
+--                        ArmaOriginal.style.display = "";
+--
+--                        const index = listaArmasEscolhidas.indexOf(armaId);
+--                        if (index > -1) {
+--                            listaArmasEscolhidas.splice(index, 1);
+--                        }
+--
+--                        document.cookie = "arma=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas));
+--                    });
+--                }
+-+                document.cookie = "armas=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas)) + "; path=/";
+-+
+-+                btnRemove.addEventListener("click", () => {
+-+                    clone.remove();
+-+                    original.style.display = "";
+-+                    listaArmasEscolhidas = listaArmasEscolhidas.filter(id => id !== armaId);
+-+                    document.cookie = "armas=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas)) + "; path=/";
+-+                });
+-             });
+-         });
+--    });
+--
+--    let listaArmaduraEscolhida = [];
+--
+--    document.addEventListener("DOMContentLoaded", () => {
+--        document.querySelectorAll(".escolherArmadura").forEach(button => {
+--            button.addEventListener("click", (e) => {
+--
+--                const armaduraId = button.dataset.armaduraId;
+--                let armaduraOriginal = document.getElementById("armadura" + armaduraId);
+--                let cloneArmadura = armaduraOriginal.cloneNode(true);
+--
+--                cloneArmadura.id = "cloneArmadura" + armaduraId;
+- 
+--                cloneArmadura.querySelector(".escolherArmadura").remove();
+--                cloneArmadura.querySelector(".removerArmadura").style.display = "initial";
+- 
+--                armaduraOriginal.style.display = "none";
+-+        listaArmasAtuais.forEach(id => {
+- 
+--                document.getElementById("listaArmaduraEscolhida").appendChild(cloneArmadura);
+--
+--                const btnRemoveClone = cloneArmadura.querySelector(".removerArmadura");
+--
+--
+--                listaArmaduraEscolhida.push(armaduraId);
+--
+--                document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscolhida));
+--
+--
+--                if (btnRemoveClone) {
+--                    btnRemoveClone.style.display = "initial";
+--                    btnRemoveClone.addEventListener("click", () => {
+--                        cloneArmadura.remove();
+--                        armaduraOriginal.style.display = "";
+-+            btn = document.querySelector(`[data-Arma-id="${id}"]`);
+-+            btn.click()
+-+        });
+- 
+--                        const index = listaArmaduraEscolhida.indexOf(armaduraId)
+-+        // ==================== ARMADURAS ====================
+-+        document.querySelectorAll(".escolherArmadura").forEach(button => {
+-+            button.addEventListener("click", () => {
+-+                const id = button.dataset.armaduraId;
+-+                const original = document.getElementById("armadura" + id);
+-+                if (!original || listaArmaduraEscolhida.includes(id)) return;
+-+
+-+                const clone = original.cloneNode(true);
+-+                clone.id = "cloneArmadura" + id;
+-+                clone.querySelector(".escolherArmadura")?.remove();
+-+                const btnRemove = clone.querySelector(".removerArmadura");
+-+                if (btnRemove) btnRemove.style.display = "inline-block";
+-+
+-+                original.style.display = "none";
+-+                document.getElementById("listaArmaduraEscolhida").appendChild(clone);
+-+                listaArmaduraEscolhida.push(id);
+-+                document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscolhida)) + "; path=/";
+-+
+-+                btnRemove.addEventListener("click", () => {
+-+                    clone.remove();
+-+                    original.style.display = "";
+-+                    listaArmaduraEscolhida = listaArmaduraEscolhida.filter(x => x !== id);
+-+                    document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscolhida)) + "; path=/";
+-+                });
+-+            });
+-+        });
+- 
+--                        if (index > -1) {
+--                            listaArmaduraEscolhida.splice(index, 1)
+--                        }
+-+        listaArmadurasAtuais.forEach(id => {
+- 
+--                        document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscoArmadura));
+--                    });
+--                }
+-+            btn = document.querySelector(`[data-armadura-id="${id}"]`);
+-+            btn.click()
+-+        });
+- 
+-+        // // ==================== CONJUNTOS DE EQUIPAMENTO ====================
+-+        // const restoreConjuntos = () => {
+-+        //     const cookie = document.cookie.split('; ').find(r => r.startsWith('conjuntoEquipamento='));
+-+        //     if (cookie) {
+-+        //         listaConjuntosEscolhidos = JSON.parse(decodeURIComponent(cookie.split('=')[1]));
+-+        //         listaConjuntosEscolhidos.forEach(id => {
+-+        //             const original = document.getElementById("conjunto" + id);
+-+        //             if (!original) return;
+-+
+-+        //             const clone = original.cloneNode(true);
+-+        //             clone.id = "cloneConjunto" + id;
+-+        //             clone.querySelector(".escolherConjunto")?.remove();
+-+        //             const btnRemove = clone.querySelector(".removerConjunto");
+-+        //             if (btnRemove) btnRemove.style.display = "inline-block";
+-+
+-+        //             original.style.display = "none";
+-+        //             document.getElementById("listaConjuntosEscolhidos").appendChild(clone);
+-+
+-+        //             btnRemove.addEventListener("click", () => {
+-+        //                 clone.remove();
+-+        //                 original.style.display = "";
+-+        //                 listaConjuntosEscolhidos = listaConjuntosEscolhidos.filter(x => x !== id);
+-+        //                 document.cookie = "conjuntoEquipamento=" + encodeURIComponent(JSON.stringify(listaConjuntosEscolhidos)) + "; path=/";
+-+        //             });
+-+        //         });
+-+        //     }
+-+        // };
+-+
+-+        // // Restaura primeiro
+-+        // restoreConjuntos();
+-+
+-+        // Depois adiciona os eventos normais
+-+        document.querySelectorAll(".escolherConjunto").forEach(button => {
+-+            button.addEventListener("click", () => {
+-+                const id = button.dataset.conjuntoId;  // ← CORRETO (dataset.conjuntoId)
+-+                if (listaConjuntosEscolhidos.includes(id)) return;
+-+
+-+                const original = document.getElementById("conjunto" + id);
+-+                if (!original) return;
+-+
+-+                const clone = original.cloneNode(true);
+-+                clone.id = "cloneConjunto" + id;
+-+                clone.querySelector(".escolherConjunto")?.remove();
+-+                const btnRemove = clone.querySelector(".removerConjunto");
+-+                if (btnRemove) btnRemove.style.display = "inline-block";
+-+
+-+                original.style.display = "none";
+-+                document.getElementById("listaConjuntosEscolhidos").appendChild(clone);
+-+                listaConjuntosEscolhidos.push(id);
+-+                document.cookie = "conjuntoEquipamento=" + encodeURIComponent(JSON.stringify(listaConjuntosEscolhidos)) + "; path=/";
+-+
+-+                btnRemove.addEventListener("click", () => {
+-+                    clone.remove();
+-+                    original.style.display = "";
+-+                    listaConjuntosEscolhidos = listaConjuntosEscolhidos.filter(x => x !== id);
+-+                    document.cookie = "conjuntoEquipamento=" + encodeURIComponent(JSON.stringify(listaConjuntosEscolhidos)) + "; path=/";
+-+                });
+-             });
+-         });
+--    });
+- 
+-+        listaConjuntosAtuais.forEach(id => {
+- 
+--    let listaFerramentaEscolhida = [];
+--
+--    document.addEventListener("DOMContentLoaded", () => {
+-+            btn = document.querySelector(`[data-conjunto-id="${id}"]`);
+-+            btn.click()
+-+        });
+- 
+--        // Escolher Truques
+-+        // ==================== FERRAMENTAS ====================
+-         document.querySelectorAll(".escolherFerramenta").forEach(button => {
+-             button.addEventListener("click", () => {
+--                const FerramentaId = button.dataset.ferramentaId;
+--                let FerramentaOriginal = document.getElementById("ferramenta" + ferramentaId);
+--                let cloneFerramenta = FerramentaOriginal.cloneNode(true);
+--
+--                cloneFerramenta.id = "cloneFerramenta" + ferramentaId;
+--
+--                cloneFerramenta.querySelector(".escolherFerramenta").remove();
+--                cloneFerramenta.querySelector(".removerFerramenta").style.display = "initial";
+--
+--                FerramentaOriginal.style.display = "none";
+--
+--                document.getElementById("listaFerramentaEscolhida").appendChild(cloneFerramenta);
+--
+--                listaFerramentaEscolhida.push(ferramentaId);
+--                document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida));
+--
+--                const btnRemoveClone = cloneFerramenta.querySelector(".removerFerramenta");
+--                if (btnRemoveClone) {
+--                    btnRemoveClone.style.display = "initial";
+--                    btnRemoveClone.addEventListener("click", () => {
+--                        cloneFerramenta.remove();
+--                        ferramentaOriginal.style.display = "";
+--
+--                        const index = listaFerramentaEscolhida.indexOf(ferramentaId);
+--                        if (index > -1) {
+--                            listaFerramentaEscolhida.splice(index, 1);
+--                        }
+--
+--                        document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida));
+--                    });
+--                }
+-+                const id = button.dataset.ferramentaId;
+-+                if (listaFerramentaEscolhida.includes(id)) return;
+-+
+-+                const original = document.getElementById("ferramenta" + id);
+-+                if (!original) return;
+-+
+-+                const clone = original.cloneNode(true);
+-+                clone.id = "cloneFerramenta" + id;
+-+                clone.querySelector(".escolherFerramenta")?.remove();
+-+                const btnRemove = clone.querySelector(".removerFerramenta");
+-+                if (btnRemove) btnRemove.style.display = "inline-block";
+-+
+-+                original.style.display = "none";
+-+                document.getElementById("listaFerramentaEscolhida").appendChild(clone);
+-+                listaFerramentaEscolhida.push(id);
+-+                document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida)) + "; path=/";
+-+
+-+                btnRemove.addEventListener("click", () => {
+-+                    clone.remove();
+-+                    original.style.display = "";
+-+                    listaFerramentaEscolhida = listaFerramentaEscolhida.filter(x => x !== id);
+-+                    document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida)) + "; path=/";
+-+                });
+-             });
+-         });
+--    });
+--
+- 
+- 
+--    function updateWizardProgress(completedStep) {
+--        // Atualiza as classes dos passos
+--        document.querySelectorAll('.wizard-step').forEach((step, index) => {
+--            const stepNumber = parseInt(step.dataset.step);
+-+        listaFerramentasAtuais.forEach(id => {
+- 
+--            step.classList.remove('active', 'completed');
+--
+--            if (stepNumber < completedStep) {
+--                step.classList.add('completed');
+--            } else if (stepNumber === completedStep) {
+--                step.classList.add('active');
+--            }
+-+            btn = document.querySelector(`[data-ferramenta-id="${id}"]`);
+-+            btn.click()
+-         });
+--    }
+--
+--    let playerNome = document.getElementById("id_nome");
+--
+--    playerNome.addEventListener("change", function () {
+--        localStorage.setItem("playerNome", this.value);
+--    })
+--
+--    // Criar um preview da imagem a ser enviada
+--    let inputAvatar = document.getElementById("id_avatar_personagem");
+--    const preview = document.getElementById("preview_avatar");
+--
+--    console.log(inputAvatar);
+--    
+--
+--    inputAvatar.addEventListener("change", function(){
+--        const image = this.files[0];
+--        
+--        
+--        if (!image){
+--            return;
+--        }
+--
+--        if (image.size >= 1756364.8 ){
+--            alert("Imagem grande demais");
+--            return;
+-+        // ==================== OUTROS (nome, avatar, wizard) ====================
+-+        const playerNomeInput = document.getElementById("id_nome");
+-+        if (playerNomeInput) {
+-+            playerNomeInput.value = localStorage.getItem("playerNome") || "";
+-+            playerNomeInput.addEventListener("change", () => {
+-+                localStorage.setItem("playerNome", playerNomeInput.value);
+-+            });
+-         }
+--        
+--        preview.src = URL.createObjectURL(image);
+--
+--        //Converter o dado bruto da URI em Base64
+--
+--        const reader = new FileReader();
+--        reader.onload = function(event){
+--            const base64 = event.target.result;
+--
+--            fetch(
+--                " {% url 'TelaClasses' %}",
+--                {
+- 
+--                    method : "POST",
+--                    headers : {
+--                        "X-CSRFToken":"{{ csrf_token }}",
+--                        "Content-Type": "application/json"
+--                    },
+--                    body : JSON.stringify({avatar : base64})          
+-+        const inputAvatar = document.getElementById("id_avatar_personagem");
+-+        const preview = document.getElementById("preview_avatar");
+-+        if (inputAvatar && preview) {
+-+            inputAvatar.addEventListener("change", function () {
+-+                const file = this.files[0];
+-+                if (file && file.size < 1756364.8) {
+-+                    preview.src = URL.createObjectURL(file);
+-+                }
+-+                else{
+-+                    alert("Imagem grande demais");
+-+                    return;
+-                 }
+--            );
+--        };
+--
+--        reader.readAsDataURL(image);
+--
+--    
+--    });
+- 
+--    // Inicialização
+--    document.addEventListener('DOMContentLoaded', function () {
+--        // Seleciona a primeira classe por padrão, se existir
+-+                //Converter o dado bruto da URI em Base64
+- 
+-+                const reader = new FileReader();
+-+                reader.onload = function (event) {
+-+                    const base64 = event.target.result;
+- 
+--        let playerNome = localStorage.getItem("playerNome") ?? "";
+-+                    fetch(
+-+                        " {% url 'mudarAvatar' %}",
+-+                        {
+- 
+--        playerName = document.getElementById("id_nome").value = playerNome;
+-+                            method: "POST",
+-+                            headers: {
+-+                                "X-CSRFToken": "{{ csrf_token }}",
+-+                                "Content-Type": "application/json"
+-+                            },
+-+                            body: JSON.stringify({ avatar: base64 })
+-+                        }
+-+                    );
+-+                };
+- 
+--        avatarExistente = "{{ avatar }}";
+-+                reader.readAsDataURL(file);
+-+            });
+-+        }
+- 
+--        if( avatarExistente != "" ){
+-+        const avatarExistente = "{{ avatar|escapejs }}";
+-+        if (avatarExistente && avatarExistente !== "") {
+-             preview.src = avatarExistente;
+--            
+-         }
+- 
+--        // Inicializa o wizard no passo 4
+-         updateWizardProgress(6);
+-     });
+-+
+-+    function updateWizardProgress(step) {
+-+        document.querySelectorAll('.wizard-step').forEach((el, i) => {
+-+            const s = parseInt(el.dataset.step);
+-+            el.classList.toggle('completed', s < step);
+-+            el.classList.toggle('active', s === step);
+-+        });
+-+    }
+- </script>
+- 
+- </html>
+-\ No newline at end of file
+-diff --git a/fichart/core/templates/templateEscolhaRaca.html b/fichart/core/templates/templateEscolhaRaca.html
+-index 8da799e..7972493 100644
+---- a/fichart/core/templates/templateEscolhaRaca.html
+-+++ b/fichart/core/templates/templateEscolhaRaca.html
+-@@ -469,7 +469,7 @@
+-             const base64 = event.target.result;
+- 
+-             fetch(
+--                " {% url 'TelaClasses' %}",
+-+                " {% url 'mudarAvatar' %}",
+-                 {
+- 
+-                     method : "POST",
+-diff --git a/fichart/core/templates/templateTelaAntecedentes.html b/fichart/core/templates/templateTelaAntecedentes.html
+-index d773694..3a4eb39 100644
+---- a/fichart/core/templates/templateTelaAntecedentes.html
+-+++ b/fichart/core/templates/templateTelaAntecedentes.html
+-@@ -410,7 +410,7 @@
+-             const base64 = event.target.result;
+- 
+-             fetch(
+--                " {% url 'TelaClasses' %}",
+-+                " {% url 'mudarAvatar' %}",
+-                 {
+- 
+-                     method : "POST",
+-diff --git a/fichart/core/templates/templateTelaAtributos.html b/fichart/core/templates/templateTelaAtributos.html
+-index 554f3bb..eebaa0c 100644
+---- a/fichart/core/templates/templateTelaAtributos.html
+-+++ b/fichart/core/templates/templateTelaAtributos.html
+-@@ -469,7 +469,7 @@
+-             const base64 = event.target.result;
+- 
+-             fetch(
+--                " {% url 'TelaClasses' %}",
+-+                " {% url 'mudarAvatar' %}",
+-                 {
+- 
+-                     method : "POST",
+-diff --git a/fichart/core/templates/templateTelaClasses.html b/fichart/core/templates/templateTelaClasses.html
+-index 7a0adef..5ed159e 100644
+---- a/fichart/core/templates/templateTelaClasses.html
+-+++ b/fichart/core/templates/templateTelaClasses.html
+-@@ -414,7 +414,7 @@
+-             const base64 = event.target.result;
+- 
+-             fetch(
+--                " {% url 'TelaClasses' %}",
+-+                " {% url 'mudarAvatar' %}",
+-                 {
+- 
+-                     method : "POST",
+-diff --git a/fichart/core/templates/templateTelaSelecaoMagia.html b/fichart/core/templates/templateTelaSelecaoMagia.html
+-index 82cefd6..f6eb214 100644
+---- a/fichart/core/templates/templateTelaSelecaoMagia.html
+-+++ b/fichart/core/templates/templateTelaSelecaoMagia.html
+-@@ -570,7 +570,7 @@
+-             const base64 = event.target.result;
+- 
+-             fetch(
+--                " {% url 'TelaClasses' %}",
+-+                " {% url 'mudarAvatar' %}",
+-                 {
+- 
+-                     method : "POST",
+-diff --git a/fichart/core/urls.py b/fichart/core/urls.py
+-index 1280730..f59ed12 100644
+---- a/fichart/core/urls.py
+-+++ b/fichart/core/urls.py
+-@@ -15,6 +15,7 @@ from .views.viewLogout import viewLogout
+- from .views.viewAssinarPlano import viewAssinarPlano
+- from .views.viewSucessoPagamento import viewSucessoPagamento
+- from .views.viewTelaEscolhaEquipamentos import viewTelaEquipamentos
+-+from .views.viewMudarAvatar import viewMudarAvatar
+- 
+- 
+- urlpatterns = [
+-@@ -29,5 +30,6 @@ urlpatterns = [
+-     path("logout/",viewLogout.as_view(), name="logout"),
+-     path("assinarPlano/", viewAssinarPlano.as_view(), name="assinarPlano"),
+-     path("sucessoPagamento/", viewSucessoPagamento.as_view(), name="sucessoPagamento"),
+--    path("selecaoEquipamento/", viewTelaEquipamentos.as_view(), name="TelaEquipamento")
+-+    path("selecaoEquipamento/", viewTelaEquipamentos.as_view(), name="TelaEquipamento"),
+-+    path("mudarAvatar/", viewMudarAvatar.as_view(), name="mudarAvatar")
+- ]
+-diff --git a/fichart/core/views/viewTelaEscolhaEquipamentos.py b/fichart/core/views/viewTelaEscolhaEquipamentos.py
+-index f7f8b03..d73fb28 100644
+---- a/fichart/core/views/viewTelaEscolhaEquipamentos.py
+-+++ b/fichart/core/views/viewTelaEscolhaEquipamentos.py
+-@@ -3,6 +3,8 @@ from django.views import View
+- from django.http import HttpResponse
+- from django.shortcuts import render, redirect
+- from ..forms import nomeForm
+-+import json
+-+from urllib.parse import unquote
+- from core.models import Arma, Armadura, TipoArmadura, ConjuntoEquipamento, EquipamentoDeAventura, Ferramenta
+- 
+- 
+-@@ -11,28 +13,36 @@ class viewTelaEquipamentos(LoginRequiredMixin, View):
+-     def get(self, request):
+-         
+-         classeAtual = request.COOKIES.get("classe")
+--        print(classeAtual)
+-+        listaArmasAtuais = unquote(request.COOKIES.get("armas",""))
+-+        listaArmadurasAtuais = unquote(request.COOKIES.get("armadura",""))
+-+        listaConjuntosAtuais = unquote(request.COOKIES.get("conjuntoEquipamento",""))
+-+        listaFerramentasAtuais = unquote(request.COOKIES.get("ferramenta",""))
+-+        
+-         armaObjects = Arma.objects.all()
+- 
+--        tipo_armaduraobjects = TipoArmadura.objects.all().filter(classe__nome = classeAtual)
+--
+--
+-         armaduraObjects = Armadura.objects.all()
+-         
+-         listaArmaduras = {
+--                        "Leves":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'Leve'),
+--                        "Medias":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'Media'),
+--                        "Pesadas":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'Pesada'),
+-+            "Leves":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'LEVE'),
+-+            "Medias":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'MEDIA'),
+-+            "Pesadas":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'PESADA'),
+-         }
+--
+--        
+-+        # conjuntoEquipamentoObjects = ConjuntoEquipamento.objects.all().filter(classe__nome = classeAtual)
+-+        conjuntoEquipamentoObjects = ConjuntoEquipamento.objects.all()
+-         
+--        conjuntoEquipamentoObjects = ConjuntoEquipamento.objects.all().filter(classe__nome = classeAtual)
+--
+-         equipamentoDeAventuraObjects = EquipamentoDeAventura.objects.all().filter(classe__nome = classeAtual)
+-         
+--        ferramentaObjects = Ferramenta.objects.all().filter(classe__nome = classeAtual)
+-+        ferramenta = Ferramenta.objects.all()
+-+        
+-+        categoriasFerramentas = ferramenta.values_list("categoria", flat=True).distinct()
+-+        
+-+        ferramentasObjects = {
+-+            nomecategoria : ferramenta.filter(categoria = nomecategoria)
+-+            for nomecategoria in categoriasFerramentas
+-+            
+-+        }
+-         
+-+        print(ferramentasObjects)
+-         form = nomeForm()
+-         
+-         avatarAtual = request.session.get("avatar","")
+-@@ -43,8 +53,12 @@ class viewTelaEquipamentos(LoginRequiredMixin, View):
+-             'armaduraObjects':listaArmaduras,
+-             "conjuntoEquipamentoObjects":conjuntoEquipamentoObjects, 
+-             "equipamentoDeAventuraObjects":equipamentoDeAventuraObjects, 
+--            "ferramentasobjects":ferramentaObjects,
+--            "avatar":avatarAtual
+-+            "ferramentasObjects":ferramentasObjects,
+-+            "avatar":avatarAtual,
+-+            "listaArmasAtuais":listaArmasAtuais,
+-+            "listaArmadurasAtuais": listaArmadurasAtuais,
+-+            "listaConjuntosAtuais":listaConjuntosAtuais,
+-+            "listaFerramentasAtuais": listaFerramentasAtuais
+-         }
+-         
+-         return render(request, "templateEscolhaEquipamentos.html", context)
+-\ No newline at end of file
 diff --git a/fichart/core/templates/templateEscolhaEquipamentos.html b/fichart/core/templates/templateEscolhaEquipamentos.html
-index 8a247d7..46199a4 100644
+index a48ef7e..a227867 100644
 --- a/fichart/core/templates/templateEscolhaEquipamentos.html
 +++ b/fichart/core/templates/templateEscolhaEquipamentos.html
-@@ -209,7 +209,7 @@
-             margin-bottom: 40px;
+@@ -683,7 +683,7 @@
+         listaArmadurasAtuais.forEach(id => {
+ 
+             btn = document.querySelector(`[data-armadura-id="${id}"]`);
+-            btn.click()
++            btn.click();
+         });
+ 
+         // // ==================== CONJUNTOS DE EQUIPAMENTO ====================
+diff --git a/fichart/core/templates/templateEscolhaRaca.html b/fichart/core/templates/templateEscolhaRaca.html
+index 60b5281..251653f 100644
+--- a/fichart/core/templates/templateEscolhaRaca.html
++++ b/fichart/core/templates/templateEscolhaRaca.html
+@@ -219,7 +219,7 @@
          }
  
--        #iconeMudarAvatar{
-+        #iconeMudarAvatar {
-             top: 6%;
+         #descricaoRaca {
+-            overflow-y: scroll;
++            white-space: pre-line;
+         }
+ 
+         #iconeRaca {
+@@ -233,6 +233,7 @@
              right: 8%;
              color: #282828;
-@@ -261,7 +261,8 @@
+         }
++
+     </style>
+ </head>
+ 
+@@ -277,16 +278,16 @@
+                 </div>
  
                  <div class="row">
-                     <div class="col-6">
--                        <div class="overflow-x-hidden scroll-custom scroll-thin" style="max-height: 78vh;">
-+                        <div class="overflow-x-hidden scroll-custom scroll-thin"
-+                            style="max-height: 78vh;overflow-y: scroll;height: 78vh">
-                             <div class="list-group pe-2" id="seletorArma">
- 
-                                 <div id="listaArmas mb-3">
-@@ -337,25 +338,26 @@
-                                                                     title="armadura tipo {{nome_tipo_armadura}}"> -
-                                                                     {{armadura.nome }}</span>
- 
--                                                                <i class="fa-solid fa-chevron-down arrow-icon"></i>
-+                                                                <i
-+                                                                    class="fa-solid fa-chevron-down arrow-icon small"></i>
-                                                             </button>
- 
-                                                             <button
--                                                                class="btn btn-outline-light btn-sm text-capitalize class escolherArmadura"
-+                                                                class="btn btn-outline-light btn-sm escolherArmadura"
-                                                                 data-armadura-id="{{armadura.id_armadura}}"
-                                                                 type="button" data-bs-toggle="collapse"
-                                                                 data-bs-target="#collapseExample" aria-expanded="false"
-                                                                 aria-controls="collapseExample">
--                                                                +
-+                                                                <i class="fa-solid fa-plus"></i>
-                                                             </button>
- 
-                                                             <button style="display: none;"
--                                                                class="btn btn-outline-light btn-sm text-capitalize class removerArmadura"
-+                                                                class="btn btn-outline-light btn-sm removerArmadura"
-                                                                 data-armadura-id="{{armadura.id_armadura}}"
-                                                                 type="button" data-bs-toggle="collapse"
-                                                                 data-bs-target="#collapseExample" aria-expanded="false"
-                                                                 aria-controls="collapseExample">
--                                                                -
-+                                                                <i class="fa-solid fa-minus"></i>
-                                                             </button>
-                                                         </p>
- 
-@@ -363,7 +365,7 @@
-                                                         <div class="collapse"
-                                                             id="collapseArmadura{{ armadura.id_armadura }}">
-                                                             <div class="card card-body mt-1 bg-secondary">
--                                                                {{ armadura.descricao }}
-+                                                                {{ armadura.descricao|linebreaks }}
-                                                             </div>
-                                                         </div>
-                                                     </div>
-@@ -376,51 +378,119 @@
-                                     {% endif %}
-                                     {% endfor %}
-                                 </div>
--                                <div id="listaArmas mb-3">
--                                    <h3>Ferramentas</h3>
--                                    {% for ferramenta in ferramentaObjects %}
--                                    {% if ferramenta %}
--                                    <div class="mb-2" id="ferramenta{{ferramenta.id_ferramenta}}">
- 
--                                        <p class="d-inline-flex gap-1">
--                                            <!-- Collapse toggle button -->
-+                                <div id="listaConjuntoEquipamentos" class="mb-3">
-+                                    <h3>Conjunto de Equipamentos</h3>
-+
-+                                    {% for conjunto in conjuntoEquipamentoObjects %}
-+                                    {% if conjunto %}
-+                                    <div class="mb-3" id="conjunto{{ conjunto.id_conjunto_equipamento }}">
-+
-+                                        <p class="d-inline-flex gap-1 w-100">
-+                                            <!-- Botão que abre/fecha os detalhes do conjunto -->
-                                             <button
--                                                class="btn text-light d-flex gap-1 justify-content-between align-items-center text-capitalize"
--                                                type="button" id="Ferramenta{{ferramenta.id_ferramenta}}"
--                                                data-bs-toggle="collapse"
--                                                data-bs-target="#collapseferramenta{{ ferramenta.id_ferramenta }}"
-+                                                class="btn text-light d-flex gap-2 justify-content-between align-items-center text-capitalize "
-+                                                type="button" data-bs-toggle="collapse"
-+                                                data-bs-target="#collapseConjunto{{ conjunto.id_conjunto_equipamento }}"
-                                                 aria-expanded="false"
--                                                aria-controls="collapseferramenta{{ ferramenta.id_ferramenta }}">
--                                                <span data-bs-toggle="tooltip" data-bs-placement="botton"
--                                                    title="Ferramenta">{{
--                                                    ferramenta.nome }}</span>
-+                                                aria-controls="collapseConjunto{{ conjunto.id_conjunto_equipamento }}">
-+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom"
-+                                                    title="Clique para ver o conteúdo do conjunto">
-+                                                    {{ conjunto.nome }}
-+                                                </span>
-                                                 <i class="fa-solid fa-chevron-down arrow-icon"></i>
-                                             </button>
- 
-+                                            <!-- Botão para escolher o conjunto inteiro -->
-                                             <button
--                                                class="btn btn-outline-light btn-sm text-capitalize class escolherArma"
--                                                data-Ferramenta-id="{{Ferramenta.id_Ferramenta}}" type="button"
--                                                data-bs-toggle="collapse" data-bs-target="#collapseExample"
--                                                aria-expanded="false" aria-controls="collapseExample">
-+                                                class="btn btn-outline-light btn-sm text-capitalize class escolherConjunto "
-+                                                data-conjunto-id="{{ conjunto.id_conjunto_equipamento }}" type="button">
-                                                 +
-                                             </button>
- 
--                                            <button style="display: none;"
--                                                class="btn btn-outline-light btn-sm text-capitalize class removerArma"
--                                                data-ferramenta-id="{{Ferramenta.id_Ferramenta}}" type="button"
--                                                data-bs-toggle="collapse" data-bs-target="#collapseExample"
--                                                aria-expanded="false" aria-controls="collapseExample">
--                                                -
-+                                            <!-- Botão para remover (inicia oculto, aparece após escolher) -->
-+                                            <button
-+                                                class="btn btn-outline-light btn-sm text-capitalize class removerConjunto "
-+                                                data-conjunto-id="{{ conjunto.id_conjunto_equipamento }}" type="button"
-+                                                style="display: none;">
-+                                                <i class="fa-solid fa-minus"></i>
-                                             </button>
-                                         </p>
- 
--                                        <!-- Collapse content -->
--                                        <div class="collapse" id="collapseferramenta{{ Ferramenta.id_Ferramenta }}">
--                                            <div class="card card-body mt-1 bg-secondary">
--                                                {{ Ferramenta.custo }}
-+                                        <!-- Conteúdo expansível com a descrição e itens -->
-+                                        <div class="collapse"
-+                                            id="collapseConjunto{{ conjunto.id_conjunto_equipamento }}">
-+                                            <div class="card card-body mt-1 bg-secondary text-light">
-+                                                {{conjunto.descricao|linebreaks }}</p>
-                                             </div>
-                                         </div>
+-                    <!-- Coluna Esquerda - Seleção de Classe -->
++                    <!-- Coluna Esquerda - Seleção de Raca -->
+                     <div class="col-12 col-md-6 mb-3">
+-                        <div class="scroll-custom overflow-x-hidden pe-2" style="max-height: 78vh; overflow-y: auto;">
++                        <div class="scroll-custom overflow-x-hidden pe-2" style="max-height: 88vh; overflow-y: scroll;height: 88vh;">
+                             <div class="list-group">
+-                                {% for classe in classes %}
++                                {% for raca in racas %}
+                                 <a href="#"
+-                                    class="mb-3 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action classe-option"
+-                                    data-class-id="{{classe.id_classe}}">
++                                    class="mb-3 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action raca-option"
++                                    data-class-id="{{raca.id_raca}}">
+                                     <div>
+-                                        <h6 class="mb-1 fs-5"> {{ classe.nome }} </h6>
++                                        <h6 class="mb-1 fs-5"> {{ raca.nome }} </h6>
                                      </div>
-+                                    {% endif %}
-+                                    {% endfor %}
-+                                </div>
-+
-+                                <div id="listaFerramentas" class="mb-4">
-+                                    <h3>Ferramentas</h3>
-+
-+                                    {% for nome_categoria, ferramentas in ferramentasObjects.items %}
-+                                    {% if ferramentas %}
-+
-+                                    <ul>
-+
-+                                        <li>{{ nome_categoria }}</li>
-+
-+
-+                                        <ul class="list-unstyled ms-3">
-+                                            {% for ferramenta in ferramentas %}
-+                                            <li>
-+                                                <div id="ferramenta{{ ferramenta.id_ferramenta }}">
-+
-+                                                    <p class="d-inline-flex gap-1 w-100 align-items-center">
-+
-+                                                        <!-- Botão expansível com nome da ferramenta -->
-+                                                        <button
-+                                                            class="btn text-light d-flex gap-2 justify-content-between align-items-center text-capitalize text-start"
-+                                                            type="button" data-bs-toggle="collapse"
-+                                                            data-bs-target="#collapseFerramenta{{ ferramenta.id_ferramenta }}"
-+                                                            aria-expanded="false"
-+                                                            aria-controls="collapseFerramenta{{ ferramenta.id_ferramenta }}">
-+                                                            <span data-bs-toggle="tooltip" data-bs-placement="bottom"
-+                                                                title="Ferramenta • {{ nome_categoria }}">-
-+                                                                {{ ferramenta.nome_ferramenta }}
-+                                                            </span>
-+                                                            <i class="fa-solid fa-chevron-down arrow-icon small"></i>
-+                                                        </button>
-+
-+                                                        <!-- Botão + para escolher -->
-+                                                        <button class="btn btn-outline-light btn-sm escolherFerramenta"
-+                                                            data-ferramenta-id="{{ ferramenta.id_ferramenta }}"
-+                                                            type="button">
-+                                                            <i class="fa-solid fa-plus"></i>
-+                                                        </button>
-+
-+                                                        <!-- Botão - (inicialmente oculto) -->
-+                                                        <button class="btn btn-outline-light btn-sm removerFerramenta"
-+                                                            data-ferramenta-id="{{ ferramenta.id_ferramenta }}"
-+                                                            type="button" style="display: none;">
-+                                                            <i class="fa-solid fa-minus"></i>
-+                                                        </button>
-+                                                    </p>
-+
-+                                                    <!-- Detalhes expansíveis -->
-+                                                    <div class="collapse"
-+                                                        id="collapseFerramenta{{ ferramenta.id_ferramenta }}">
-+                                                        <div class="card card-body mt-1 bg-secondary text-light small">
-+
-+                                                            <p class="mb-1"><strong>Custo:</strong> {{ferramenta.custo}}</p>
-+                                                            <p class="mb-0"><strong>Peso:</strong> {{ferramenta.peso|floatformat:1 }} lb</p>
-+                                                            
-+                                                        </div>
-+                                                    </div>
-+                                                </div>
-+                                            </li>
-+                                            {% endfor %}
-+                                        </ul>
-+                                    </ul>
+                                 </a>
+                                 {% endfor %}
+@@ -296,11 +297,11 @@
  
-                                     {% endif %}
-                                     {% endfor %}
-@@ -431,8 +501,8 @@
-                     </div>
- 
- 
--                    <div class="col-5 ms-5">
--
-+                    <div class="col-5 ms-5 overflow-x-hidden scroll-custom scroll-thin"
-+                        style="max-height: 78vh;overflow-y: scroll;height: 78vh">
- 
-                         <h2>Equipamentos do Personagem</h2>
- 
-@@ -448,6 +518,18 @@
- 
+                     <!-- Coluna Central - Ícone + Descrição -->
+                     <div class="col-12 col-md-6 mb-3">
+-                        <div class="scroll-custom overflow-x-hidden p-1" style="max-height: 78vh; overflow-y: auto;">
++                        <div class="scroll-custom overflow-x-hidden p-1" style="max-height: 88vh; overflow-y: scroll;height: 88vh;">
+                             <div class="card-body text-center">
+-                                <img id="iconeClasse" src="" alt="Ícone da Classe"
++                                <img id="iconeRaca" src="" alt="Ícone da Raca"
+                                     class="avatar-img img-fluid mb-3 rounded-5">
+-                                <p id="descricaoClasse" class="lead mt-3 text-start fs-6">
++                                <p id="descricaoRaca" class="lead mt-3 text-start fs-6">
+                                 </p>
                              </div>
                          </div>
-+                        <div class="overflow-x-hidden scroll-custom scroll-thin p-3" style="max-height: 78vh;">
-+                            <h3>Conjunto de Equipamentos</h3>
-+                            <div class=" mb-3" id="listaConjuntosEscolhidos">
-+
-+                            </div>
-+                        </div>
-+                        <div class="overflow-x-hidden scroll-custom scroll-thin p-3" style="max-height: 78vh;">
-+                            <h3>Ferramentas</h3>
-+                            <div class=" mb-3" id="listaFerramentaEscolhida">
-+
-+                            </div>
-+                        </div>
+@@ -375,7 +376,7 @@
+     {% endfor %}
+             };
  
-                     </div>
-                 </div>
-@@ -502,232 +584,247 @@
- </body>
+-    // Função para atualizar a classe selecionada
++    // Função para atualizar a raca selecionada
+     function updateSelectedClass(racaId) {
  
+         const racaData = racasData[racaId];
+@@ -386,7 +387,7 @@
+         console.log(racaData)
+ 
+         if (racaData) {
+-            document.getElementById('descricaoRaca').textContent = racaData.description;
++            document.getElementById('descricaoRaca').innerText = racaData.description;
+             document.getElementById("iconeRaca").src = racaData.icone;
+ 
+             const container = document.getElementById("containerListaSubracas");
+@@ -494,7 +495,7 @@
+             // Adiciona active no item clicado
+             this.classList.add('active');
+ 
+-            // Atualiza os dados da classe
++            // Atualiza os dados da raca
+             const racaId = this.dataset.classId;
+             updateSelectedClass(racaId);
+ 
+@@ -503,7 +504,7 @@
+     });
+ 
+     function updateWizardProgress(completedStep) {
+-        // Atualiza as classes dos passos
++        // Atualiza as raca dos passos
+         document.querySelectorAll('.wizard-step').forEach((step, index) => {
+             const stepNumber = parseInt(step.dataset.step);
+ 
+@@ -572,7 +573,7 @@
+ 
+     // Inicialização
+     document.addEventListener('DOMContentLoaded', function () {
+-        // Seleciona a primeira classe por padrão, se existir
++        // Seleciona a primeira raca por padrão, se existir
+ 
+ 
+         let playerNome = localStorage.getItem("playerNome") ?? "";
+diff --git a/fichart/core/templates/templateTelaAntecedentes.html b/fichart/core/templates/templateTelaAntecedentes.html
+index 93bddd0..3a1ffde 100644
+--- a/fichart/core/templates/templateTelaAntecedentes.html
++++ b/fichart/core/templates/templateTelaAntecedentes.html
+@@ -148,6 +148,10 @@
+             color: #282828;
+         }
+ 
++        #descricaoAntecedente {
++            white-space: pre-line;
++        }
++
+         /* Responsive adjustments */
+         @media (max-width: 768px) {
+             .wizard-step .step-label {
+@@ -327,7 +331,7 @@
+         console.log(antecedenteData)
+ 
+         if (antecedenteData) {
+-            document.getElementById('descricaoAntecedente').textContent = antecedenteData.description;
++            document.getElementById('descricaoAntecedente').innerText = antecedenteData.description;
+             document.getElementById("iconeAntecedente").src = antecedenteData.icone;
+         }
+ 
+diff --git a/fichart/core/templates/templateTelaAtributos.html b/fichart/core/templates/templateTelaAtributos.html
+index d82c030..1f856b4 100644
+--- a/fichart/core/templates/templateTelaAtributos.html
++++ b/fichart/core/templates/templateTelaAtributos.html
+@@ -337,7 +337,7 @@
+ 
+                         {% for nome, label in atributos.items %}
+                         <div class="text-dark d-flex flex-column justify-content-center align-items-center rounded-5"
+-                            style="padding: 10px; width: 25%; background-color: #D9D9D9;">
++                            style="padding: 10px; width: 17vh; background-color: #D9D9D9;">
+ 
+                             <span id="modificador_{{ nome }}"
+                                 style="background-color: #FFFFFF; padding:1px 10px; font-size: 1.5rem;"
+diff --git a/fichart/core/templates/templateTelaClasses.html b/fichart/core/templates/templateTelaClasses.html
+index d97a846..e69dd4d 100644
+--- a/fichart/core/templates/templateTelaClasses.html
++++ b/fichart/core/templates/templateTelaClasses.html
+@@ -169,6 +169,7 @@
+ 
+             #descricaoClasse {
+                 font-size: 1rem !important;
++                white-space: pre-line;
+             }
+         }
+ 
+@@ -324,7 +325,7 @@
+         console.log(classeData)
+ 
+         if (classeData) {
+-            document.getElementById('descricaoClasse').textContent = classeData.description;
++            document.getElementById('descricaoClasse').innerText = classeData.description;
+             document.getElementById("iconeClasse").src = classeData.icone;
+             document.getElementById('current-class').textContent = classeData.name;
+             document.cookie = `classe=${classeData.name}; path=/; max-age=86400`;
+diff --git a/fichart/core/templates/templateTelaSelecaoMagia.html b/fichart/core/templates/templateTelaSelecaoMagia.html
+index 4750f99..be9efbe 100644
+--- a/fichart/core/templates/templateTelaSelecaoMagia.html
++++ b/fichart/core/templates/templateTelaSelecaoMagia.html
+@@ -458,6 +458,7 @@
  <script>
--
-+    // === ARRAYS GLOBAIS ===
-     let listaArmasEscolhidas = [];
-+    let listaArmaduraEscolhida = [];
-+    let listaConjuntosEscolhidos = [];
-+    let listaFerramentaEscolhida = [];
-+    let listaArmasAtuais = {{ listaArmasAtuais|default:"[]"|safe}};
-+    let listaArmadurasAtuais = {{ listaArmadurasAtuais|default:"[]"|safe}};
-+    let listaConjuntosAtuais = {{ listaConjuntosAtuais|default:"[]"|safe}};
-+    let listaFerramentasAtuais = {{ listaFerramentasAtuais|default:"[]"|safe}};
+ 
+     let listaTruquesEscolhidos = [];
++    const listaTruquesAtuais = {{listaTruquesAtuais|default:"[]"|safe}}
  
      document.addEventListener("DOMContentLoaded", () => {
  
--
-+        // ==================== ARMAS ====================
-         document.querySelectorAll(".escolherArma").forEach(button => {
-             button.addEventListener("click", () => {
--
-                 const armaId = button.dataset.armaId;
--                let ArmaOriginal = document.getElementById("arma" + armaId);
--                let cloneArma = ArmaOriginal.cloneNode(true);
--
--                console.log(cloneArma);
--
-+                const original = document.getElementById("arma" + armaId);
-+                if (!original || listaArmasEscolhidas.includes(armaId)) return;
- 
--                cloneArma.id = "cloneArma" + armaId;
--
--                cloneArma.querySelector(".escolherArma").remove();
--                cloneArma.querySelector(".removerArma").style.display = "initial";
--
--                ArmaOriginal.style.display = "none";
--
--                document.getElementById("listaArmasEscolhidas").appendChild(cloneArma);
-+                const clone = original.cloneNode(true);
-+                clone.id = "cloneArma" + armaId;
-+                clone.querySelector(".escolherArma")?.remove();
-+                const btnRemove = clone.querySelector(".removerArma");
-+                if (btnRemove) btnRemove.style.display = "inline-block";
- 
-+                original.style.display = "none";
-+                document.getElementById("listaArmasEscolhidas").appendChild(clone);
-                 listaArmasEscolhidas.push(armaId);
--                document.cookie = "arma=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas));
--
--                const btnRemoveClone = cloneArma.querySelector(".removerArma");
--                if (btnRemoveClone) {
--                    btnRemoveClone.style.display = "initial";
--                    btnRemoveClone.addEventListener("click", () => {
--                        cloneArma.remove();
--                        ArmaOriginal.style.display = "";
--
--                        const index = listaArmasEscolhidas.indexOf(armaId);
--                        if (index > -1) {
--                            listaArmasEscolhidas.splice(index, 1);
--                        }
--
--                        document.cookie = "arma=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas));
--                    });
--                }
-+                document.cookie = "armas=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas)) + "; path=/";
-+
-+                btnRemove.addEventListener("click", () => {
-+                    clone.remove();
-+                    original.style.display = "";
-+                    listaArmasEscolhidas = listaArmasEscolhidas.filter(id => id !== armaId);
-+                    document.cookie = "armas=" + encodeURIComponent(JSON.stringify(listaArmasEscolhidas)) + "; path=/";
-+                });
-             });
-         });
--    });
--
--    let listaArmaduraEscolhida = [];
--
--    document.addEventListener("DOMContentLoaded", () => {
--        document.querySelectorAll(".escolherArmadura").forEach(button => {
--            button.addEventListener("click", (e) => {
--
--                const armaduraId = button.dataset.armaduraId;
--                let armaduraOriginal = document.getElementById("armadura" + armaduraId);
--                let cloneArmadura = armaduraOriginal.cloneNode(true);
--
--                cloneArmadura.id = "cloneArmadura" + armaduraId;
- 
--                cloneArmadura.querySelector(".escolherArmadura").remove();
--                cloneArmadura.querySelector(".removerArmadura").style.display = "initial";
- 
--                armaduraOriginal.style.display = "none";
-+        listaArmasAtuais.forEach(id => {
- 
--                document.getElementById("listaArmaduraEscolhida").appendChild(cloneArmadura);
--
--                const btnRemoveClone = cloneArmadura.querySelector(".removerArmadura");
--
--
--                listaArmaduraEscolhida.push(armaduraId);
--
--                document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscolhida));
--
--
--                if (btnRemoveClone) {
--                    btnRemoveClone.style.display = "initial";
--                    btnRemoveClone.addEventListener("click", () => {
--                        cloneArmadura.remove();
--                        armaduraOriginal.style.display = "";
-+            btn = document.querySelector(`[data-Arma-id="${id}"]`);
-+            btn.click()
-+        });
- 
--                        const index = listaArmaduraEscolhida.indexOf(armaduraId)
-+        // ==================== ARMADURAS ====================
-+        document.querySelectorAll(".escolherArmadura").forEach(button => {
-+            button.addEventListener("click", () => {
-+                const id = button.dataset.armaduraId;
-+                const original = document.getElementById("armadura" + id);
-+                if (!original || listaArmaduraEscolhida.includes(id)) return;
-+
-+                const clone = original.cloneNode(true);
-+                clone.id = "cloneArmadura" + id;
-+                clone.querySelector(".escolherArmadura")?.remove();
-+                const btnRemove = clone.querySelector(".removerArmadura");
-+                if (btnRemove) btnRemove.style.display = "inline-block";
-+
-+                original.style.display = "none";
-+                document.getElementById("listaArmaduraEscolhida").appendChild(clone);
-+                listaArmaduraEscolhida.push(id);
-+                document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscolhida)) + "; path=/";
-+
-+                btnRemove.addEventListener("click", () => {
-+                    clone.remove();
-+                    original.style.display = "";
-+                    listaArmaduraEscolhida = listaArmaduraEscolhida.filter(x => x !== id);
-+                    document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscolhida)) + "; path=/";
-+                });
-+            });
-+        });
- 
--                        if (index > -1) {
--                            listaArmaduraEscolhida.splice(index, 1)
--                        }
-+        listaArmadurasAtuais.forEach(id => {
- 
--                        document.cookie = "armadura=" + encodeURIComponent(JSON.stringify(listaArmaduraEscoArmadura));
--                    });
--                }
-+            btn = document.querySelector(`[data-armadura-id="${id}"]`);
-+            btn.click()
-+        });
- 
-+        // // ==================== CONJUNTOS DE EQUIPAMENTO ====================
-+        // const restoreConjuntos = () => {
-+        //     const cookie = document.cookie.split('; ').find(r => r.startsWith('conjuntoEquipamento='));
-+        //     if (cookie) {
-+        //         listaConjuntosEscolhidos = JSON.parse(decodeURIComponent(cookie.split('=')[1]));
-+        //         listaConjuntosEscolhidos.forEach(id => {
-+        //             const original = document.getElementById("conjunto" + id);
-+        //             if (!original) return;
-+
-+        //             const clone = original.cloneNode(true);
-+        //             clone.id = "cloneConjunto" + id;
-+        //             clone.querySelector(".escolherConjunto")?.remove();
-+        //             const btnRemove = clone.querySelector(".removerConjunto");
-+        //             if (btnRemove) btnRemove.style.display = "inline-block";
-+
-+        //             original.style.display = "none";
-+        //             document.getElementById("listaConjuntosEscolhidos").appendChild(clone);
-+
-+        //             btnRemove.addEventListener("click", () => {
-+        //                 clone.remove();
-+        //                 original.style.display = "";
-+        //                 listaConjuntosEscolhidos = listaConjuntosEscolhidos.filter(x => x !== id);
-+        //                 document.cookie = "conjuntoEquipamento=" + encodeURIComponent(JSON.stringify(listaConjuntosEscolhidos)) + "; path=/";
-+        //             });
-+        //         });
-+        //     }
-+        // };
-+
-+        // // Restaura primeiro
-+        // restoreConjuntos();
-+
-+        // Depois adiciona os eventos normais
-+        document.querySelectorAll(".escolherConjunto").forEach(button => {
-+            button.addEventListener("click", () => {
-+                const id = button.dataset.conjuntoId;  // ← CORRETO (dataset.conjuntoId)
-+                if (listaConjuntosEscolhidos.includes(id)) return;
-+
-+                const original = document.getElementById("conjunto" + id);
-+                if (!original) return;
-+
-+                const clone = original.cloneNode(true);
-+                clone.id = "cloneConjunto" + id;
-+                clone.querySelector(".escolherConjunto")?.remove();
-+                const btnRemove = clone.querySelector(".removerConjunto");
-+                if (btnRemove) btnRemove.style.display = "inline-block";
-+
-+                original.style.display = "none";
-+                document.getElementById("listaConjuntosEscolhidos").appendChild(clone);
-+                listaConjuntosEscolhidos.push(id);
-+                document.cookie = "conjuntoEquipamento=" + encodeURIComponent(JSON.stringify(listaConjuntosEscolhidos)) + "; path=/";
-+
-+                btnRemove.addEventListener("click", () => {
-+                    clone.remove();
-+                    original.style.display = "";
-+                    listaConjuntosEscolhidos = listaConjuntosEscolhidos.filter(x => x !== id);
-+                    document.cookie = "conjuntoEquipamento=" + encodeURIComponent(JSON.stringify(listaConjuntosEscolhidos)) + "; path=/";
-+                });
-             });
-         });
--    });
- 
-+        listaConjuntosAtuais.forEach(id => {
- 
--    let listaFerramentaEscolhida = [];
--
--    document.addEventListener("DOMContentLoaded", () => {
-+            btn = document.querySelector(`[data-conjunto-id="${id}"]`);
-+            btn.click()
-+        });
- 
--        // Escolher Truques
-+        // ==================== FERRAMENTAS ====================
-         document.querySelectorAll(".escolherFerramenta").forEach(button => {
-             button.addEventListener("click", () => {
--                const FerramentaId = button.dataset.ferramentaId;
--                let FerramentaOriginal = document.getElementById("ferramenta" + ferramentaId);
--                let cloneFerramenta = FerramentaOriginal.cloneNode(true);
--
--                cloneFerramenta.id = "cloneFerramenta" + ferramentaId;
--
--                cloneFerramenta.querySelector(".escolherFerramenta").remove();
--                cloneFerramenta.querySelector(".removerFerramenta").style.display = "initial";
--
--                FerramentaOriginal.style.display = "none";
--
--                document.getElementById("listaFerramentaEscolhida").appendChild(cloneFerramenta);
--
--                listaFerramentaEscolhida.push(ferramentaId);
--                document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida));
--
--                const btnRemoveClone = cloneFerramenta.querySelector(".removerFerramenta");
--                if (btnRemoveClone) {
--                    btnRemoveClone.style.display = "initial";
--                    btnRemoveClone.addEventListener("click", () => {
--                        cloneFerramenta.remove();
--                        ferramentaOriginal.style.display = "";
--
--                        const index = listaFerramentaEscolhida.indexOf(ferramentaId);
--                        if (index > -1) {
--                            listaFerramentaEscolhida.splice(index, 1);
--                        }
--
--                        document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida));
--                    });
--                }
-+                const id = button.dataset.ferramentaId;
-+                if (listaFerramentaEscolhida.includes(id)) return;
-+
-+                const original = document.getElementById("ferramenta" + id);
-+                if (!original) return;
-+
-+                const clone = original.cloneNode(true);
-+                clone.id = "cloneFerramenta" + id;
-+                clone.querySelector(".escolherFerramenta")?.remove();
-+                const btnRemove = clone.querySelector(".removerFerramenta");
-+                if (btnRemove) btnRemove.style.display = "inline-block";
-+
-+                original.style.display = "none";
-+                document.getElementById("listaFerramentaEscolhida").appendChild(clone);
-+                listaFerramentaEscolhida.push(id);
-+                document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida)) + "; path=/";
-+
-+                btnRemove.addEventListener("click", () => {
-+                    clone.remove();
-+                    original.style.display = "";
-+                    listaFerramentaEscolhida = listaFerramentaEscolhida.filter(x => x !== id);
-+                    document.cookie = "ferramenta=" + encodeURIComponent(JSON.stringify(listaFerramentaEscolhida)) + "; path=/";
-+                });
-             });
-         });
--    });
--
- 
- 
--    function updateWizardProgress(completedStep) {
--        // Atualiza as classes dos passos
--        document.querySelectorAll('.wizard-step').forEach((step, index) => {
--            const stepNumber = parseInt(step.dataset.step);
-+        listaFerramentasAtuais.forEach(id => {
- 
--            step.classList.remove('active', 'completed');
--
--            if (stepNumber < completedStep) {
--                step.classList.add('completed');
--            } else if (stepNumber === completedStep) {
--                step.classList.add('active');
--            }
-+            btn = document.querySelector(`[data-ferramenta-id="${id}"]`);
-+            btn.click()
-         });
--    }
--
--    let playerNome = document.getElementById("id_nome");
--
--    playerNome.addEventListener("change", function () {
--        localStorage.setItem("playerNome", this.value);
--    })
--
--    // Criar um preview da imagem a ser enviada
--    let inputAvatar = document.getElementById("id_avatar_personagem");
--    const preview = document.getElementById("preview_avatar");
--
--    console.log(inputAvatar);
--    
--
--    inputAvatar.addEventListener("change", function(){
--        const image = this.files[0];
--        
--        
--        if (!image){
--            return;
--        }
--
--        if (image.size >= 1756364.8 ){
--            alert("Imagem grande demais");
--            return;
-+        // ==================== OUTROS (nome, avatar, wizard) ====================
-+        const playerNomeInput = document.getElementById("id_nome");
-+        if (playerNomeInput) {
-+            playerNomeInput.value = localStorage.getItem("playerNome") || "";
-+            playerNomeInput.addEventListener("change", () => {
-+                localStorage.setItem("playerNome", playerNomeInput.value);
-+            });
-         }
--        
--        preview.src = URL.createObjectURL(image);
--
--        //Converter o dado bruto da URI em Base64
--
--        const reader = new FileReader();
--        reader.onload = function(event){
--            const base64 = event.target.result;
--
--            fetch(
--                " {% url 'TelaClasses' %}",
--                {
- 
--                    method : "POST",
--                    headers : {
--                        "X-CSRFToken":"{{ csrf_token }}",
--                        "Content-Type": "application/json"
--                    },
--                    body : JSON.stringify({avatar : base64})          
-+        const inputAvatar = document.getElementById("id_avatar_personagem");
-+        const preview = document.getElementById("preview_avatar");
-+        if (inputAvatar && preview) {
-+            inputAvatar.addEventListener("change", function () {
-+                const file = this.files[0];
-+                if (file && file.size < 1756364.8) {
-+                    preview.src = URL.createObjectURL(file);
-+                }
-+                else{
-+                    alert("Imagem grande demais");
-+                    return;
+@@ -497,9 +498,17 @@
                  }
--            );
--        };
--
--        reader.readAsDataURL(image);
--
--    
--    });
- 
--    // Inicialização
--    document.addEventListener('DOMContentLoaded', function () {
--        // Seleciona a primeira classe por padrão, se existir
-+                //Converter o dado bruto da URI em Base64
- 
-+                const reader = new FileReader();
-+                reader.onload = function (event) {
-+                    const base64 = event.target.result;
- 
--        let playerNome = localStorage.getItem("playerNome") ?? "";
-+                    fetch(
-+                        " {% url 'mudarAvatar' %}",
-+                        {
- 
--        playerName = document.getElementById("id_nome").value = playerNome;
-+                            method: "POST",
-+                            headers: {
-+                                "X-CSRFToken": "{{ csrf_token }}",
-+                                "Content-Type": "application/json"
-+                            },
-+                            body: JSON.stringify({ avatar: base64 })
-+                        }
-+                    );
-+                };
- 
--        avatarExistente = "{{ avatar }}";
-+                reader.readAsDataURL(file);
-+            });
-+        }
- 
--        if( avatarExistente != "" ){
-+        const avatarExistente = "{{ avatar|escapejs }}";
-+        if (avatarExistente && avatarExistente !== "") {
-             preview.src = avatarExistente;
--            
-         }
- 
--        // Inicializa o wizard no passo 4
-         updateWizardProgress(6);
-     });
+             });
+         });
 +
-+    function updateWizardProgress(step) {
-+        document.querySelectorAll('.wizard-step').forEach((el, i) => {
-+            const s = parseInt(el.dataset.step);
-+            el.classList.toggle('completed', s < step);
-+            el.classList.toggle('active', s === step);
-+        });
-+    }
- </script>
++        listaTruquesAtuais.forEach(id => {
++            btn = document.querySelector(`.escolherTruque[data-truque-id="${id}"]`);
++            console.log(btn);
++            
++            btn.click();
++        })
+     });
  
- </html>
-\ No newline at end of file
-diff --git a/fichart/core/templates/templateEscolhaRaca.html b/fichart/core/templates/templateEscolhaRaca.html
-index 8da799e..7972493 100644
---- a/fichart/core/templates/templateEscolhaRaca.html
-+++ b/fichart/core/templates/templateEscolhaRaca.html
-@@ -469,7 +469,7 @@
-             const base64 = event.target.result;
+     let listaMagiasEscolhidas = [];
++    const listaMagiasAtuais = {{listaMagiasAtuais|default:"[]"|safe}}
  
-             fetch(
--                " {% url 'TelaClasses' %}",
-+                " {% url 'mudarAvatar' %}",
-                 {
+     document.addEventListener("DOMContentLoaded", () => {
+         document.querySelectorAll(".escolherMagia").forEach(button => {
+@@ -549,8 +558,15 @@
  
-                     method : "POST",
-diff --git a/fichart/core/templates/templateTelaAntecedentes.html b/fichart/core/templates/templateTelaAntecedentes.html
-index d773694..3a4eb39 100644
---- a/fichart/core/templates/templateTelaAntecedentes.html
-+++ b/fichart/core/templates/templateTelaAntecedentes.html
-@@ -410,7 +410,7 @@
-             const base64 = event.target.result;
+             });
+         });
++        listaMagiasAtuais.forEach(id => {
++            btn = document.querySelector(`.escolherMagia[data-magia-id="${id}"]`);
++            console.log(btn);
++            
++            btn.click();
++        })
+     });
  
-             fetch(
--                " {% url 'TelaClasses' %}",
-+                " {% url 'mudarAvatar' %}",
-                 {
- 
-                     method : "POST",
-diff --git a/fichart/core/templates/templateTelaAtributos.html b/fichart/core/templates/templateTelaAtributos.html
-index 554f3bb..eebaa0c 100644
---- a/fichart/core/templates/templateTelaAtributos.html
-+++ b/fichart/core/templates/templateTelaAtributos.html
-@@ -469,7 +469,7 @@
-             const base64 = event.target.result;
- 
-             fetch(
--                " {% url 'TelaClasses' %}",
-+                " {% url 'mudarAvatar' %}",
-                 {
- 
-                     method : "POST",
-diff --git a/fichart/core/templates/templateTelaClasses.html b/fichart/core/templates/templateTelaClasses.html
-index 7a0adef..5ed159e 100644
---- a/fichart/core/templates/templateTelaClasses.html
-+++ b/fichart/core/templates/templateTelaClasses.html
-@@ -414,7 +414,7 @@
-             const base64 = event.target.result;
- 
-             fetch(
--                " {% url 'TelaClasses' %}",
-+                " {% url 'mudarAvatar' %}",
-                 {
- 
-                     method : "POST",
-diff --git a/fichart/core/templates/templateTelaSelecaoMagia.html b/fichart/core/templates/templateTelaSelecaoMagia.html
-index 82cefd6..f6eb214 100644
---- a/fichart/core/templates/templateTelaSelecaoMagia.html
-+++ b/fichart/core/templates/templateTelaSelecaoMagia.html
-@@ -570,7 +570,7 @@
-             const base64 = event.target.result;
- 
-             fetch(
--                " {% url 'TelaClasses' %}",
-+                " {% url 'mudarAvatar' %}",
-                 {
- 
-                     method : "POST",
-diff --git a/fichart/core/urls.py b/fichart/core/urls.py
-index 1280730..f59ed12 100644
---- a/fichart/core/urls.py
-+++ b/fichart/core/urls.py
-@@ -15,6 +15,7 @@ from .views.viewLogout import viewLogout
- from .views.viewAssinarPlano import viewAssinarPlano
- from .views.viewSucessoPagamento import viewSucessoPagamento
- from .views.viewTelaEscolhaEquipamentos import viewTelaEquipamentos
-+from .views.viewMudarAvatar import viewMudarAvatar
- 
- 
- urlpatterns = [
-@@ -29,5 +30,6 @@ urlpatterns = [
-     path("logout/",viewLogout.as_view(), name="logout"),
-     path("assinarPlano/", viewAssinarPlano.as_view(), name="assinarPlano"),
-     path("sucessoPagamento/", viewSucessoPagamento.as_view(), name="sucessoPagamento"),
--    path("selecaoEquipamento/", viewTelaEquipamentos.as_view(), name="TelaEquipamento")
-+    path("selecaoEquipamento/", viewTelaEquipamentos.as_view(), name="TelaEquipamento"),
-+    path("mudarAvatar/", viewMudarAvatar.as_view(), name="mudarAvatar")
- ]
-diff --git a/fichart/core/views/viewTelaEscolhaEquipamentos.py b/fichart/core/views/viewTelaEscolhaEquipamentos.py
-index f7f8b03..d73fb28 100644
---- a/fichart/core/views/viewTelaEscolhaEquipamentos.py
-+++ b/fichart/core/views/viewTelaEscolhaEquipamentos.py
-@@ -3,6 +3,8 @@ from django.views import View
++
+     function updateWizardProgress(completedStep) {
+         // Atualiza as classes dos passos
+         document.querySelectorAll('.wizard-step').forEach((step, index) => {
+diff --git a/fichart/core/views/viewTelaMagia.py b/fichart/core/views/viewTelaMagia.py
+index 18fc9e4..f182cdc 100644
+--- a/fichart/core/views/viewTelaMagia.py
++++ b/fichart/core/views/viewTelaMagia.py
+@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
+ from django.views import View
  from django.http import HttpResponse
  from django.shortcuts import render, redirect
- from ..forms import nomeForm
-+import json
 +from urllib.parse import unquote
- from core.models import Arma, Armadura, TipoArmadura, ConjuntoEquipamento, EquipamentoDeAventura, Ferramenta
+ from ..forms import nomeForm
+ from core.models import Magia, Truque
  
- 
-@@ -11,28 +13,36 @@ class viewTelaEquipamentos(LoginRequiredMixin, View):
+@@ -11,7 +12,9 @@ class viewTelaMagia(LoginRequiredMixin, View):
      def get(self, request):
          
          classeAtual = request.COOKIES.get("classe")
 -        print(classeAtual)
-+        listaArmasAtuais = unquote(request.COOKIES.get("armas",""))
-+        listaArmadurasAtuais = unquote(request.COOKIES.get("armadura",""))
-+        listaConjuntosAtuais = unquote(request.COOKIES.get("conjuntoEquipamento",""))
-+        listaFerramentasAtuais = unquote(request.COOKIES.get("ferramenta",""))
++        listaMagiasAtuais = unquote(request.COOKIES.get("magias",""))
++        listaTruquesAtuais = unquote(request.COOKIES.get("truques",""))
 +        
-         armaObjects = Arma.objects.all()
- 
--        tipo_armaduraobjects = TipoArmadura.objects.all().filter(classe__nome = classeAtual)
--
--
-         armaduraObjects = Armadura.objects.all()
-         
-         listaArmaduras = {
--                        "Leves":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'Leve'),
--                        "Medias":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'Media'),
--                        "Pesadas":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'Pesada'),
-+            "Leves":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'LEVE'),
-+            "Medias":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'MEDIA'),
-+            "Pesadas":armaduraObjects.filter(tipo_armadura__nome_tipo_armadura = 'PESADA'),
-         }
--
--        
-+        # conjuntoEquipamentoObjects = ConjuntoEquipamento.objects.all().filter(classe__nome = classeAtual)
-+        conjuntoEquipamentoObjects = ConjuntoEquipamento.objects.all()
-         
--        conjuntoEquipamentoObjects = ConjuntoEquipamento.objects.all().filter(classe__nome = classeAtual)
--
-         equipamentoDeAventuraObjects = EquipamentoDeAventura.objects.all().filter(classe__nome = classeAtual)
-         
--        ferramentaObjects = Ferramenta.objects.all().filter(classe__nome = classeAtual)
-+        ferramenta = Ferramenta.objects.all()
-+        
-+        categoriasFerramentas = ferramenta.values_list("categoria", flat=True).distinct()
-+        
-+        ferramentasObjects = {
-+            nomecategoria : ferramenta.filter(categoria = nomecategoria)
-+            for nomecategoria in categoriasFerramentas
-+            
-+        }
-         
-+        print(ferramentasObjects)
-         form = nomeForm()
-         
-         avatarAtual = request.session.get("avatar","")
-@@ -43,8 +53,12 @@ class viewTelaEquipamentos(LoginRequiredMixin, View):
-             'armaduraObjects':listaArmaduras,
-             "conjuntoEquipamentoObjects":conjuntoEquipamentoObjects, 
-             "equipamentoDeAventuraObjects":equipamentoDeAventuraObjects, 
--            "ferramentasobjects":ferramentaObjects,
+         magiasObjects = Magia.objects.all().filter(classe__nome = classeAtual)
+         listaMagias = {
+                         "1":magiasObjects.filter(nivel = 1),
+@@ -34,7 +37,9 @@ class viewTelaMagia(LoginRequiredMixin, View):
+             "form":form, 
+             "listaMagias":listaMagias,
+             "truquesObjects":truquesObjects,
 -            "avatar":avatarAtual
-+            "ferramentasObjects":ferramentasObjects,
 +            "avatar":avatarAtual,
-+            "listaArmasAtuais":listaArmasAtuais,
-+            "listaArmadurasAtuais": listaArmadurasAtuais,
-+            "listaConjuntosAtuais":listaConjuntosAtuais,
-+            "listaFerramentasAtuais": listaFerramentasAtuais
++            "listaMagiasAtuais":listaMagiasAtuais,
++            "listaTruquesAtuais":listaTruquesAtuais
+             
          }
          
-         return render(request, "templateEscolhaEquipamentos.html", context)
-\ No newline at end of file

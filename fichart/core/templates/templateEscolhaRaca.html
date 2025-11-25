@@ -219,7 +219,7 @@
         }
 
         #descricaoRaca {
-            overflow-y: scroll;
+            white-space: pre-line;
         }
 
         #iconeRaca {
@@ -233,6 +233,7 @@
             right: 8%;
             color: #282828;
         }
+
     </style>
 </head>
 
@@ -277,16 +278,16 @@
                 </div>
 
                 <div class="row">
-                    <!-- Coluna Esquerda - Seleção de Classe -->
+                    <!-- Coluna Esquerda - Seleção de Raca -->
                     <div class="col-12 col-md-6 mb-3">
-                        <div class="scroll-custom overflow-x-hidden pe-2" style="max-height: 78vh; overflow-y: auto;">
+                        <div class="scroll-custom overflow-x-hidden pe-2" style="max-height: 88vh; overflow-y: scroll;height: 88vh;">
                             <div class="list-group">
-                                {% for classe in classes %}
+                                {% for raca in racas %}
                                 <a href="#"
-                                    class="mb-3 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action classe-option"
-                                    data-class-id="{{classe.id_classe}}">
+                                    class="mb-3 shadow rounded-start-0 rounded-end-5 list-group-item list-group-item-action raca-option"
+                                    data-class-id="{{raca.id_raca}}">
                                     <div>
-                                        <h6 class="mb-1 fs-5"> {{ classe.nome }} </h6>
+                                        <h6 class="mb-1 fs-5"> {{ raca.nome }} </h6>
                                     </div>
                                 </a>
                                 {% endfor %}
@@ -296,11 +297,11 @@
 
                     <!-- Coluna Central - Ícone + Descrição -->
                     <div class="col-12 col-md-6 mb-3">
-                        <div class="scroll-custom overflow-x-hidden p-1" style="max-height: 78vh; overflow-y: auto;">
+                        <div class="scroll-custom overflow-x-hidden p-1" style="max-height: 88vh; overflow-y: scroll;height: 88vh;">
                             <div class="card-body text-center">
-                                <img id="iconeClasse" src="" alt="Ícone da Classe"
+                                <img id="iconeRaca" src="" alt="Ícone da Raca"
                                     class="avatar-img img-fluid mb-3 rounded-5">
-                                <p id="descricaoClasse" class="lead mt-3 text-start fs-6">
+                                <p id="descricaoRaca" class="lead mt-3 text-start fs-6">
                                 </p>
                             </div>
                         </div>
@@ -375,7 +376,7 @@
     {% endfor %}
             };
 
-    // Função para atualizar a classe selecionada
+    // Função para atualizar a raca selecionada
     function updateSelectedClass(racaId) {
 
         const racaData = racasData[racaId];
@@ -386,7 +387,7 @@
         console.log(racaData)
 
         if (racaData) {
-            document.getElementById('descricaoRaca').textContent = racaData.description;
+            document.getElementById('descricaoRaca').innerText = racaData.description;
             document.getElementById("iconeRaca").src = racaData.icone;
 
             const container = document.getElementById("containerListaSubracas");
@@ -494,7 +495,7 @@
             // Adiciona active no item clicado
             this.classList.add('active');
 
-            // Atualiza os dados da classe
+            // Atualiza os dados da raca
             const racaId = this.dataset.classId;
             updateSelectedClass(racaId);
 
@@ -503,7 +504,7 @@
     });
 
     function updateWizardProgress(completedStep) {
-        // Atualiza as classes dos passos
+        // Atualiza as raca dos passos
         document.querySelectorAll('.wizard-step').forEach((step, index) => {
             const stepNumber = parseInt(step.dataset.step);
 
@@ -572,7 +573,7 @@
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', function () {
-        // Seleciona a primeira classe por padrão, se existir
+        // Seleciona a primeira raca por padrão, se existir
 
 
         let playerNome = localStorage.getItem("playerNome") ?? "";
