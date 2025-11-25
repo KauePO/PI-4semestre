@@ -188,6 +188,16 @@ class Cobranca(models.Model):
     class Meta:
         db_table = 'cobranca'
     
+    
+class ProficienciaSalvaguardas_Pericias(models.Model):
+    id_proficienciaSalvaguardas_pericia = models.AutoField(primary_key=True)
+    nome = models.CharField()
+
+    class Meta:
+        db_table = 'proficiencia_salvaguardas_pericias'
+        
+    def __str__(self):
+        return self.nome
 
 class Personagem(models.Model):
     id_personagem = models.AutoField(primary_key=True)
@@ -208,6 +218,8 @@ class Personagem(models.Model):
     tracos_e_caracteristicas_adicionais = models.CharField(blank=True, null=True)
     tesouro = models.CharField(blank=True, null=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    proficienciaSalvaguardas_Pericias = models.ManyToManyField(ProficienciaSalvaguardas_Pericias)
+    magia = models.ManyToManyField(Magia, blank=True, null=True)
 
     class Meta:
         db_table = 'personagem'
@@ -296,6 +308,7 @@ class Truque(models.Model):
     classes = models.ManyToManyField(Classe)
     raca = models.ManyToManyField(Raca, blank=True, null=True)
     subraca = models.ManyToManyField(Subraca, blank=True, null=True)
+    personagem = models.ManyToManyField(Personagem, blank=True, null=True)
 
     class Meta:
         db_table = 'truque'
