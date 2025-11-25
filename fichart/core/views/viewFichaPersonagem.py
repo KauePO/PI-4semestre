@@ -18,28 +18,32 @@ class viewFichaPersonagem(LoginRequiredMixin,View):
 
         #Proficiencias======================================================================
         idproficiencias = request.COOKIES.get('idproficiencias')
-        lista_decodificada = urllib.parse.unquote(idproficiencias)
-        id = json.loads(lista_decodificada)
+        if idproficiencias:
+            lista_decodificada = urllib.parse.unquote(idproficiencias)
+            id = json.loads(lista_decodificada)
 
         proficiencias = Proficiencia.objects.all().filter(id_proficiencia__in = id)
 
         #Idiomas======================================================================
         ididiomas = request.COOKIES.get('idiomas')
-        lista_decodificada = urllib.parse.unquote(ididiomas)
-        id = json.loads(lista_decodificada)
+        if ididiomas:
+            lista_decodificada = urllib.parse.unquote(ididiomas)
+            id = json.loads(lista_decodificada)
 
         idiomas = Idiomas.objects.all().filter(id_idioma__in = id)
 
         #Truques======================================================================
         idtruques = request.COOKIES.get('truques')
-        lista_decodificada = urllib.parse.unquote(idtruques)
-        id = json.loads(lista_decodificada)
+        if idtruques:
+            lista_decodificada = urllib.parse.unquote(idtruques)
+            id = json.loads(lista_decodificada)
 
         truques = Truque.objects.all().filter(id_truque__in = id)
         #Magias=========================================================================
         idmagias = request.COOKIES.get('magias')
-        lista_decodificada = urllib.parse.unquote(idmagias)
-        id = json.loads(lista_decodificada)
+        if idmagias:
+            lista_decodificada = urllib.parse.unquote(idmagias)
+            id = json.loads(lista_decodificada)
 
         magias = Magia.objects.all().filter(id_magia__in = id)
         #Classe=========================================================================
@@ -75,8 +79,9 @@ class viewFichaPersonagem(LoginRequiredMixin,View):
 
         #Habilidades Especiais=========================================================================
         idhabilidade_especiais = request.COOKIES.get('idhabilidade_especiais')
-        lista_decodificada = urllib.parse.unquote(idhabilidade_especiais)
-        id = json.loads(lista_decodificada)
+        if idhabilidade_especiais:
+            lista_decodificada = urllib.parse.unquote(idhabilidade_especiais)
+            id = json.loads(lista_decodificada)
 
         habilidade_especiais = HabilidadeEspecial.objects.all().filter(id_habilidade_especial__in = id)
 
