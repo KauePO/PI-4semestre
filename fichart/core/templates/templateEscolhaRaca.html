@@ -378,6 +378,14 @@
 
     // Função para atualizar a raca selecionada
     function updateSelectedClass(racaId) {
+        if (racaId == "1") {
+                // Cria o novo cookie com os idiomas
+                const idiomas = ["3", "4"];
+                const idiomasStr = JSON.stringify(idiomas);
+                document.cookie = `idiomas=${encodeURIComponent(idiomasStr)}; path=/; max-age=3600`;
+
+                appendToCookie('idhabilidade_especiais', ["1","3"], 1); // 1 dia
+            }
 
         const racaData = racasData[racaId];
 
@@ -417,13 +425,7 @@
 
             console.log(localStorage.getItem("raca"))
 
-            if (racaId == "1") {
-            const idiomas = ["3", "4"]
-            const idiomasStr = JSON.stringify(idiomas);
-            document.cookie = `idiomas=${encodeURIComponent(idiomasStr)}; path=/; max-age=3600`;
-
-            appendToCookie('idhabilidade_especiais', ["1","3"], 1); // 1 dia
-        }
+            
 
         }
 
