@@ -62,3 +62,6 @@ class viewTelaEquipamentos(LoginRequiredMixin, View):
         }
         
         return render(request, "templateEscolhaEquipamentos.html", context)
+    
+    def post(self, request):
+        return redirect('fichaPersonagem')
