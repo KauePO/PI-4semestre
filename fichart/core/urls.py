@@ -18,6 +18,7 @@ from .views.viewSucessoPagamento import viewSucessoPagamento
 from .views.viewTelaEscolhaEquipamentos import viewTelaEquipamentos
 from .views.viewMudarAvatar import viewMudarAvatar
 
+from .views.viewVisualizarFicha import viewVisualizarFicha
 
 urlpatterns = [
     path('', viewTelaLogin.as_view(), name="telaLogin"),
@@ -27,6 +28,7 @@ urlpatterns = [
     path("selecaoMagia/",viewTelaMagia.as_view(), name="TelaMagia"),
     path('selecaoAntecedente/',viewTelaAntecedente.as_view(), name="TelaAntecedente"),
     path('fichaPersonagem/', viewFichaPersonagem.as_view(), name="fichaPersonagem"),
+    path('visualizarFicha/<int:idPersonagem>/', viewVisualizarFicha.as_view(), name="visualizarFicha"),
     path('selecaoAtributos/',viewTelaAtributos.as_view(), name='TelaAtributos'),
     path("paginaInicial/", viewPaginaInicial.as_view(), name="paginaInicial"),
     path("logout/",viewLogout.as_view(), name="logout"),

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Raca, Subraca, Personagem, Classe, Magia, Proficiencia, Truque, Antecedente, Armadura, TipoArmadura, Idiomas, Arma, ConjuntoEquipamento, EquipamentoDeAventura, Ferramenta, IncrementoHabilidade, Usuario, Cobranca, HabilidadeEspecial
+from .models import Raca, Subraca, Personagem, Classe, Magia, Proficiencia, Truque, Antecedente, Armadura, TipoArmadura, ProficienciaSalvaguardas_Pericias, Idiomas, Arma, ConjuntoEquipamento, EquipamentoDeAventura, Ferramenta, IncrementoHabilidade, Usuario, Cobranca, HabilidadeEspecial
 
 
 # =============================
@@ -160,3 +160,13 @@ class ProficienciaAdmin(admin.ModelAdmin):
     list_display = ('id_proficiencia', 'nome', 'tipo',)
     search_fields = ('nome',)
     list_filter = ('nome',)
+
+# =============================
+# Admin para ProficienciaSalvaguardas_Pericias
+# =============================
+@admin.register(ProficienciaSalvaguardas_Pericias)
+class ProficienciaSalvaguardas_PericiasAdmin(admin.ModelAdmin):
+    list_display = ('id_proficienciaSalvaguardas_pericia', 'nome',)
+    search_fields = ('nome',)
+    list_filter = ('nome',)
+

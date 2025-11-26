@@ -279,6 +279,14 @@
                             <div class="wizard-connector rounded-5 completed"></div>
                             <div class="step-number"></div>
                         </div>
+                        <div class="col wizard-step" data-step="7">
+                            <form action="{% url 'TelaEquipamento' %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-light ms-2">
+                                    Avançar
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
