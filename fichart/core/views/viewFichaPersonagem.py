@@ -11,9 +11,15 @@ from core.models import Personagem, Magia, Truque, Classe, Raca, HabilidadeEspec
 
 class viewFichaPersonagem(LoginRequiredMixin,View):
     def get(self, request):
+        
         #Puxar informações salvas nos cookies
         #Antecedente======================================================================
         antecedenteNome = request.COOKIES.get('antecedente')
+        
+        if(not antecedenteNome):
+            return redirect('paginaInicial')
+        
+        
         antecedente = Antecedente.objects.get(nome = antecedenteNome)
 
         #Proficiencias======================================================================
@@ -56,12 +62,12 @@ class viewFichaPersonagem(LoginRequiredMixin,View):
         raca = Raca.objects.get(id_raca= id)
 
         #Atributos=========================================================================
-        atrForca = request.COOKIES.get('forca')
-        atrDestreza = request.COOKIES.get('destreza')
-        atrConstituicao = request.COOKIES.get('constituicao')
-        atrInteligencia = request.COOKIES.get('inteligencia')
-        atrSabedoria = request.COOKIES.get('sabedoria')
-        atrCarisma = request.COOKIES.get('carisma')
+        atrForca = request.COOKIES.get('forca',10)
+        atrDestreza = request.COOKIES.get('destreza',10)
+        atrConstituicao = request.COOKIES.get('constituicao',10)
+        atrInteligencia = request.COOKIES.get('inteligencia',10)
+        atrSabedoria = request.COOKIES.get('sabedoria',10)
+        atrCarisma = request.COOKIES.get('carisma',10)
 
         atributos = {
             "Forca": atrForca, "Destreza": atrDestreza, "Constituicao": atrConstituicao,
@@ -182,7 +188,7 @@ class viewFichaPersonagem(LoginRequiredMixin,View):
 
         # Adiciona Magias e Truques ao personagem
         try:
-            idmagias = request.COOKIES.get('idmagias')
+            idmagias = request.COOKIES.get('magias')
             if idmagias:
                 lista_decodificada = urllib.parse.unquote(idmagias)
                 ids_magias = json.loads(lista_decodificada)
@@ -199,7 +205,7 @@ class viewFichaPersonagem(LoginRequiredMixin,View):
             print(f"Erro ao adicionar magias: {e}")
 
         try:
-            idtruques = request.COOKIES.get('idtruques')
+            idtruques = request.COOKIES.get('truques')
             if idtruques:
                 lista_decodificada = urllib.parse.unquote(idtruques)
                 ids_truques = json.loads(lista_decodificada)
@@ -215,5 +221,5 @@ class viewFichaPersonagem(LoginRequiredMixin,View):
 
         except Exception as e:
             print(f"Erro ao adicionar truques: {e}")
-
+        
         return redirect('paginaInicial')

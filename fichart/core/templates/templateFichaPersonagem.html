@@ -434,7 +434,7 @@
 
         <div class="row g-3">
             <div class="col-12 col-lg-12">
-                <button class="btn btn-outline-light" onclick="window.history.back();">
+                <button class="btn btn-outline-light" onclick="history.back();">
                     ← Voltar
                 </button>
 
@@ -494,7 +494,7 @@
                                 {% for nome, valor in atributos.items %}
                                 <div class="atributo w-100 mb-2 text-center" id="atributo-{{ nome|lower }}">
                                     <div class="modificador" id="modificador-{{ nome|lower }}">
-                                        {% with modificador=valor|add:"-10"|divisibleby:2|yesno:valor|default:0 %}
+                                        {% with modificador=valor|add:"-10"|default:0 %}
                                         {% widthratio modificador 1 1 as mod_calc %}
                                         {{ mod_calc }}
                                         {% endwith %}

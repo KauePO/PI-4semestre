@@ -17,16 +17,22 @@ class viewVisualizarFicha(LoginRequiredMixin,View):
     
 
         #Puxar informações salvas nos cookies
+        
+        #Classe=========================================================================
+        classe = Classe.objects.get(nome = personagem.classe)
+        
         #Antecedente======================================================================
         antecedente = Antecedente.objects.get(nome = personagem.antecedente)
 
         #Proficiencias======================================================================
-        if(personagem.classe == "Bardo"):
-            proficiencias = Proficiencia.objects.all().filter(nome__in = ["Armadura Leve","Armas Simples"])
+        
+        proficiencias = Proficiencia.objects.filter(nome__in=classe.proficiencia_set.values_list('nome', flat=True)
+)
 
         #Idiomas======================================================================
-        if(personagem.raca == "Elfo"):
-            idiomas = Idiomas.objects.all().filter(nome__in = ["Comum","Élfico"])
+        
+        idiomas = Idiomas.objects.all().filter(nome__in = raca.idioma.values_list('nome', flat=True))
+        
 
         #Truques======================================================================
         truques = Truque.objects.all().filter(personagem = personagem.id_personagem)
@@ -34,8 +40,7 @@ class viewVisualizarFicha(LoginRequiredMixin,View):
         #Magias=========================================================================
         magias = personagem.magia.all()
 
-        #Classe=========================================================================
-        classe = Classe.objects.get(nome = personagem.classe)
+        
         
         #Raça=========================================================================
         raca = Raca.objects.get(nome= personagem.raca)

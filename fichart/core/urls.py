@@ -35,5 +35,5 @@ urlpatterns = [
     path("assinarPlano/", viewAssinarPlano.as_view(), name="assinarPlano"),
     path("sucessoPagamento/", viewSucessoPagamento.as_view(), name="sucessoPagamento"),
     path("selecaoEquipamento/", viewTelaEquipamentos.as_view(), name="TelaEquipamento"),
-    path("mudarAvatar/", viewMudarAvatar.as_view(), name="mudarAvatar")
+    path("mudarAvatar/", viewMudarAvatar.as_view(), name="mudarAvatar"),
 ]
