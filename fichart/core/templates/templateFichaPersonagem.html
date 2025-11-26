@@ -1234,6 +1234,34 @@
                     </div>
             
         </div>
+
+        <!-- Campos hidden para salvaguardas -->
+        <input type="hidden" name="salvaguarda_forca" id="hidden_salvaguarda_forca" value="0">
+        <input type="hidden" name="salvaguarda_destreza" id="hidden_salvaguarda_destreza" value="0">
+        <input type="hidden" name="salvaguarda_constituicao" id="hidden_salvaguarda_constituicao" value="0">
+        <input type="hidden" name="salvaguarda_sabedoria" id="hidden_salvaguarda_sabedoria" value="0">
+        <input type="hidden" name="salvaguarda_inteligencia" id="hidden_salvaguarda_inteligencia" value="0">
+        <input type="hidden" name="salvaguarda_carisma" id="hidden_salvaguarda_carisma" value="0">
+        
+        <!-- Campos hidden para perícias -->
+        <input type="hidden" name="pericia_acrobacia" id="hidden_pericia_acrobacia" value="0">
+        <input type="hidden" name="pericia_arcanismo" id="hidden_pericia_arcanismo" value="0">
+        <input type="hidden" name="pericia_atletismo" id="hidden_pericia_atletismo" value="0">
+        <input type="hidden" name="pericia_atuacao" id="hidden_pericia_atuacao" value="0">
+        <input type="hidden" name="pericia_enganacao" id="hidden_pericia_enganacao" value="0">
+        <input type="hidden" name="pericia_furtividade" id="hidden_pericia_furtividade" value="0">
+        <input type="hidden" name="pericia_historia" id="hidden_pericia_historia" value="0">
+        <input type="hidden" name="pericia_intimidacao" id="hidden_pericia_intimidacao" value="0">
+        <input type="hidden" name="pericia_intuicao" id="hidden_pericia_intuicao" value="0">
+        <input type="hidden" name="pericia_investigacao" id="hidden_pericia_investigacao" value="0">
+        <input type="hidden" name="pericia_lidarcomanimais" id="hidden_pericia_lidarcomanimais" value="0">
+        <input type="hidden" name="pericia_medicina" id="hidden_pericia_medicina" value="0">
+        <input type="hidden" name="pericia_natureza" id="hidden_pericia_natureza" value="0">
+        <input type="hidden" name="pericia_percepcao" id="hidden_pericia_percepcao" value="0">
+        <input type="hidden" name="pericia_persuasao" id="hidden_pericia_persuasao" value="0">
+        <input type="hidden" name="pericia_prestidigitacao" id="hidden_pericia_prestidigitacao" value="0">
+        <input type="hidden" name="pericia_religiao" id="hidden_pericia_religiao" value="0">
+        <input type="hidden" name="pericia_sobrevivencia" id="hidden_pericia_sobrevivencia" value="0">
 </form>
     </div>
     </div>
@@ -1278,6 +1306,11 @@
             // Carrega dados da ficha
             atualizarModificadoresFicha();
             atualizarValoresSalvaguardasEPericias();
+             // Adicionar event listeners para proficiências
+            adicionarEventListenersProficiencias();
+            
+            // Atualizar campos hidden inicialmente
+            atualizarCamposHidden();
 
             // Carrega o nome do personagem do localStorage ao carregar a página
             let playerNome = localStorage.getItem("playerNome") ?? "";
@@ -1376,6 +1409,103 @@ function atualizarValoresSalvaguardasEPericias() {
     });
 }
 
+    // Função para atualizar campos hidden baseado nos checkboxes
+    function atualizarCamposHidden() {
+        // Atualizar salvaguardas
+        document.getElementById('hidden_salvaguarda_forca').value = 
+            document.querySelector('.check_salvaFOR').checked ? '1' : '0';
+        document.getElementById('hidden_salvaguarda_destreza').value = 
+            document.querySelector('.check_salvaDES').checked ? '1' : '0';
+        document.getElementById('hidden_salvaguarda_constituicao').value = 
+            document.querySelector('.check_salvaCON').checked ? '1' : '0';
+        document.getElementById('hidden_salvaguarda_sabedoria').value = 
+            document.querySelector('.check_salvaSAB').checked ? '1' : '0';
+        document.getElementById('hidden_salvaguarda_inteligencia').value = 
+            document.querySelector('.check_salvaINT').checked ? '1' : '0';
+        document.getElementById('hidden_salvaguarda_carisma').value = 
+            document.querySelector('.check_salvaCAR').checked ? '1' : '0';
+        
+        // Atualizar perícias
+        document.getElementById('hidden_pericia_acrobacia').value = 
+            document.querySelector('.check_periciaACROBACIA').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_arcanismo').value = 
+            document.querySelector('.check_periciaARCANISMO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_atletismo').value = 
+            document.querySelector('.check_periciaATLETISMO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_atuacao').value = 
+            document.querySelector('.check_periciaATUACAO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_enganacao').value = 
+            document.querySelector('.check_periciaENGANACAO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_furtividade').value = 
+            document.querySelector('.check_periciaFURTIVIDADE').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_historia').value = 
+            document.querySelector('.check_periciaHISTORIA').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_intimidacao').value = 
+            document.querySelector('.check_periciaINTIMIDACAO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_intuicao').value = 
+            document.querySelector('.check_periciaINTUICAO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_investigacao').value = 
+            document.querySelector('.check_periciaINVESTIGACAO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_lidarcomanimais').value = 
+            document.querySelector('.check_periciaLIDARCOMANIMAIS').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_medicina').value = 
+            document.querySelector('.check_periciaMEDICINA').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_natureza').value = 
+            document.querySelector('.check_periciaNATUREZA').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_percepcao').value = 
+            document.querySelector('.check_periciaPERCEPCAO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_persuasao').value = 
+            document.querySelector('.check_periciaPERSUASAO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_prestidigitacao').value = 
+            document.querySelector('.check_periciaPRESTIDIGITACAO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_religiao').value = 
+            document.querySelector('.check_periciaRELIGIAO').checked ? '1' : '0';
+        document.getElementById('hidden_pericia_sobrevivencia').value = 
+            document.querySelector('.check_periciaSOBREVIVENCIA').checked ? '1' : '0';
+    }
+
+        // Adicionar event listeners aos checkboxes
+    function adicionarEventListenersProficiencias() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                atualizarCamposHidden();
+                salvarCheckboxesNosCookies();
+                atualizarValoresSalvaguardasEPericias();
+            });
+        });
+    }
+
+    // Modifique a função de salvar checkboxes para incluir todas as proficiências
+        function salvarCheckboxesNosCookies() {
+            // Salvaguardas
+            setCookie("check_forca", document.querySelector('.check_salvaFOR').checked ? '1' : '0');
+            setCookie("check_destreza", document.querySelector('.check_salvaDES').checked ? '1' : '0');
+            setCookie("check_constituicao", document.querySelector('.check_salvaCON').checked ? '1' : '0');
+            setCookie("check_sabedoria", document.querySelector('.check_salvaSAB').checked ? '1' : '0');
+            setCookie("check_inteligencia", document.querySelector('.check_salvaINT').checked ? '1' : '0');
+            setCookie("check_carisma", document.querySelector('.check_salvaCAR').checked ? '1' : '0');
+            
+            // Perícias
+            setCookie("check_acrobacia", document.querySelector('.check_periciaACROBACIA').checked ? '1' : '0');
+            setCookie("check_arcanismo", document.querySelector('.check_periciaARCANISMO').checked ? '1' : '0');
+            setCookie("check_atletismo", document.querySelector('.check_periciaATLETISMO').checked ? '1' : '0');
+            setCookie("check_atuacao", document.querySelector('.check_periciaATUACAO').checked ? '1' : '0');
+            setCookie("check_enganacao", document.querySelector('.check_periciaENGANACAO').checked ? '1' : '0');
+            setCookie("check_furtividade", document.querySelector('.check_periciaFURTIVIDADE').checked ? '1' : '0');
+            setCookie("check_historia", document.querySelector('.check_periciaHISTORIA').checked ? '1' : '0');
+            setCookie("check_intimidacao", document.querySelector('.check_periciaINTIMIDACAO').checked ? '1' : '0');
+            setCookie("check_intuicao", document.querySelector('.check_periciaINTUICAO').checked ? '1' : '0');
+            setCookie("check_investigacao", document.querySelector('.check_periciaINVESTIGACAO').checked ? '1' : '0');
+            setCookie("check_lidarcomanimais", document.querySelector('.check_periciaLIDARCOMANIMAIS').checked ? '1' : '0');
+            setCookie("check_medicina", document.querySelector('.check_periciaMEDICINA').checked ? '1' : '0');
+            setCookie("check_natureza", document.querySelector('.check_periciaNATUREZA').checked ? '1' : '0');
+            setCookie("check_percepcao", document.querySelector('.check_periciaPERCEPCAO').checked ? '1' : '0');
+            setCookie("check_persuasao", document.querySelector('.check_periciaPERSUASAO').checked ? '1' : '0');
+            setCookie("check_prestidigitacao", document.querySelector('.check_periciaPRESTIDIGITACAO').checked ? '1' : '0');
+            setCookie("check_religiao", document.querySelector('.check_periciaRELIGIAO').checked ? '1' : '0');
+            setCookie("check_sobrevivencia", document.querySelector('.check_periciaSOBREVIVENCIA').checked ? '1' : '0');
+        }
     // ---------------- FUNÇÕES DE COOKIES ----------------
 
     function pegar_cookie(nome_cookie) {

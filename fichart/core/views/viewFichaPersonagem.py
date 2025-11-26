@@ -7,7 +7,7 @@ import json
 import urllib.parse
 
 
-from core.models import Personagem, Magia, Truque, Classe, Raca, HabilidadeEspecial, Usuario, Antecedente, Proficiencia, Idiomas
+from core.models import Personagem, Magia, Truque, Classe, Raca, HabilidadeEspecial, Usuario, Antecedente, Proficiencia, Idiomas, ProficienciaSalvaguardas_Pericias
 
 class viewFichaPersonagem(LoginRequiredMixin,View):
     def get(self, request):
@@ -137,6 +137,47 @@ class viewFichaPersonagem(LoginRequiredMixin,View):
         personagem.usuario_id = usuario.id_usuario
         
         # Salva o objeto completo no banco de dados
+        personagem.save()
+
+                # Lista de todas as proficiências possíveis
+        proficiencias_map = {
+            'salvaguarda_forca': 'Forca',
+            'salvaguarda_destreza': 'Destreza', 
+            'salvaguarda_constituicao': 'Constituicao',
+            'salvaguarda_sabedoria': 'Sabedoria',
+            'salvaguarda_inteligencia': 'Inteligencia',
+            'salvaguarda_carisma': 'Carisma',
+            'pericia_acrobacia': 'Acrobacia',
+            'pericia_arcanismo': 'Arcanismo',
+            'pericia_atletismo': 'Atletismo',
+            'pericia_atuacao': 'Atuacao',
+            'pericia_enganacao': 'Enganacao',
+            'pericia_furtividade': 'Furtividade',
+            'pericia_historia': 'Historia',
+            'pericia_intimidacao': 'Intimidacao',
+            'pericia_intuicao': 'Intuicao',
+            'pericia_investigacao': 'Investigacao',
+            'pericia_lidarcomanimais': 'Lidar com Animais',
+            'pericia_medicina': 'Medicina',
+            'pericia_natureza': 'Natureza',
+            'pericia_percepcao': 'Percepcao',
+            'pericia_persuasao': 'Persuasao',
+            'pericia_prestidigitacao': 'Prestidigitacao',
+            'pericia_religiao': 'Religiao',
+            'pericia_sobrevivencia': 'Sobrevivencia',
+        }
+
+         # Adicionar proficiências selecionadas
+        for field_name, proficiencia_nome in proficiencias_map.items():
+            if request.POST.get(field_name) == '1':
+                try:
+                    proficiencia = ProficienciaSalvaguardas_Pericias.objects.get(nome=proficiencia_nome)
+                    personagem.proficienciaSalvaguardas_Pericias.add(proficiencia)
+                except ProficienciaSalvaguardas_Pericias.DoesNotExist:
+                    # Se a proficiência não existir, criar uma nova
+                    proficiencia = ProficienciaSalvaguardas_Pericias.objects.create(nome=proficiencia_nome)
+                    personagem.proficienciaSalvaguardas_Pericias.add(proficiencia)
+
         personagem.save()
 
         # Adiciona Magias e Truques ao personagem
