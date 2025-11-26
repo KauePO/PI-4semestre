@@ -479,7 +479,7 @@
                 document.getElementById("listaMagiasEscolhidas").appendChild(cloneTruque);
 
                 listaTruquesEscolhidos.push(truqueId);
-                document.cookie = "truques=" + encodeURIComponent(JSON.stringify(listaTruquesEscolhidos));
+                document.cookie = "truques=" + encodeURIComponent(JSON.stringify(listaTruquesEscolhidos)) + "; path=/";
 
                 const btnRemoveClone = cloneTruque.querySelector(".removerTruque");
                 if (btnRemoveClone) {
@@ -493,7 +493,7 @@
                             listaTruquesEscolhidos.splice(index, 1);
                         }
 
-                        document.cookie = "truques=" + encodeURIComponent(JSON.stringify(listaTruquesEscolhidos));
+                        document.cookie = "truques=" + encodeURIComponent(JSON.stringify(listaTruquesEscolhidos)) + "; path=/";
                     });
                 }
             });
@@ -537,7 +537,7 @@
 
                 listaMagiasEscolhidas.push(magiaId);
 
-                document.cookie = "magias=" + encodeURIComponent(JSON.stringify(listaMagiasEscolhidas));
+                document.cookie = "magias=" + encodeURIComponent(JSON.stringify(listaMagiasEscolhidas)) + "; path=/";
 
 
                 if (btnRemoveClone) {
@@ -552,7 +552,7 @@
                             listaMagiasEscolhidas.splice(index, 1)
                         }
 
-                        document.cookie = "magias=" + encodeURIComponent(JSON.stringify(listaMagiasEscolhidas));
+                        document.cookie = "magias=" + encodeURIComponent(JSON.stringify(listaMagiasEscolhidas)) + "; path=/";
                     });
                 }
 

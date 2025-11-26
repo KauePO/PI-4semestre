@@ -113,7 +113,7 @@
             border-width: thick;
             border-radius: 15px;
             color: #FFC014;
-            text-decoration:none;
+            text-decoration: none;
         }
 
         #overlayTrancado {
@@ -129,6 +129,15 @@
         #linkCardCriar {
             text-decoration: none;
             color: white;
+        }
+
+        .linkPersonagem {
+            text-decoration: none;
+        }
+
+        #cardCriadoInterno:hover {
+            background: linear-gradient(180deg, transparent, #0e0e0eff);
+            cursor: pointer;
         }
     </style>
 </head>
@@ -150,8 +159,9 @@
                     <p class="fs-3 text-center mb-0">De: <span class="text-decoration-line-through">R$20,00</span></p>
                     <p class="fs-1 text-center mt-0" style="color: #FFC014;">Por: R$13,99 </p>
 
-                    <a href="{% url 'assinarPlano' %}" class="fs-3 p-3 align-self-center" id="botaoUpgrade"><i>Aprimore seu
-                        plano</i></a>
+                    <a href="{% url 'assinarPlano' %}" class="fs-3 p-3 align-self-center" id="botaoUpgrade"><i>Aprimore
+                            seu
+                            plano</i></a>
 
                 </div>
             </div>
@@ -165,22 +175,22 @@
         <div class="d-flex flex-row justify-content-between mb-5">
             <a class="align-self-center" id="elementoLogout" href="{% url 'logout' %}"><em>Logout</em></a>
 
-            
+
             {% if not plano_ativo %}
-                <div class="d-flex flex-column" id="container-plano">
-                    <span>Plano Básico</span>
-                    <button data-bs-toggle="modal" data-bs-target="#exampleModal" id="elementoPlano">Aprimore seu
-                        plano</button>
-                </div>
-            
+            <div class="d-flex flex-column" id="container-plano">
+                <span>Plano Básico</span>
+                <button data-bs-toggle="modal" data-bs-target="#exampleModal" id="elementoPlano">Aprimore seu
+                    plano</button>
+            </div>
+
             {% else %}
-                
-                <div class="d-flex flex-column" id="container-plano">
-                    <span  id="elementoPlano">Plano Aventureiro</span>
-                </div>
-            
+
+            <div class="d-flex flex-column" id="container-plano">
+                <span id="elementoPlano">Plano Aventureiro</span>
+            </div>
+
             {% endif %}
-                
+
         </div>
 
 
@@ -193,42 +203,41 @@
 
         <div class="card-group gap-5">
 
-                {% if plano_ativo or QTD_fichas < 3 %} 
-                    <a href="{% url 'TelaClasses' %}" id="linkCardCriar">
-                        <div id="cardCriar" class="d-flex flex-column justify-content-between">
-                            <span class="w-100" id="contadorFichas"></span>
-                            <i class="fa-solid fa-plus align-self-center" id="iconeAdicionar"></i>
+            {% if QTD_fichas < 3 or QTD_fichas < 20 and plano_ativo %} 
+            <a href="{% url 'TelaClasses' %}"
+                id="linkCardCriar">
+                <div id="cardCriar" class="d-flex flex-column justify-content-between">
+                    <span class="w-100" id="contadorFichas"></span>
+                    <i class="fa-solid fa-plus align-self-center" id="iconeAdicionar"></i>
 
-                            <h5 class=" mb-0 pb-2" id="tituloCard">CRIAR FICHA</h5>
-                        </div>
-                    </a>
+                    <h5 class=" mb-0 pb-2" id="tituloCard">CRIAR FICHA</h5>
+                </div>
+                </a>
                 {% else %}
-                    <a href="" id="linkCardCriar">
-                        <div id="cardCriar" class="d-flex flex-column justify-content-between">
-                            <span class="w-100" id="contadorFichas"></span>
-                            <i class="fa-solid fa-ban align-self-center" id="iconeAdicionar"></i>
 
-                            <h5 class=" mb-0 pb-2" id="tituloCard">CRIAR FICHA</h5>
-                        </div>
-                    </a>
+                <div id="cardCriar" class="d-flex flex-column justify-content-between">
+                    <span class="w-100" id="contadorFichas"></span>
+                    <i class="fa-solid fa-ban align-self-center" id="iconeAdicionar"></i>
+
+                    <h5 class=" mb-0 pb-2" id="tituloCard">CRIAR FICHA</h5>
+                </div>
+
                 {% endif %}
 
 
 
                 {% for personagem in personagens %}
                 <div id="cardCriado">
-
-
                     {% if forloop.counter > 3 and not plano_ativo %}
                     <div id="overlayTrancado" class="d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-lock fs-1"></i>
                     </div>
                     {% endif %}
-
-                    <div id="cardCriadoInterno" class="d-flex align-items-end h-100 w-100">
-                        <h5 class=" mb-0 pb-2" id="tituloCard">{{personagem.nome}}</h5>
-                    </div>
-
+                    <a href="{% url 'visualizarFicha' personagem.id_personagem %}" class="linkPersonagem">
+                        <div id="cardCriadoInterno" class="d-flex align-items-end h-100 w-100">
+                            <h5 class=" mb-0 pb-2" id="tituloCard">{{personagem.nome}}</h5>
+                        </div>
+                    </a>
                 </div>
                 {% endfor %}
 
@@ -253,8 +262,43 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            let maximoPersonagens = {{ plano_ativo|yesno:"true,false" }} ?50 : 3;
-            document.getElementById("contadorFichas").innerText = "{{ QTD_fichas }}" + `/${maximoPersonagens}`;
+            let maximoPersonagens = {{ plano_ativo|yesno:"true,false"}} ?20 : 3;
+        
+        document.getElementById("contadorFichas").innerText = "{{ QTD_fichas }}" + `/${maximoPersonagens}`;
+        
+        const cookiesParaExcluir = [
+            'forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma',
+            'classe', 'raca_escolhida', 'antecedente',"armas","armadura", "conjuntoEquipamento","ferramenta",
+            'magias', 'truques',
+            'check_acrobacia',
+            'check_arcanismo',
+            'check_atletismo',
+            'check_atuacao',
+            'check_enganacao',
+            'check_furtividade',
+            'check_historia',
+            'check_intimidacao',
+            'check_intuição',
+            'check_investigacao',
+            'check_lidarcomanimais',
+            'check_medicina',
+            'check_natureza',
+            'check_percepcao',
+            'check_persuasao',
+            'check_prestidigitacao',
+            'check_religiao',
+            'check_sobrevivencia',
+            'check_forca',
+            'check_destreza',
+            'check_constituicao',
+            'check_inteligencia',
+            'check_sabedoria',
+            'check_carisma'
+        ];
+        cookiesParaExcluir.forEach(cookie => {
+                document.cookie = cookie + "=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+            });
+
         });
     </script>
 </body>
