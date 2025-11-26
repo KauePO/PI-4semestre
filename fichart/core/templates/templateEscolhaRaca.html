@@ -400,6 +400,13 @@
             const idiomasStr = JSON.stringify(idiomas);
             document.cookie = `idiomas=${encodeURIComponent(idiomasStr)}; path=/; max-age=3600`;
             document.cookie = `check_percepcao=0; path=/; max-age=3600`;
+        } else if (racaId == "3") {
+            // Restaura ao estado original e ADICIONA habilidades da raça 3
+            setCookie('idhabilidade_especiais', estadoOriginal, 1);
+            
+            const idiomas = ["4"];
+            const idiomasStr = JSON.stringify(idiomas);
+            document.cookie = `idiomas=${encodeURIComponent(idiomasStr)}; path=/; max-age=3600`;
         }
 
         const racaData = racasData[racaId];
